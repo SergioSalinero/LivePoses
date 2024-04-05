@@ -1,0 +1,102 @@
+
+<GESTIÓN AUTENTICACIÓN>
+UC-001: Iniciar sesión
+UC-002: Establecer contraseña
+UC-003: Restablecer contraseña
+UC-004: Cerrar sesión
+
+
+<Gestión de usuarios>
+UC-005: Ver perfil
+UC-006: Cambiar contraseña
+UC-007: Modificar datos
+UC-008: Eliminar cuenta
+UC-009: Listar usuarios
+UC-010: Cambiar rol
+UC-011: Eliminar usuario
+
+
+<Gestión de elaboración de rutinas>
+UC-012: Elaborar una rutina
+  - Pasos:
+    1. El actor usuario solicita elaborar una rutina de ejercicio.
+    2. El sistema solicita la configuración de ejercicios que compondrán la rutina.
+    3. El usuario añade y/o elimina los ejercicios y sus repeticiones.
+    4. El sistema construye la rutina.
+UC-013: Restablecer rutina
+UC-014: Especificar tiempo de descanso entre series
+UC-015: Guardar rutina
+
+
+<Gestión de ejecución de rutinas>
+UC-016: Comenzar rutina
+  (Control de gestos)
+UC-017: Saltar ejercicio
+UC-018: Terminar rutina
+UC-019: Guardar rutina realizada
+
+
+<Gestión de grupos de ejercicio>
+UC-020: Mostrar grupos
+UC-021: Acceder a un grupo
+  (Esto puede dar lugar a la ejecución del caso de uso UC-016)
+UC-022: Apuntarse a un grupo
+UC-023: Crear grupo
+  - Pasos:
+    1. El usuario solicita crear un grupo
+    2. El sistema solicita al usuario los datos del grupo (nombre, descripción, clase, ...)
+    3. El usuario proporciona los datos requeridos
+    4. El sistema recopila los datos y crea el grupo
+    5. El usuario puede añadir y/o eliminar rutinas (Postcondición)
+  (Esto puede dar lugar a la ejecución del caso de uso UC-012)
+UC-024: Modificar grupo
+UC-025: Eliminar grupo
+
+
+<Gestión de estadísticas y rutinas personales>
+UC-026: Mostrar histórico de rutinas
+UC-027: Mostrar rutinas guardadas
+UC-028: Mostrar estadísticas personales
+
+
+
+
+<NOTAS>
+En la pantalla principal aparecerán las salas de ejercicios a las que el usuario está apuntado.
+Backend en Java con Springboot.
+Base de datos con Firebase (Authentication, Firestore, Realtime Database).
+La elaboración de una rutina consistirá en una tabla con un componente select que permitirá elegir el ejercicio y un número de repeticiones. Estructura:
+	CUADRADO CON DIBUJO DEL EJERCICIO	SELECT		BOTÓN MENOS	BOTÓN MÁS	BOTÓN ELIMINAR EJERCICIO
+	
+
+Parámetro nuevo en la base de datos: Tipo de Reconocimiento:
+	Solo ángulos
+	Solo distancias
+	Ambos
+	
+	
+Se utiliza:
+	Eclipse 2024-03-R-linux
+	Spring Boot 4. Versión 3.2.4
+	JavaSE-17
+	
+Base de datos:
+	Mariadb
+	Nombre de usuario: mainUser	(Todos los permisos permitidos para este usuario)
+	Contraseña: 3Mpx5u#LJW4G!sqd
+	Nombre de la base de datos: LivePoses
+	
+	
+DATOS PARA EJERCICIOS:
+	Ejercicio de pie 1: Levantar la pierna en el plano frontal:
+		tipo de reconocimiento: only_angles
+		rightKeyPoint1: 11
+		rightKeyPoint2: 23
+		rightKeyPoint3: 25
+		leftKeyPoint1: 12
+		leftKeyPoint2: 24
+		leftKeyPoint3: 26
+		upperAngleMax: 40
+		upperAngleMin: 15
+		lowerAngleMax: 15
+		lowerAngleMin: 0
