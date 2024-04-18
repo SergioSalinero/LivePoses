@@ -7,7 +7,7 @@ export default function Home() {
     <div>
       <h1>Home Page</h1>
       {/* Usar Link para manejar la navegación interna de Next.js */}
-      <Link href="/PoseRecognition">
+      <Link href="/RoutineBuilding">
         Go to BlazePose Page
       </Link>
     </div>

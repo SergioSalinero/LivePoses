@@ -2,8 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import * as tf from '@tensorflow/tfjs';
 import * as poseDetection from '@tensorflow-models/pose-detection';
 
-import Component from './Component';
-import { calculateAngleBetweenTwoLines } from '../libraries/ExerciseRecognition';
+import { calculateAngleBetweenTwoLines } from '@/libraries/ExerciseRecognition';
 
 
 export default function BlazePose() {
@@ -124,7 +123,8 @@ export default function BlazePose() {
         videoCanvasStyle: {
             width: '50%',
             height: 'auto',
-            position: 'absolute', left: '0px', top: '0px'
+            position: 'absolute', left: '0px', top: '0px',
+            transform: 'scaleX(-1)'
         }
     }
 
@@ -133,7 +133,6 @@ export default function BlazePose() {
             <h1>BlazePose Demo</h1>
             <video ref={videoRef} width="640" height="480" style={StyleSheet.videoCanvasStyle} autoPlay></video>
             <canvas className="output_canvas" ref={canvasRef} style={StyleSheet.videoCanvasStyle}></canvas>
-            <Component />
         </div>
     );
 }

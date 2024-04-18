@@ -53,18 +53,24 @@ export function exerciseRecognitionByAngles(rightKeyPoint1, rightKeyPoint2, righ
  *      It determinates if a specific exercises repetition is valid by calculating distances between points and angles between lines.
  * 
  *      Given a human pose by the next parameters:
-  *          RightKeyPoint1: Integer         First right human part articulation 
- *          RightKeyPoint2: Integer         Second right human part articulation
- *          RightKeyPoint3: Integer         Third right human part articulation. It will be used to calculate angles
- *          LeftKeyPoint1: Integer          First left human part articulation
- *          LeftKeyPoint2: Integer          Second left human part articulation
- *          LeftKeyPoint3: Integer          Third left human part articulation. It will be used to calculate angles
+ *          RightKeyPoint1: Integer         First right human part articulation to calculate the angle
+ *          RightKeyPoint2: Integer         Second right human part articulation to calculate the angle
+ *          RightKeyPoint3: Integer         Third right human part articulation to calculate the angle
+ *          RightKeyPointDistance1: Integer First right human part articulation to compare distances
+ *          RightKeyPointDistance2: Integer Second right human part articulation to compare distances
+ *          LeftKeyPoint1: Integer          First left human part articulation to calculate the angle
+ *          LeftKeyPoint2: Integer          Second left human part articulation to calculate the angle
+ *          LeftKeyPoint3: Integer          Third left human part articulation to calculate the angle
+ *          LeftKeyPointDistance1: Integer  First left human part articulation to compare distances
+ *          LeftKeyPointDistance2: Integer  Second left human part articulation to compare distances
  *          UpperAngleMax: Integer          Upper part of the exercise maximun allowed angle
  *          UpperAngleMin: Integer          Upper part of the exercise minimun allowed angle
  *          LowerAngleMax: Integer          Lower part of the exercise maximun allowed angle
  *          LowerAngleMin: Integer          Lower part of the exercise minimun allowed angle
  */
-export function exerciseRecognitionByAnglesAndDistances(rightKeyPoint1, rightKeyPoint2, rightKeyPoint3, leftKeyPoint1, leftKeyPoint2, leftKeyPoint3, upperAngleMax, upperAngleMin, lowerAngleMax, lowerAngleMin) {
+export function exerciseRecognitionByAnglesAndDistances(rightKeyPoint1, rightKeyPoint2, rightKeyPoint3, rightKeyPointDistance1, rightKeyPointDistance2, 
+    leftKeyPoint1, leftKeyPoint2, leftKeyPoint3, leftKeyPointDistance1, leftKeyPointDistance2, 
+    upperAngleMax, upperAngleMin, lowerAngleMax, lowerAngleMin) {
 
 }
 
@@ -83,8 +89,8 @@ export function calculateAngleBetweenTwoLines(point1, point2, point3) {
     };
 
     const vectorD2 = {
-        x: point3.x - point1.x,
-        y: point3.y - point1.y
+        x: point3.x - point2.x,
+        y: point3.y - point2.y
     };
 
     const den = Math.abs(vectorD1.x * vectorD2.x + vectorD1.y * vectorD2.y);
