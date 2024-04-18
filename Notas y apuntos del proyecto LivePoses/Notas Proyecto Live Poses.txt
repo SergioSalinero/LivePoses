@@ -88,15 +88,34 @@ Base de datos:
 	
 	
 DATOS PARA EJERCICIOS:
-	Ejercicio de pie 1: Levantar la pierna en el plano frontal:
-		tipo de reconocimiento: only_angles
-		rightKeyPoint1: 11
-		rightKeyPoint2: 23
-		rightKeyPoint3: 25
-		leftKeyPoint1: 12
-		leftKeyPoint2: 24
-		leftKeyPoint3: 26
-		upperAngleMax: 40
-		upperAngleMin: 15
-		lowerAngleMax: 15
+	Ejercicio de pie 1: Levantar la pierna en el plano frontal (FrontalLegRaises):
+		name: "Pierna frontal"
+		rightKeyPoint1: 12
+		rightKeyPoint2: 24
+		rightKeyPoint3: 26
+		leftKeyPoint1: 11
+		leftKeyPoint2: 23
+		leftKeyPoint3: 25
+		upperAngleMax: 60
+		upperAngleMin: 40
+		lowerAngleMax: 20
 		lowerAngleMin: 0
+		recognitionType: only_angles
+		
+	Ejercicio lunge:
+		name: "Sentadillas lunge"
+		rightKeyPoint1: 24
+		rightKeyPoint2: 26
+		rightKeyPoint3: 28
+		rightKeyPointDistance1: 24
+		rightKeyPointDistance2: 26
+		leftKeyPoint1: 23
+		leftKeyPoint2: 25
+		leftKeyPoint3: 27
+		leftKeyPointDistance1: 23
+		leftKeyPointDistance2: 25
+		upperAngleMax: 90
+		upperAngleMin: 55
+		lowerAngleMax: 25
+		lowerAngleMin: 0
+		recognitionType: both
