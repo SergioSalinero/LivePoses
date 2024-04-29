@@ -2,27 +2,33 @@ package com.liveposes.main.model;
 
 public class User {
 	
+	private long id;
 	private String email;
 	private String password;
-	private String token;
 	
 	
 	/* CONSTRUCTORS */
-	public User(String email, String password, String token) {
+	public User(long id, String email, String password) {
 		super();
+		this.id = id;
 		this.email = email;
 		this.password = password;
-		this.token = token;
 	}
 	
 	public User() {
+		id = -1;
 		email = "UNKNOWN";
 		password = "UNKNOWN";
-		token = "UNKNOWN";
 	}
 	
 	
 	/* GETTERS AND SETTERS */
+	public long getId() {
+		return id;
+	}
+	public void setId(long id) {
+		this.id = id;
+	}
 	public String getEmail() {
 		return email;
 	}
@@ -34,14 +40,6 @@ public class User {
 	}
 	public void setPassword(String password) {
 		this.password = password;
-	}
-	public String getToken() {
-		return token;
-	}
-	public void setToken(String token) {
-		this.token = token;
-	}
-	
-	
+	}	
 
 }

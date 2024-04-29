@@ -1,27 +1,46 @@
 package com.liveposes.main.controller;
 
-import java.util.List;
-
-import org.springframework.security.core.GrantedAuthority;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+import com.liveposes.main.dao.UserDAO;
 import com.liveposes.main.model.User;
+import com.liveposes.main.services.AuthenticationServices;
+import com.liveposes.main.utils.JWTUtil;
 
+@RestController
+@RequestMapping("/api/auth")
 public class AuthenticationController {
 	
-	@PostMapping("auth")
-	public User login(@RequestParam("email") String email, @RequestParam("password") String password) {
-		String token
-		User user = new User();
-		
-		return user;
+	private AuthenticationServices authenticationServices;
+	
+	private UserDAO userDAO;
+	
+	private JWTUtil jwtUtil;
+	
+	
+	public AuthenticationController() {
+		this.authenticationServices = new AuthenticationServices();
 	}
 	
-	private String getJWTToken(String email) {
-		String secretKey = "Yz$9@Qp#Lx2!sD*";
-		List<GrantedAuthority> grantedAuthorities = AuthorityUtils;
+	
+	@PostMapping("/signup")
+	public ResponseEntity<String> signup(@RequestBody User user) {
 		
+		/*User loggedUser = userDAO.getUserByCredentials(user);
+		if(loggedUser != null) {
+				String tokenJWT = jwtUtil.create(String.valueOf(loggedUser.getId()), loggedUser.getEmail());
+				return tokenJWT;
+		}*/		
+		
+		if(this.authenticationServices.signup(user))
+			return ResponseEntity.status(HttpStatus.CREATED).body("User has been created successfully");
+		else
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to create the user");
 	}
 
 }
