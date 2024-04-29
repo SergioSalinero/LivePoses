@@ -1,78 +1,62 @@
 package com.liveposesdb.main.services;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.ArrayList;
 
 import org.springframework.stereotype.Service;
 
-import com.liveposesdb.main.model.DBConnection;
 import com.liveposesdb.main.model.Exercise;
+import com.liveposesdb.main.utils.DBConnection;
 
 @Service
 public class ExercisesServices {
-	
-	private DBConnection dbConnection;
-		
-	public ExercisesServices() {
-		this.dbConnection = new DBConnection();
-	}
-	
-	public List<Exercise> getExercises() {
-		List<Exercise> exercisesList = new ArrayList<>();
-		
-		Connection connection = null;
-		
-		try {
-			// Establish the connection to the database
-			connection = DriverManager.getConnection(this.dbConnection.getUrl(), this.dbConnection.getUser(), this.dbConnection.getPassword());
-			
-			// Create a SQL declaration
-			Statement statement = connection.createStatement();
-			
-			// Execute the SQL query
-			String SQLQuery = "SELECT * FROM exercises";
-			ResultSet result = statement.executeQuery(SQLQuery);
-			
-			// Process the results of the query
-			while(result.next()) {
-				Exercise exercise = new Exercise();
-				
-				exercise.setId(result.getInt("id"));
-				exercise.setName(result.getString("name"));
-				exercise.setRightKeyPoint1(result.getInt("rightKeyPoint1"));
-				exercise.setRightKeyPoint2(result.getInt("rightKeyPoint2"));
-				exercise.setRightKeyPoint3(result.getInt("rightKeyPoint3"));
-				exercise.setLeftKeyPoint1(result.getInt("leftKeyPoint1"));
-				exercise.setLeftKeyPoint2(result.getInt("leftKeyPoint2"));
-				exercise.setLeftKeyPoint3(result.getInt("leftKeyPoint3"));
-				exercise.setUpperAngleMax(result.getInt("upperAngleMax"));
-				exercise.setUpperAngleMin(result.getInt("upperAngleMin"));
-				exercise.setLowerAngleMax(result.getInt("lowerAngleMax"));
-				exercise.setLowerAngleMin(result.getInt("lowerAngleMin"));
-				exercise.setRecognitionType(result.getString("recognitionType"));
-				
-				exercisesList.add(exercise);
-			}
-			
-		} catch(SQLException e) {
-			e.printStackTrace();
-		} finally {
-			// Close the connection
-			if(connection != null) {
-				try {
-					connection.close();
-				} catch(SQLException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-		
-		return exercisesList;
+
+	private final DBConnection dbConnection;
+
+	public ExercisesServices(DBConnection dbConnection) {
+		this.dbConnection = dbConnection;
 	}
 
+	public List<Exercise> getExercises() {
+		List<Exercise> exercisesList = new ArrayList<>();
+
+		List<String[]> results = dbConnection.DBOperation("SELECT * FROM exercises", "GET");
+
+		if (results == null)
+			return null;
+
+		for (String[] result : results) {
+			Exercise exercise = new Exercise();
+
+			exercise.setId(Integer.parseInt(result[0]));
+			exercise.setName(result[1]);
+			
+			if (result.length > 2 && result[2] != null) 
+				exercise.setRightKeyPoint1(Integer.parseInt(result[2]));
+			if (result.length > 3 && result[3] != null) 
+				exercise.setRightKeyPoint2(Integer.parseInt(result[3]));
+			if (result.length > 4 && result[4] != null) 
+				exercise.setRightKeyPoint3(Integer.parseInt(result[4]));
+			if (result.length > 5 && result[5] != null) 
+				exercise.setLeftKeyPoint1(Integer.parseInt(result[5]));
+			if (result.length > 6 && result[6] != null) 
+				exercise.setLeftKeyPoint2(Integer.parseInt(result[6]));
+			if (result.length > 7 && result[7] != null) 
+				exercise.setLeftKeyPoint3(Integer.parseInt(result[7]));
+			if (result.length > 8 && result[8] != null) 
+				exercise.setUpperAngleMax(Integer.parseInt(result[8]));
+			if (result.length > 9 && result[9] != null) 
+				exercise.setUpperAngleMin(Integer.parseInt(result[9]));
+			if (result.length > 10 && result[10] != null) 
+				exercise.setLowerAngleMax(Integer.parseInt(result[10]));
+			if (result.length > 11 && result[11] != null)
+				exercise.setLowerAngleMin(Integer.parseInt(result[11]));
+
+			exercise.setRecognitionType(result[12]);
+
+			exercisesList.add(exercise);
+		}
+
+		return exercisesList;
+	}
 }
