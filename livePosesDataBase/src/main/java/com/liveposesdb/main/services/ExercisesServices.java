@@ -5,6 +5,9 @@ import java.util.ArrayList;
 
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.liveposesdb.main.model.CurrentRoutine;
 import com.liveposesdb.main.model.Exercise;
 import com.liveposesdb.main.utils.DBConnection;
 
@@ -19,8 +22,10 @@ public class ExercisesServices {
 
 	public List<Exercise> getExercises() {
 		List<Exercise> exercisesList = new ArrayList<>();
+		
+		String query = "SELECT * FROM exercises";
 
-		List<String[]> results = dbConnection.DBOperation("SELECT * FROM exercises", "GET");
+		List<String[]> results = dbConnection.DBOperation(query,"SELECT");
 
 		if (results == null)
 			return null;
@@ -58,5 +63,30 @@ public class ExercisesServices {
 		}
 
 		return exercisesList;
+	}
+	
+	public boolean setCurrentRoutine(CurrentRoutine currentRoutine) {
+		String query = "DELETE FROM current_routine WHERE userId = " + currentRoutine.getUserId() + ";";
+		List<String[]> results = dbConnection.DBOperation(query, "DELETE");
+		
+		if(results == null)
+			return false;
+		
+		
+		ObjectMapper mapper = new ObjectMapper();
+        String exercisesJson;
+		try {
+			exercisesJson = mapper.writeValueAsString(currentRoutine.getExercises());
+			
+			query = "INSERT INTO current_routine (userId, exercises, breakTime) VALUES ('" + currentRoutine.getUserId() + "', '" + exercisesJson + "', '" + currentRoutine.getBreakTime() + "');";
+			results = dbConnection.DBOperation(query, "INSERT");
+			
+			if(results == null)
+				return false;
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+
+		return true;
 	}
 }

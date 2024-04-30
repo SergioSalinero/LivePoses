@@ -32,7 +32,7 @@ public class DBConnection {
 
 			Statement statement = connection.createStatement();
 
-			if (type.equals("GET")) {
+			if (type.equals("SELECT")) {
 				ResultSet resultSet = statement.executeQuery(sqlQuery);
 
 				while (resultSet.next()) {
@@ -44,7 +44,7 @@ public class DBConnection {
 					resultList.add(row);
 				}
 			}
-			else if(type.equals("POST")) {
+			else if(type.equals("INSERT") || type.equals("DELETE")) {
 				statement.executeUpdate(sqlQuery);
 			}
 
