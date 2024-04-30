@@ -85,6 +85,7 @@ Base de datos:
 	Nombre de usuario: mainUser	(Todos los permisos permitidos para este usuario)
 	Contraseña: 3Mpx5u#LJW4G!sqd
 	Nombre de la base de datos: LivePoses
+	Contraseña ROOT del servidor de bases de datos: sss20010523
 	
 	
 DATOS PARA EJERCICIOS:

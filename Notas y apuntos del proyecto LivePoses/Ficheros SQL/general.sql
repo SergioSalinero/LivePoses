@@ -28,6 +28,16 @@ CREATE TABLE IF NOT EXISTS exercises (
 );
 
 
+CREATE TABLE `liveposes`.`current_routine` (
+	id INT AUTO_INCREMENT PRIMARY KEY,
+    userId INT NOT NULL,
+    exercises JSON    NOT NULL,
+    breakTime   INT NOT NULL,
+    FOREIGN KEY (userId) REFERENCES users(id)
+);
+
+
+
 -- First standing exercise configuration
 INSERT INTO exercises (name, rightKeyPoint1, rightKeyPoint2, rightKeyPoint3, leftKeyPoint1, leftKeyPoint2, leftKeyPoint3, upperAngleMax, upperAngleMin, lowerAngleMax, lowerAngleMin, recognitionType)
 VALUES ('Pierna frontal', 12, 24, 26, 11, 23, 25, 60, 40, 20, 0, 'only_angles');
