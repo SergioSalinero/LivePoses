@@ -1,1 +1,0 @@
-export const GET_EXERCISES_URL = 'http://localhost:5000/api/get/exercises';
