@@ -19,14 +19,14 @@ import java.util.Date;
  */
 @Component
 public class JWTUtil {
-    @Value("${security.jwt.secret}")
-    private String key;
+    //@Value("${security.jwt.secret}")
+    private String key = "ghk45jgherogho834go3h4g";
 
-    @Value("${security.jwt.issuer}")
-    private String issuer;
+    //@Value("${security.jwt.issuer}")
+    private String issuer = "Main";
 
-    @Value("${security.jwt.ttlMillis}")
-    private long ttlMillis;
+    //@Value("${security.jwt.ttlMillis}")
+    private long ttlMillis = 604800000;
 
     private final Logger log = LoggerFactory
             .getLogger(JWTUtil.class);
@@ -39,7 +39,6 @@ public class JWTUtil {
      * @return
      */
     public String create(String id, String subject) {
-
         // The JWT signature algorithm used to sign the token
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
 

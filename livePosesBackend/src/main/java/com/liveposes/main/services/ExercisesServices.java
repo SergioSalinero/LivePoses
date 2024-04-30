@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import com.liveposes.main.model.CurrentRoutine;
 import com.liveposes.main.model.Exercise;
 import com.liveposes.main.utils.RemoteServices;
 
@@ -40,6 +41,25 @@ public class ExercisesServices {
             return null;
         }
     
+	}
+
+
+	public boolean setCurrentRoutine(CurrentRoutine currentRoutine) {
+		try {	
+            ResponseEntity<Void> response = restTemplate.postForEntity(RemoteServices.POST_CURRENT_ROUTINE, currentRoutine, Void.class);
+            
+            if (response.getStatusCode() == HttpStatus.OK) {
+            	return true;
+            } else {
+                return false;
+            }
+        } catch (HttpClientErrorException ex) {
+			//HttpStatus statusCode = (HttpStatus) ex.getStatusCode();
+            return false;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return false;
+        }
 	}
 
 }
