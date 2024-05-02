@@ -2,16 +2,20 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 
-import { GET_EXERCISES_URL } from '@/components/Config';
-import { POST_CURRENT_ROUTINE_URL } from '@/components/Config';
+import { GET_EXERCISES_URL, POST_CURRENT_ROUTINE_URL } from '@/components/Config';
 import AddExercise from '@/components/AddExercise';
 
+
 export default function RoutineBuilding() {
+   
+    const router = useRouter();
     const [exerciseComponents, setExerciseComponents] = useState([]);
     const [idComponent, setIdComponent] = useState(0);
     const [exercises, setExercises] = useState();
     const [loading, setLoading] = useState();
     const [breakTime, setBreakTime] = useState(0);
+
+    const [error, setError] = useState(null);
     var [token, setToken] = useState('');
 
 
@@ -123,30 +127,28 @@ export default function RoutineBuilding() {
             currentRoutine.exercises.push(exerciseData);
         });
 
+        if (currentRoutine.exercises.length > 0) {
+            try {
+                const response = await fetch(POST_CURRENT_ROUTINE_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': token,
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(currentRoutine),
+                });
 
-        try {
-            const response = await fetch(POST_CURRENT_ROUTINE_URL, {
-                method: 'POST',
-                headers: {
-                    'Authorization': token,
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(currentRoutine),
-            });
-
-            /*if (response.ok) {
-                const token = await response.text();
-                setAccessToken(token);
-                localStorage.setItem('accessToken', token);
-                router.push('/RoutineBuilding');
-            } else if (response.status === 500) {
-                setError('Internal server error. Please try again later.');
-            } else {
-                setError('Invalid credentials');
-            }*/
-        } catch (error) {
-            console.error('Error processing request:', error);
-            setError('Error processing request. Please try again later.');
+                if (response.ok) {
+                    router.push('/PoseRecognition');
+                } else if (response.status === 500) {
+                    setError('Internal server error. Please try again later.');
+                } else {
+                    setError('Invalid credentials');
+                }
+            } catch (error) {
+                console.error('Error processing request:', error);
+                setError('Error processing request. Please try again later.');
+            }
         }
     }
 

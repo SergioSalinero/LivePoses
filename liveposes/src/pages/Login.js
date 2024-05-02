@@ -1,15 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 
 import { POST_LOGING_URL } from '@/components/Config';
 
+
 export default function Login() {
+  
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [access, setAccessToken] = useState('');
+
+  useEffect(() => {
+    const storedToken = localStorage.getItem('accessToken');
+    if (storedToken !== null && storedToken !== undefined) {
+      router.push('/RoutineBuilding');
+    }
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -26,7 +34,6 @@ export default function Login() {
 
       if (response.ok) {
         const token = await response.text();
-        setAccessToken(token);
         localStorage.setItem('accessToken', token);
         router.push('/RoutineBuilding');
       } else if (response.status === 500) {

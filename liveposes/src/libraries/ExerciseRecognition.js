@@ -43,8 +43,15 @@ export function exerciseRecognitionByDistances(rightKeyPoint1, rightKeyPoint2, l
  *          LowerAngleMax: Integer          Lower part of the exercise maximun allowed angle
  *          LowerAngleMin: Integer          Lower part of the exercise minimun allowed angle
  */
-export function exerciseRecognitionByAngles(rightKeyPoint1, rightKeyPoint2, rightKeyPoint3, leftKeyPoint1, leftKeyPoint2, leftKeyPoint3, upperAngleMax, upperAngleMin, lowerAngleMax, lowerAngleMin) {
+export function exerciseRecognitionByAngles(rightPoint1, rightPoint2, rightPoint3, leftPoint1, leftPoint2, leftPoint3, upperAngleMax, upperAngleMin, lowerAngleMax, lowerAngleMin) {
+    var rightAngle = calculateAngleBetweenTwoLines(rightPoint1, rightPoint2, rightPoint3);
+    var leftAngle = calculateAngleBetweenTwoLines(leftPoint1, leftPoint2, leftPoint3);
 
+    if((rightAngle < upperAngleMax && rightAngle > upperAngleMin) || (leftAngle < upperAngleMax && leftAngle > upperAngleMin))
+        return 'TOP';
+    
+    if((rightAngle < lowerAngleMax && rightAngle > lowerAngleMin) || (leftAngle < lowerAngleMax && leftAngle > lowerAngleMin))
+        return 'BOTTOM';
 }
 
 
@@ -82,7 +89,7 @@ export function exerciseRecognitionByAnglesAndDistances(rightKeyPoint1, rightKey
  * 
  *      Three points are neccessary
  */
-export function calculateAngleBetweenTwoLines(point1, point2, point3) {
+function calculateAngleBetweenTwoLines(point1, point2, point3) {
     const vectorD1 = {
         x: point1.x - point2.x,
         y: point1.y - point2.y
@@ -98,8 +105,3 @@ export function calculateAngleBetweenTwoLines(point1, point2, point3) {
 
     return Math.acos(den / num) / (Math.PI / 180);
 }
-
-
-/**
- * QUITAR EL EXPORT DE LA FUNCIÓN calculateAngleBetweenTwoLines
- */
