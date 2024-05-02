@@ -12,6 +12,9 @@ public class CurrentRoutineExercises {
 		this.repetitions = repetitions;
 	}
 	
+	public CurrentRoutineExercises() {
+    }
+	
 	
 	public long getExerciseId() {
 		return exerciseId;

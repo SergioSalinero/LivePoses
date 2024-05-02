@@ -9,8 +9,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.liveposesdb.main.model.CurrentRoutine;
 import com.liveposesdb.main.model.Exercise;
 import com.liveposesdb.main.services.ExercisesServices;
@@ -43,6 +45,17 @@ public class ExercisesController {
 			return ResponseEntity.status(HttpStatus.OK).body("The routine has been added successfully");
 		else
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("The routine could not be added");
+	}
+	
+	@GetMapping("/get/current_routine")
+	public ResponseEntity<CurrentRoutine> getCurrentRoutine(@RequestParam long userID) {
+		CurrentRoutine currentRoutine = exercisesServices.getCurrentRoutine(userID);
+		
+		if (currentRoutine == null) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+	    }
+		
+		return ResponseEntity.status(HttpStatus.OK).body(currentRoutine);
 	}
 	
 }
