@@ -7,9 +7,13 @@ public class Exercise {
 	private int rightKeyPoint1;
 	private int rightKeyPoint2;
 	private int rightKeyPoint3;
+	private int rightKeyPointDistance1;
+	private int rightKeyPointDistance2;
 	private int leftKeyPoint1;
 	private int leftKeyPoint2;
 	private int leftKeyPoint3;
+	private int leftKeyPointDistance1;
+	private int leftKeyPointDistance2;
 	
 	private int upperAngleMax;
 	private int upperAngleMin;
@@ -20,8 +24,8 @@ public class Exercise {
 
 	
 	/* CONSTRUCTORS */	
-	public Exercise(int id, String name, int rightKeyPoint1, int rightKeyPoint2, int rightKeyPoint3, int leftKeyPoint1, int leftKeyPoint2,
-			int leftKeyPoint3, int upperAngleMax, int upperAngleMin, int lowerAngleMax, int lowerAngleMin,
+	public Exercise(int id, String name, int rightKeyPoint1, int rightKeyPoint2, int rightKeyPoint3, int rightKeyPointDistance1, int rightKeyPointDistance2, int leftKeyPoint1, int leftKeyPoint2,
+			int leftKeyPoint3, int leftKeyPointDistance1, int leftKeyPointDistance2, int upperAngleMax, int upperAngleMin, int lowerAngleMax, int lowerAngleMin,
 			String recognitionType) {
 		super();
 		this.id = id;
@@ -29,9 +33,13 @@ public class Exercise {
 		this.rightKeyPoint1 = rightKeyPoint1;
 		this.rightKeyPoint2 = rightKeyPoint2;
 		this.rightKeyPoint3 = rightKeyPoint3;
+		this.rightKeyPointDistance1 = rightKeyPointDistance1;
+		this.rightKeyPointDistance2 = rightKeyPointDistance2;
 		this.leftKeyPoint1 = leftKeyPoint1;
 		this.leftKeyPoint2 = leftKeyPoint2;
 		this.leftKeyPoint3 = leftKeyPoint3;
+		this.leftKeyPointDistance1 = leftKeyPointDistance1;
+		this.leftKeyPointDistance2 = leftKeyPointDistance2;
 		this.upperAngleMax = upperAngleMax;
 		this.upperAngleMin = upperAngleMin;
 		this.lowerAngleMax = lowerAngleMax;
@@ -96,6 +104,22 @@ public class Exercise {
 	public void setRightKeyPoint3(int rightKeyPoint3) {
 		this.rightKeyPoint3 = rightKeyPoint3;
 	}
+	
+	public int getRightKeyPointDistance1() {
+		return rightKeyPointDistance1;
+	}
+
+	public void setRightKeyPointDistance1(int rightKeyPointDistance1) {
+		this.rightKeyPointDistance1 = rightKeyPointDistance1;
+	}
+
+	public int getRightKeyPointDistance2() {
+		return rightKeyPointDistance2;
+	}
+
+	public void setRightKeyPointDistance2(int rightKeyPointDistance2) {
+		this.rightKeyPointDistance2 = rightKeyPointDistance2;
+	}
 
 	public int getLeftKeyPoint1() {
 		return leftKeyPoint1;
@@ -115,6 +139,22 @@ public class Exercise {
 
 	public int getLeftKeyPoint3() {
 		return leftKeyPoint3;
+	}
+	
+	public int getLeftKeyPointDistance1() {
+		return leftKeyPointDistance1;
+	}
+
+	public void setLeftKeyPointDistance1(int leftKeyPointDistance1) {
+		this.leftKeyPointDistance1 = leftKeyPointDistance1;
+	}
+
+	public int getLeftKeyPointDistance2() {
+		return leftKeyPointDistance2;
+	}
+
+	public void setLeftKeyPointDistance2(int leftKeyPointDistance2) {
+		this.leftKeyPointDistance2 = leftKeyPointDistance2;
 	}
 
 	public void setLeftKeyPoint3(int leftKeyPoint3) {

@@ -45,7 +45,7 @@ public class ExercisesServices {
 
 
 	public boolean setCurrentRoutine(CurrentRoutine currentRoutine) {
-		try {	
+		try {
             ResponseEntity<Void> response = restTemplate.postForEntity(RemoteServices.POST_CURRENT_ROUTINE, currentRoutine, Void.class);
             
             if (response.getStatusCode() == HttpStatus.OK) {
@@ -59,6 +59,27 @@ public class ExercisesServices {
         } catch (Exception ex) {
             ex.printStackTrace();
             return false;
+        }
+	}
+
+
+	public CurrentRoutine getCurrentRoutine(String userID) {
+		try {
+			String url = RemoteServices.GET_CURRENT_ROUTINE + "?userID={userID}";
+			
+            ResponseEntity<CurrentRoutine> response = restTemplate.getForEntity(url, CurrentRoutine.class, userID);
+            
+            if (response.getStatusCode() == HttpStatus.OK) {
+                return response.getBody();
+            } else {
+                return null;
+            }
+        } catch (HttpClientErrorException ex) {
+			//HttpStatus statusCode = (HttpStatus) ex.getStatusCode();
+            return null;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
         }
 	}
 

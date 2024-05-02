@@ -66,5 +66,24 @@ public class ExercisesController {
 		else
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 	}
+	
+	@GetMapping("/get/current_routine")
+	public ResponseEntity<CurrentRoutine> getCurrentRoutine(@RequestHeader("Authorization") String token) {
+		if (token == null || token.isBlank())
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+
+		String userID = jwtUtil.getKey(token);
+
+		if (userID == null)
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+		
+		CurrentRoutine currentRoutine = exercisesServices.getCurrentRoutine(userID);
+		
+		if (currentRoutine == null) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+	    }
+		
+		return ResponseEntity.status(HttpStatus.OK).body(currentRoutine);
+	}
 
 }
