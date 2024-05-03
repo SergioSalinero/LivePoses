@@ -48,10 +48,10 @@ export function exerciseRecognitionByAngles(rightPoint1, rightPoint2, rightPoint
     var leftAngle = calculateAngleBetweenTwoLines(leftPoint1, leftPoint2, leftPoint3);
 
     if((rightAngle < upperAngleMax && rightAngle > upperAngleMin) || (leftAngle < upperAngleMax && leftAngle > upperAngleMin))
-        return 'TOP';
+        return 'END';
     
     if((rightAngle < lowerAngleMax && rightAngle > lowerAngleMin) || (leftAngle < lowerAngleMax && leftAngle > lowerAngleMin))
-        return 'BOTTOM';
+        return 'START';
 }
 
 
@@ -75,10 +75,21 @@ export function exerciseRecognitionByAngles(rightPoint1, rightPoint2, rightPoint
  *          LowerAngleMax: Integer          Lower part of the exercise maximun allowed angle
  *          LowerAngleMin: Integer          Lower part of the exercise minimun allowed angle
  */
-export function exerciseRecognitionByAnglesAndDistances(rightKeyPoint1, rightKeyPoint2, rightKeyPoint3, rightKeyPointDistance1, rightKeyPointDistance2, 
-    leftKeyPoint1, leftKeyPoint2, leftKeyPoint3, leftKeyPointDistance1, leftKeyPointDistance2, 
+export function exerciseRecognitionByAnglesAndDistances(rightPoint1, rightPoint2, rightPoint3, rightPointDistance1, rightPointDistance2, 
+    leftPoint1, leftPoint2, leftPoint3, leftPointDistance1, leftPointDistance2, 
     upperAngleMax, upperAngleMin, lowerAngleMax, lowerAngleMin) {
+        var rightAngle = calculateAngleBetweenTwoLines(rightPoint1, rightPoint2, rightPoint3);
+    var leftAngle = calculateAngleBetweenTwoLines(leftPoint1, leftPoint2, leftPoint3);
 
+    var operationalMargin = 20;
+
+    if((rightAngle < upperAngleMax && rightAngle > upperAngleMin) || (leftAngle < upperAngleMax && leftAngle > upperAngleMin))
+        if(rightPointDistance1.y + operationalMargin > rightPointDistance2.y || leftPointDistance1.y + operationalMargin > leftPointDistance2.y)    
+            return 'END';
+    
+    if((rightAngle < lowerAngleMax && rightAngle > lowerAngleMin) || (leftAngle < lowerAngleMax && leftAngle > lowerAngleMin))
+        if(rightPointDistance1.y + operationalMargin < rightPointDistance2.y || leftPointDistance1.y + operationalMargin < leftPointDistance2.y)
+            return 'START';
 }
 
 

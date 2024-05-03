@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import * as tf from '@tensorflow/tfjs';
 import * as poseDetection from '@tensorflow-models/pose-detection';
 
-import { exerciseRecognitionByAngles } from '@/libraries/ExerciseRecognition';
+import { exerciseRecognitionByAngles, exerciseRecognitionByAnglesAndDistances } from '@/libraries/ExerciseRecognition';
 import { GET_EXERCISES_URL, GET_CURRENT_ROUTINE_URL } from '@/components/Config';
 
 
@@ -14,9 +14,12 @@ export default function BlazePose() {
 
     var currentExercise;
     var currentExerciseIndex = -1;
-    var currentExeciseRepetitions;
-    var previousExerciseStatus = 'BOTTOM';
+    var previousExerciseStatus = 'START';
+    var currentExerciseRepetitionsAux = -1;
+    var currentRepetitionsAux = 0;
     const [currentRepetitions, setCurrentRepetitions] = useState(0);
+    const [currentExerciseRepetitions, setCurrentExerciseRepetition] = useState(0);
+    const [currentExerciseName, setCurrentExerciseName] = useState('');
 
 
     const videoRef = useRef(null);
@@ -79,18 +82,23 @@ export default function BlazePose() {
         function setExerciseStatus() {
             currentExerciseIndex++;
 
-            var iterator = 0;
+            let found = false;
             exercises.forEach((exercise) => {
-                if (exercise.id == currentRoutine.exercises[currentExerciseIndex].exerciseId) {
+                if (!found && exercise.id == currentRoutine.exercises[currentExerciseIndex].exerciseId) {
                     currentExercise = exercise;
-                    currentExeciseRepetitions = currentRoutine.exercises[currentExerciseIndex].repetitions;
+                    setCurrentExerciseRepetition(currentRoutine.exercises[currentExerciseIndex].repetitions);
+                    currentExerciseRepetitionsAux = currentRoutine.exercises[currentExerciseIndex].repetitions;
+                    found = true;
                 }
-                iterator++;
             });
 
-            setCurrentRepetitions(0);
+            currentRoutine.exercises.slice(1);
 
-            console.log(currentExerciseIndex, currentExercise, currentExeciseRepetitions, currentRepetitions);
+            setCurrentRepetitions(0);
+            currentRepetitionsAux = 0;
+            setCurrentExerciseName(currentExercise.name);
+
+            console.log(currentExerciseIndex, currentExercise, currentExerciseRepetitions, currentRepetitions);
         }
 
 
@@ -183,54 +191,85 @@ export default function BlazePose() {
                     }
 
                     if (typeof currentExercise != 'undefined') {
-                        if (currentExercise.recognitionType == 'only_angles') {
+                        var rightKeyPoint1 = currentExercise.rightKeyPoint1
+                        var rightKeyPoint2 = currentExercise.rightKeyPoint2
+                        var rightKeyPoint3 = currentExercise.rightKeyPoint3
+                        var rightKeyPointDistance1 = currentExercise.rightKeyPointDistance1;
+                        var rightKeyPointDistance2 = currentExercise.rightKeyPointDistance2;
+                        var leftKeyPoint1 = currentExercise.leftKeyPoint1
+                        var leftKeyPoint2 = currentExercise.leftKeyPoint2
+                        var leftKeyPoint3 = currentExercise.leftKeyPoint3
+                        var leftKeyPointDistance1 = currentExercise.leftKeyPointDistance1;
+                        var leftKeyPointDistance2 = currentExercise.leftKeyPointDistance2;
+                        var upperAngleMax = currentExercise.upperAngleMax
+                        var upperAngleMin = currentExercise.upperAngleMin;
+                        var lowerAngleMax = currentExercise.lowerAngleMax;
+                        var lowerAngleMin = currentExercise.lowerAngleMin;
 
-                            var rightKeyPoint1 = currentExercise.rightKeyPoint1
-                            var rightKeyPoint2 = currentExercise.rightKeyPoint2
-                            var rightKeyPoint3 = currentExercise.rightKeyPoint3
-                            var leftKeyPoint1 = currentExercise.leftKeyPoint1
-                            var leftKeyPoint2 = currentExercise.leftKeyPoint2
-                            var leftKeyPoint3 = currentExercise.leftKeyPoint3
-                            var upperAngleMax = currentExercise.upperAngleMax
-                            var upperAngleMin = currentExercise.upperAngleMin;
-                            var lowerAngleMax = currentExercise.lowerAngleMax;
-                            var lowerAngleMin = currentExercise.lowerAngleMin;
-
-                            var rightPoint1 = {
-                                x: keypoints[rightKeyPoint1].x,
-                                y: keypoints[rightKeyPoint1].y
-                            }
-                            var rightPoint2 = {
-                                x: keypoints[rightKeyPoint2].x,
-                                y: keypoints[rightKeyPoint2].y
-                            }
-                            var rightPoint3 = {
-                                x: keypoints[rightKeyPoint3].x,
-                                y: keypoints[rightKeyPoint3].y
-                            }
-
-                            var leftPoint1 = {
-                                x: keypoints[leftKeyPoint1].x,
-                                y: keypoints[leftKeyPoint1].y
-                            }
-                            var leftPoint2 = {
-                                x: keypoints[leftKeyPoint2].x,
-                                y: keypoints[leftKeyPoint2].y
-                            }
-                            var leftPoint3 = {
-                                x: keypoints[leftKeyPoint3].x,
-                                y: keypoints[leftKeyPoint3].y
-                            }
-
-                            var exerciseStatus = exerciseRecognitionByAngles(rightPoint1, rightPoint2, rightPoint3, leftPoint1, leftPoint2, leftPoint3, upperAngleMax, upperAngleMin, lowerAngleMax, lowerAngleMin);
-
-                            if(exerciseStatus != previousExerciseStatus && exerciseStatus == 'BOTTOM') {
-                                setCurrentRepetitions(prevRepetitions => prevRepetitions + 1);
-                            }
-
-                            previousExerciseStatus = exerciseStatus;
+                        var rightPoint1 = {
+                            x: keypoints[rightKeyPoint1].x,
+                            y: keypoints[rightKeyPoint1].y
                         }
-                        //else if(currentExercise.recognitionType == 'both')
+                        var rightPoint2 = {
+                            x: keypoints[rightKeyPoint2].x,
+                            y: keypoints[rightKeyPoint2].y
+                        }
+                        var rightPoint3 = {
+                            x: keypoints[rightKeyPoint3].x,
+                            y: keypoints[rightKeyPoint3].y
+                        }
+
+                        var leftPoint1 = {
+                            x: keypoints[leftKeyPoint1].x,
+                            y: keypoints[leftKeyPoint1].y
+                        }
+                        var leftPoint2 = {
+                            x: keypoints[leftKeyPoint2].x,
+                            y: keypoints[leftKeyPoint2].y
+                        }
+                        var leftPoint3 = {
+                            x: keypoints[leftKeyPoint3].x,
+                            y: keypoints[leftKeyPoint3].y
+                        }
+
+                        if (currentExercise.recognitionType == 'only_angles') {
+                            var exerciseStatus = exerciseRecognitionByAngles(rightPoint1, rightPoint2, rightPoint3, leftPoint1, leftPoint2, leftPoint3, upperAngleMax, upperAngleMin, lowerAngleMax, lowerAngleMin);
+                        }
+                        else if (currentExercise.recognitionType == 'both') {
+                            var rightPointDistance1 = {
+                                x: keypoints[rightKeyPointDistance1].x,
+                                y: keypoints[rightKeyPointDistance1].y
+                            }
+                            var rightPointDistance2 = {
+                                x: keypoints[rightKeyPointDistance2].x,
+                                y: keypoints[rightKeyPointDistance2].y
+                            }
+                            var leftPointDistance1 = {
+                                x: keypoints[leftKeyPointDistance1].x,
+                                y: keypoints[leftKeyPointDistance1].y
+                            }
+                            var leftPointDistance2 = {
+                                x: keypoints[leftKeyPointDistance2].x,
+                                y: keypoints[leftKeyPointDistance2].y
+                            }
+
+                            var exerciseStatus = exerciseRecognitionByAnglesAndDistances(rightPoint1, rightPoint2, rightPoint3, rightPointDistance1, rightPointDistance2, leftPoint1, leftPoint2, leftPoint3, leftPointDistance1, leftPointDistance2, upperAngleMax, upperAngleMin, lowerAngleMax, lowerAngleMin);
+                        }
+
+                        if (typeof exerciseStatus == 'undefined')
+                            exerciseStatus = previousExerciseStatus;
+
+                        if (exerciseStatus != previousExerciseStatus && exerciseStatus == 'START') {
+                            setCurrentRepetitions(prevRepetitions => prevRepetitions + 1);
+                            currentRepetitionsAux++;
+                        }
+
+                        previousExerciseStatus = exerciseStatus;
+
+
+                        /* End of exercise */
+                        if (currentRepetitionsAux >= currentExerciseRepetitionsAux)
+                            setExerciseStatus();
                     }
 
                     //console.log(calculateAngleBetweenTwoLines(point1, point2, point3));
@@ -282,7 +321,8 @@ export default function BlazePose() {
         */
         <div>
             <div style={StyleSheet.dataDivContainer}>
-                Reps: {currentRepetitions}
+                Name: {currentExerciseName}
+                Reps: {currentRepetitions}/{currentExerciseRepetitions}
             </div>
             <video ref={videoRef} width="640" height="480" style={StyleSheet.videoCanvasStyle} autoPlay></video>
             <canvas className="output_canvas" ref={canvasRef} style={StyleSheet.videoCanvasStyle}></canvas>
