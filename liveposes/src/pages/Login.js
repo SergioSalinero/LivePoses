@@ -14,9 +14,9 @@ export default function Login() {
 
   useEffect(() => {
     const storedToken = localStorage.getItem('accessToken');
-    if (storedToken !== null && storedToken !== undefined) {
-      router.push('/RoutineBuilding');
-    }
+    //if (storedToken !== null && storedToken !== undefined) {
+      //router.push('/RoutineBuilding');
+    //}
   }, []);
 
   const handleSubmit = async (e) => {
