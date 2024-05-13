@@ -36,36 +36,104 @@ export default function handleAddExercise(props) {
 
     const StyleSheet = {
         containerStyle: {
+            backgroundColor: '#0D0D0D',
+            borderRadius: '20px',
+            marginBottom: '15px',
+            boxShadow: '0px 5px 15px rgba(0, 0, 0, 0.3)',
+        },
+        contentContainer: {
             display: 'flex',
             alignItems: 'center',
-            backgroundColor: 'blue'
+            marginLeft: '20px',
         },
         repetitionCounterStyle: {
-            color: 'white'
-        }
+            color: 'white',
+            fontSize: '30px',
+            fontFamily: 'Roboto, sans-serif',
+            marginRight: '20px'
+        },
+        selectExercise: {
+            backgroundColor: '#2F2F2F',
+            color: 'white',
+            height: '50px',
+            border: 'none',
+            borderRadius: '20px',
+            fontSize: '18px',
+            fontFamily: 'Roboto, sans-serif',
+            marginRight: '20px',
+            cursor: 'pointer'
+        },
+        button: {
+            backgroundColor: '#2F2F2F',
+            color: 'white',
+            borderRadius: '20px',
+            border: 'none',
+            fontSize: '24px',
+            fontFamily: 'Roboto, sans-serif',
+            marginRight: '20px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '10px',
+            cursor: 'pointer'
+        },
+        sidebarButtonHover: {
+            backgroundColor: '#4A4A4A',
+        },
     }
 
     return (
         <div style={StyleSheet.containerStyle}>
-            <p style={StyleSheet.repetitionCounterStyle}>{repetitions} x </p>
-            <select value={selectedExercise} onChange={handleExerciseChange}>
-                {props.exercises.map((exercise) => (
-                    <option key={exercise.id} value={exercise.id}>
-                        {exercise.name}
-                    </option>
-                ))}
-            </select>
-            <button onClick={handleAddRepetition}>+</button>
-            <button onClick={handleSubtractRepetition}>-</button>
-            <button onClick={handleRemoveExercise}>
-                <FaRegTrashCan />
-            </button>
-            <button onClick={handleMoveUpExercise}>
-                <FaArrowUp />
-            </button>
-            <button onClick={handleMoveDownExercise}>
-                <FaArrowDown />
-            </button>
+            <div style={StyleSheet.contentContainer}>
+                <p style={StyleSheet.repetitionCounterStyle}>{repetitions} x </p>
+                <select style={StyleSheet.selectExercise} value={selectedExercise} onChange={handleExerciseChange}>
+                    {props.exercises.map((exercise) => (
+                        <option key={exercise.id} value={exercise.id}>
+                            {exercise.name}
+                        </option>
+                    ))}
+                </select>
+                <button
+                    style={StyleSheet.button}
+                    onMouseEnter={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButtonHover.backgroundColor}
+                    onMouseLeave={(e) => e.target.style.backgroundColor = StyleSheet.button.backgroundColor}
+                    onClick={handleAddRepetition}
+                >
+                    &nbsp;+&nbsp;
+                </button>
+                <button
+                    style={StyleSheet.button}
+                    onMouseEnter={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButtonHover.backgroundColor}
+                    onMouseLeave={(e) => e.target.style.backgroundColor = StyleSheet.button.backgroundColor}
+                    onClick={handleSubtractRepetition}
+                >
+                    &nbsp;&nbsp;-&nbsp;&nbsp;
+                </button>
+                <button
+                    style={StyleSheet.button}
+                    onMouseEnter={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButtonHover.backgroundColor}
+                    onMouseLeave={(e) => e.target.style.backgroundColor = StyleSheet.button.backgroundColor}
+                    onClick={handleRemoveExercise}
+                >
+                    <FaRegTrashCan />
+                </button>
+                <button
+                    style={StyleSheet.button}
+                    onMouseEnter={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButtonHover.backgroundColor}
+                    onMouseLeave={(e) => e.target.style.backgroundColor = StyleSheet.button.backgroundColor}
+                    onClick={handleMoveUpExercise}
+                >
+                    <FaArrowUp />
+                </button>
+                <button
+                    style={StyleSheet.button}
+                    onMouseEnter={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButtonHover.backgroundColor}
+                    onMouseLeave={(e) => e.target.style.backgroundColor = StyleSheet.button.backgroundColor}
+                    onClick={handleMoveDownExercise}
+                >
+                    <FaArrowDown />
+                </button>
+            </div>
         </div>
     );
 }

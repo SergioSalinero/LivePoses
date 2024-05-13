@@ -2,22 +2,23 @@ export default function ExerciseCategory({ imageURL, title, cardio, strenght, mo
 
     const StyleSheet = {
         rectangleButton: {
-            width: '300px', // Calculamos un tercio del contenedor y restamos el espacio entre los elementos
-            height: '400px', /* Ajusta la altura según lo necesites */
-            //display: 'flex',
+            width: '300px',
+            height: '400px',
+            display: 'inline-flex', 
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
             color: 'white',
             fontWeight: 'bold',
-            backgroundColor: '#0C3E7D', // Por defecto, pero se puede modificar para cada instancia de RectangleComponent
+            backgroundColor: '#0D0D0D', 
             border: 'none',
             cursor: 'pointer',
             outline: 'none',
             borderRadius: '20px',
-            boxShadow: '0px 5px 15px rgba(0, 0, 0, 0.3)',
+            boxShadow: '0px 5px 15px rgba(0, 0, 0, 0.7)',
             position: 'relative',
-            marginRight: '20px'
+            marginRight: '20px',
+            fontFamily: 'Roboto, sans-serif',
         },
         image: {
             width: '300px',
@@ -41,7 +42,7 @@ export default function ExerciseCategory({ imageURL, title, cardio, strenght, mo
             bottom: '0',
             width: '300px',
             height: '250px',
-            backgroundImage: 'linear-gradient(to bottom, rgba(16,82,147,0) 0%, rgba(16,82,147,1) 100%)',
+            backgroundImage: 'linear-gradient(to bottom, rgba(13,13,13,0) 0%, rgba(13,13,13,1) 100%)',
             borderRadius: '0 0 18px 18px',
             zIndex: '0',
         },
@@ -52,8 +53,8 @@ export default function ExerciseCategory({ imageURL, title, cardio, strenght, mo
             borderRadius: '10px',
             left: 0,
             marginLeft: '10px',
-            marginTop: '200px'
-        }
+            marginTop: '50px'
+        },
     }
 
     return (

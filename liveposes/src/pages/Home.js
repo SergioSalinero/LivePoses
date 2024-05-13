@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 
 import ExerciseCategory from "@/components/ExerciseCategory";
 
 import cardioBurnerImage from '../../public/images/exerciseCategories/Cardio Burner.jpeg';
 import deadliftImage from '../../public/images/exerciseCategories/Deadlift.jpeg';
 import flexibilityImage from '../../public/images/exerciseCategories/Flexibility.jpg';
-import { backend_util } from '@tensorflow/tfjs';
+//import { backend_util } from '@tensorflow/tfjs';
 
 export default function Home() {
 
+    const router = useRouter();
     var [cardioBurnerImageURL, setCardioBurnerImageURL] = useState('');
     var [deadliftImageURL, setdeadliftImageURL] = useState('');
     var [flexibilityImageURL, setflexibilityImageURL] = useState('');
@@ -38,30 +40,26 @@ export default function Home() {
         }
     };
 
+    function handleCreateYourOwnRoutine() {
+        router.push('/RoutineBuilding');
+    }
+
     const StyleSheet = {
+        backgroundContainer: {
+            height: '100vh',
+            //width: '100vw',
+            backgroundColor: '#212121',
+            marginTop: '10px',
+            userSelect: 'none',
+            fontFamily: 'Roboto, sans-serif',
+        },
         mainContainer: {
             marginTop: '-10px',
             marginLeft: '-10px',
-            marginRight: '-8px',
+            //marginRight: '-8px',
             marginBottom: '-10px',
-            backgroundColor: '#083167',
+            backgroundColor: '#212121',
             height: '100%',
-        },
-        header: {
-            backgroundColor: '#011733',
-            color: 'white',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            paddingLeft: '20px',
-            paddingRight: '20px',
-            position: 'fixed',
-            width: '100%',
-            zIndex: 5,
-        },
-        headerButtons: {
-            //marginLeft: '1rem',
-            marginRight: '40px'
         },
         content: {
             display: 'flex',
@@ -70,30 +68,56 @@ export default function Home() {
         sidebar: {
             flex: '0 0 300px',
             padding: '1rem',
-            backgroundColor: '#285793',
+            backgroundColor: '#171717 ',
             height: '100%',
             position: 'fixed',
-            marginTop: '80px',
+            //marginTop: '80px',
             display: 'flex',
             flexDirection: 'column',
-            boxShadow: '0px 5px 15px rgba(0, 0, 0, 0.4)',
+            //boxShadow: '0px 5px 15px rgba(0, 0, 0, 0.4)',
         },
-        sidebarButton : {
+        sidebarTitle: {
+            color: 'white',
+            fontSize: '32px',
+            fontWeight: 'bold',
+            marginLeft: '15px',
+            width: '250px'
+        },
+        sidebarButton: {
             border: 'none',
             cursor: 'pointer',
-            marginBottom: '20px',
-            fontSize: '18px',
-            textAlign: 'left'
+            marginBottom: '15px',
+            fontSize: '20px',
+            textAlign: 'left',
+            padding: '15px',
+            backgroundColor: '#212121',
+            color: 'white',
+            borderRadius: '20px',
         },
-        rectangleContainer: {
+        sidebarButtonHover: {
+            backgroundColor: '#4A4A4A'
+        },
+        sidebarDivider: {
+            margin: '10px 0',
+        },
+        exerciseCategory: {
             //flex: 3,
             //display: 'grid',
             //gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
             //gap: '1rem',
             //padding: '1rem',
             //width: '70%',
-            marginTop: '80px',
-            marginLeft: '20%',
+            marginLeft: '320px',
+            height: '400px'
+        },
+        sectionTitle: {
+            color: 'white',
+            fontSize: '35px',
+        },
+        sectionDivider: {
+            width: '99%',
+            marginTop: '-20px',
+            marginBottom: '15px'
         },
         horizontalScroll: {
             overflowX: 'auto',
@@ -102,70 +126,114 @@ export default function Home() {
             /*gap: '1rem',
             padding: '1rem',*/
         },
+        sidebarButtonHover: {
+            backgroundColor: '#4A4A4A',
+        },
     };
 
     return (
-        <div style={StyleSheet.mainContainer}>
-            <header style={StyleSheet.header}>
-                <h1>Live Poses</h1>
-                {/*<div style={StyleSheet.headerButtons}>
-                    <button>Sign Up</button>
-                    <button>Sign In</button>
-    </div>*/}
-            </header>
+        <div style={StyleSheet.backgroundContainer}>
+            <div style={StyleSheet.mainContainer}>
+                <div style={StyleSheet.content}>
+                    <div style={StyleSheet.sidebar}>
+                        <p style={StyleSheet.sidebarTitle}>Live Poses</p>
+                        <button
+                            style={StyleSheet.sidebarButton}
+                            onMouseEnter={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButtonHover.backgroundColor}
+                            onMouseLeave={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButton.backgroundColor}
+                            onClick={() => handleCreateYourOwnRoutine()}
+                        >
+                            Create your own rutine
+                        </button>
+                        <button
+                            style={StyleSheet.sidebarButton}
+                            onMouseEnter={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButtonHover.backgroundColor}
+                            onMouseLeave={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButton.backgroundColor}
+                        /*onClick={() => handleClick(2)}*/
+                        >
+                            Publish a routine
+                        </button>
+                        <button
+                            style={StyleSheet.sidebarButton}
+                            onMouseEnter={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButtonHover.backgroundColor}
+                            onMouseLeave={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButton.backgroundColor}
+                        /*onClick={() => handleClick(2)}*/
+                        >
+                            Your statistics
+                        </button>
+                        <button
+                            style={StyleSheet.sidebarButton}
+                            onMouseEnter={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButtonHover.backgroundColor}
+                            onMouseLeave={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButton.backgroundColor}
+                        /*onClick={() => handleClick(2)}*/
+                        >
+                            Stored routines
+                        </button>
+                        <button
+                            style={StyleSheet.sidebarButton}
+                            onMouseEnter={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButtonHover.backgroundColor}
+                            onMouseLeave={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButton.backgroundColor}
+                        /*onClick={() => handleClick(2)}*/
+                        >
+                            Routine history
+                        </button>
+                        <hr style={StyleSheet.sidebarDivider} />
+                        <button
+                            style={StyleSheet.sidebarButton}
+                            onMouseEnter={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButtonHover.backgroundColor}
+                            onMouseLeave={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButton.backgroundColor}
+                        /*onClick={() => handleClick(3)}*/
+                        >
+                            Profile
+                        </button>
+                    </div>
+                </div>
 
-            <div style={StyleSheet.content}>
-                <div style={StyleSheet.sidebar}>
-                    <button style={StyleSheet.sidebarButton} /*onClick={() => handleClick(1)}*/>Crreate your own rutine</button>
-                    <button style={StyleSheet.sidebarButton} /*onClick={() => handleClick(2)}*/>Publish a routine</button>
-                    <button style={StyleSheet.sidebarButton} /*onClick={() => handleClick(2)}*/>Your statistics</button>
-                    <button style={StyleSheet.sidebarButton} /*onClick={() => handleClick(3)}*/>Profile</button>
+                {/* Espacio restante */}
+                <div style={StyleSheet.exerciseCategory}>
+                    <p style={StyleSheet.sectionTitle}>Select a fitness plan</p>
+                    <hr style={StyleSheet.sectionDivider} />
+                    <div style={StyleSheet.horizontalScroll}>
+                        <ExerciseCategory
+                            imageURL={cardioBurnerImageURL}
+                            title="Cardio Burner"
+                            numRoutines="512"
+                            onClick={() => handleClick(1)} />
+                        <ExerciseCategory
+                            imageURL={deadliftImageURL}
+                            title="Muscle & Strenght"
+                            numRoutines="357"
+                            onClick={() => handleClick(2)} />
+                        <ExerciseCategory
+                            imageURL={flexibilityImageURL}
+                            title="Flexibility & mobility"
+                            numRoutines="154"
+                            onClick={() => handleClick(2)} />
+                        {/* Puedes añadir más instancias de ExerciseCategory aquí */}
+                        <ExerciseCategory
+                            imageURL={deadliftImageURL}
+                            title="Flexibility & mobility"
+                            numRoutines="154"
+                            onClick={() => handleClick(2)} />
+
+                        <ExerciseCategory
+                            imageURL={deadliftImageURL}
+                            title="Flexibility & mobility"
+                            numRoutines="154"
+                            onClick={() => handleClick(2)} />
+                        <ExerciseCategory
+                            imageURL={deadliftImageURL}
+                            title="Flexibility & mobility"
+                            numRoutines="154"
+                            onClick={() => handleClick(2)} />
+                        <ExerciseCategory
+                            imageURL={deadliftImageURL}
+                            title="Flexibility & mobility"
+                            numRoutines="154"
+                            onClick={() => handleClick(2)} />
+                    </div>
                 </div>
             </div>
-
-            {/* Espacio restante */}
-            <div style={StyleSheet.rectangleContainer}>
-                <div style={StyleSheet.horizontalScroll}>
-                    <ExerciseCategory
-                        imageURL={cardioBurnerImageURL}
-                        title="Cardio Burner"
-                        numRoutines="512"
-                        onClick={() => handleClick(1)} />
-                    <ExerciseCategory
-                        imageURL={deadliftImageURL}
-                        title="Muscle & Strenght"
-                        numRoutines="357"
-                        onClick={() => handleClick(2)} />
-                    <ExerciseCategory
-                        imageURL={flexibilityImageURL}
-                        title="Flexibility & mobility"
-                        numRoutines="154"
-                        onClick={() => handleClick(2)} />
-                    {/* Puedes añadir más instancias de ExerciseCategory aquí */}
-                    <ExerciseCategory
-                        imageURL={deadliftImageURL}
-                        title="Flexibility & mobility"
-                        numRoutines="154"
-                        onClick={() => handleClick(2)} />
-                        
-                        <ExerciseCategory
-                        imageURL={deadliftImageURL}
-                        title="Flexibility & mobility"
-                        numRoutines="154"
-                        onClick={() => handleClick(2)} />
-                        <ExerciseCategory
-                        imageURL={deadliftImageURL}
-                        title="Flexibility & mobility"
-                        numRoutines="154"
-                        onClick={() => handleClick(2)} />
-                        <ExerciseCategory
-                        imageURL={deadliftImageURL}
-                        title="Flexibility & mobility"
-                        numRoutines="154"
-                        onClick={() => handleClick(2)} />
-                </div>
-            </div>
-
         </div>
     );
 }
