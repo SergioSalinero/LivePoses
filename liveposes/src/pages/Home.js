@@ -4,21 +4,24 @@ import { useRouter } from 'next/router';
 import ExerciseCategory from "@/components/ExerciseCategory";
 
 import cardioBurnerImage from '../../public/images/exerciseCategories/Cardio Burner.jpeg';
-import deadliftImage from '../../public/images/exerciseCategories/Deadlift.jpeg';
+import strenghtImage from '../../public/images/exerciseCategories/Strenght.jpeg';
 import flexibilityImage from '../../public/images/exerciseCategories/Flexibility.jpg';
+import rehabilitationImage from '../../public/images/exerciseCategories/Rehabilitation.jpeg';
 //import { backend_util } from '@tensorflow/tfjs';
 
 export default function Home() {
 
     const router = useRouter();
     var [cardioBurnerImageURL, setCardioBurnerImageURL] = useState('');
-    var [deadliftImageURL, setdeadliftImageURL] = useState('');
+    var [strenghtImageURL, setStrenghtImageURL] = useState('');
     var [flexibilityImageURL, setflexibilityImageURL] = useState('');
+    var [rehabilitationImageURL, setRehabilitationImageURL] = useState('');
 
     useEffect(() => {
         setCardioBurnerImageURL(cardioBurnerImage.src);
-        setdeadliftImageURL(deadliftImage.src);
+        setStrenghtImageURL(strenghtImage.src);
         setflexibilityImageURL(flexibilityImage.src);
+        setRehabilitationImageURL(rehabilitationImage.src);
     }, []);
 
     const handleClick = (id) => {
@@ -39,10 +42,6 @@ export default function Home() {
                 console.log("Botón no reconocido");
         }
     };
-
-    function handleCreateYourOwnRoutine() {
-        router.push('/RoutineBuilding');
-    }
 
     const StyleSheet = {
         backgroundContainer: {
@@ -141,7 +140,7 @@ export default function Home() {
                             style={StyleSheet.sidebarButton}
                             onMouseEnter={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButtonHover.backgroundColor}
                             onMouseLeave={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButton.backgroundColor}
-                            onClick={() => handleCreateYourOwnRoutine()}
+                            onClick={() => router.push('/RoutineBuilding')}
                         >
                             Create your own rutine
                         </button>
@@ -149,7 +148,7 @@ export default function Home() {
                             style={StyleSheet.sidebarButton}
                             onMouseEnter={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButtonHover.backgroundColor}
                             onMouseLeave={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButton.backgroundColor}
-                        /*onClick={() => handleClick(2)}*/
+                            onClick={() => router.push('/PublishRoutine')}
                         >
                             Publish a routine
                         </button>
@@ -175,7 +174,7 @@ export default function Home() {
                             onMouseLeave={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButton.backgroundColor}
                         /*onClick={() => handleClick(2)}*/
                         >
-                            Routine history
+                            Training history
                         </button>
                         <hr style={StyleSheet.sidebarDivider} />
                         <button
@@ -200,7 +199,7 @@ export default function Home() {
                             numRoutines="512"
                             onClick={() => handleClick(1)} />
                         <ExerciseCategory
-                            imageURL={deadliftImageURL}
+                            imageURL={strenghtImageURL}
                             title="Muscle & Strenght"
                             numRoutines="357"
                             onClick={() => handleClick(2)} />
@@ -209,25 +208,26 @@ export default function Home() {
                             title="Flexibility & mobility"
                             numRoutines="154"
                             onClick={() => handleClick(2)} />
-                        {/* Puedes añadir más instancias de ExerciseCategory aquí */}
                         <ExerciseCategory
-                            imageURL={deadliftImageURL}
-                            title="Flexibility & mobility"
+                            imageURL={rehabilitationImageURL}
+                            title="Rehabilitation"
                             numRoutines="154"
                             onClick={() => handleClick(2)} />
 
+                        {/* Puedes añadir más instancias de ExerciseCategory aquí */}
+
                         <ExerciseCategory
-                            imageURL={deadliftImageURL}
+                            imageURL={strenghtImageURL}
                             title="Flexibility & mobility"
                             numRoutines="154"
                             onClick={() => handleClick(2)} />
                         <ExerciseCategory
-                            imageURL={deadliftImageURL}
+                            imageURL={strenghtImageURL}
                             title="Flexibility & mobility"
                             numRoutines="154"
                             onClick={() => handleClick(2)} />
                         <ExerciseCategory
-                            imageURL={deadliftImageURL}
+                            imageURL={strenghtImageURL}
                             title="Flexibility & mobility"
                             numRoutines="154"
                             onClick={() => handleClick(2)} />

@@ -156,11 +156,6 @@ export default function RoutineBuilding() {
         }
     }
 
-    function handleBackToHome() {
-        router.push('/Home');
-    }
-
-
     const StyleSheet = {
         backgroundContainer: {
             height: '100vh',
@@ -282,7 +277,8 @@ export default function RoutineBuilding() {
             border: 'none',
             borderRadius: '20px',
             padding: '15px',
-            cursor: 'pointer'
+            cursor: 'pointer',
+            boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.5)',
         },
         startRoutineButtonHover: {
             backgroundColor: '#69DF00',
@@ -299,15 +295,15 @@ export default function RoutineBuilding() {
                             style={StyleSheet.sidebarButton}
                             onMouseEnter={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButtonHover.backgroundColor}
                             onMouseLeave={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButton.backgroundColor}
-                            onClick={() => handleBackToHome()}
+                            onClick={() => router.push('/Home')}
                         >
-                            <FaArrowLeft /> Back to home
+                            <FaArrowLeft /> Back to Home
                         </button>
                         <button
                             style={StyleSheet.sidebarButton}
                             onMouseEnter={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButtonHover.backgroundColor}
                             onMouseLeave={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButton.backgroundColor}
-                        /*onClick={() => handleClick(2)}*/
+                            onClick={() => router.push('PublishRoutine')}
                         >
                             Publish a routine
                         </button>
@@ -333,7 +329,7 @@ export default function RoutineBuilding() {
                             onMouseLeave={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButton.backgroundColor}
                         /*onClick={() => handleClick(2)}*/
                         >
-                            Routine history
+                            Training history
                         </button>
                         <hr style={StyleSheet.sidebarDivider} />
                         <button
