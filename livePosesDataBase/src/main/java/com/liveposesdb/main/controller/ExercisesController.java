@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.liveposesdb.main.model.CategoryCount;
 import com.liveposesdb.main.model.CurrentRoutine;
 import com.liveposesdb.main.model.Exercise;
+import com.liveposesdb.main.model.PublicRoutine;
 import com.liveposesdb.main.services.ExercisesServices;
 
 
@@ -58,4 +60,41 @@ public class ExercisesController {
 		return ResponseEntity.status(HttpStatus.OK).body(currentRoutine);
 	}
 	
+	@GetMapping("/get/start_signal")
+	public ResponseEntity<Exercise> getStartSignal() {
+		Exercise startSignal = exercisesServices.getStartSignal();
+		
+		if(startSignal != null)
+			return ResponseEntity.status(HttpStatus.OK).body(startSignal);
+		else
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+	}
+	
+	@PostMapping("/post/public_routine")
+	public ResponseEntity<String> setPublicRoutine(@RequestBody PublicRoutine publicRoutine) {
+		if(exercisesServices.setPublicRoutine(publicRoutine))
+			return ResponseEntity.status(HttpStatus.OK).body("The routine has been published successfully");
+		else
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("The routine could not be published");
+	}
+	
+	@GetMapping("/get/category_count")
+	public ResponseEntity<List<CategoryCount>> getCategoryCount() {
+		List<CategoryCount> categoryCount = exercisesServices.getCategoryCount();
+		
+		if(categoryCount != null)
+			return ResponseEntity.status(HttpStatus.OK).body(categoryCount);
+		else
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+	}
+	
+	@GetMapping("/get/category_routines")
+	public ResponseEntity<List<PublicRoutine>> getCategoryRoutines(@RequestParam String category) {
+		List<PublicRoutine> categoryRoutines = exercisesServices.getCategoryRoutines(category);
+		
+		if(categoryRoutines != null)
+			return ResponseEntity.status(HttpStatus.OK).body(categoryRoutines);
+		else
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+	}
 }
