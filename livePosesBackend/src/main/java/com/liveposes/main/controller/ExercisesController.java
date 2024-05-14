@@ -3,6 +3,7 @@ package com.liveposes.main.controller;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,9 +12,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 
+import com.liveposes.main.model.CategoryCount;
 import com.liveposes.main.model.CurrentRoutine;
 import com.liveposes.main.model.CurrentRoutineExercises;
 import com.liveposes.main.model.Exercise;
+import com.liveposes.main.model.PublicRoutine;
 import com.liveposes.main.services.ExercisesServices;
 import com.liveposes.main.utils.JWTUtil;
 
@@ -64,7 +67,7 @@ public class ExercisesController {
 		if(exercisesServices.setCurrentRoutine(currentRoutine))
 			return ResponseEntity.status(HttpStatus.OK).body("The routine has been added successfully");
 		else
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add the routine");
 	}
 	
 	@GetMapping("/get/current_routine")
@@ -84,6 +87,79 @@ public class ExercisesController {
 	    }
 		
 		return ResponseEntity.status(HttpStatus.OK).body(currentRoutine);
+	}
+	
+	@GetMapping("/get/start_signal")
+	public ResponseEntity<Exercise> getStartSignal(@RequestHeader("Authorization") String token) {
+		if (token == null || token.isBlank())
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+
+		String userID = jwtUtil.getKey(token);
+
+		if (userID == null)
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+
+		Exercise startSignal = this.exercisesServices.getStartSignal();
+
+		if (startSignal != null)
+			return ResponseEntity.status(HttpStatus.OK).body(startSignal);
+		else
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+	}
+	
+	@PostMapping("/post/public_routine")
+	public ResponseEntity<String> setPublicRoutine(@RequestBody PublicRoutine publicRoutine,
+			@RequestHeader("Authorization") String token) {
+		if (token == null || token.isBlank())
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+
+		String userID = jwtUtil.getKey(token);
+
+		if (userID == null)
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+		
+		
+		if(exercisesServices.setPublicRoutine(publicRoutine))
+			return ResponseEntity.status(HttpStatus.OK).body("The routine has been published successfully");
+		else
+			return ResponseEntity.status(HttpStatus.OK).body("Failed to publish the routine");
+	}
+	
+	@GetMapping("/get/category_count")
+	public ResponseEntity<List<CategoryCount>> getCategoryCount(@RequestHeader("Authorization") String token) {
+		if (token == null || token.isBlank())
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+
+		String userID = jwtUtil.getKey(token);
+
+		if (userID == null)
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+		
+		List<CategoryCount> categoryCount = exercisesServices.getCategoryCount();
+		
+		if (categoryCount != null)
+			return ResponseEntity.status(HttpStatus.OK).body(categoryCount);
+		else
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+	}
+	
+	@GetMapping("/get/category_routines")
+	public ResponseEntity<List<PublicRoutine>> getCategoryRoutine(@RequestParam String category,
+			@RequestHeader("Authorization") String token) {
+		if (token == null || token.isBlank())
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+
+		String userID = jwtUtil.getKey(token);
+
+		if (userID == null)
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+		
+		List<PublicRoutine> categoryRoutine = exercisesServices.getCategoryRoutine(category);
+		
+		if (categoryRoutine != null)
+			return ResponseEntity.status(HttpStatus.OK).body(categoryRoutine);
+		else
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 	}
 
 }
