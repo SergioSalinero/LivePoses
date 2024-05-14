@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { FaArrowLeft } from 'react-icons/fa6'
 
-import { GET_EXERCISES_URL, POST_CURRENT_ROUTINE_URL } from '@/components/Config';
+import { GET_EXERCISES_URL, POST_PUBLIC_ROUTINE_URL } from '@/components/Config';
 import AddExercise from '@/components/AddExercise';
 
 
@@ -20,7 +20,7 @@ export default function PublishRoutine() {
     const maxWords = 100;
     const [wordsRemaining, setWordsRemaining] = useState(maxWords);
 
-    var [selectedCategory, setSelectedCategory] = useState('');
+    var [selectedCategory, setSelectedCategory] = useState('Cardio Burner');
 
     const [error, setError] = useState(null);
     var [token, setToken] = useState('');
@@ -33,7 +33,7 @@ export default function PublishRoutine() {
             token = storedToken;
         }
         else {
-            router.push('/PoseRecognition');
+            router.push('/Login');
         }
 
         async function fetchData() {
@@ -126,7 +126,9 @@ export default function PublishRoutine() {
 
         const currentRoutine = {
             exercises: [],
-            breakTime: breakTime
+            breakTime: breakTime,
+            description: routineDescription,
+            category: selectedCategory.replace(/\s+/g, '')
         }
 
         filteredExerciseComponents.forEach(component => {
@@ -139,7 +141,7 @@ export default function PublishRoutine() {
 
         if (currentRoutine.exercises.length > 0) {
             try {
-                const response = await fetch(POST_CURRENT_ROUTINE_URL, {
+                const response = await fetch(POST_PUBLIC_ROUTINE_URL, {
                     method: 'POST',
                     headers: {
                         'Authorization': token,
@@ -149,7 +151,7 @@ export default function PublishRoutine() {
                 });
 
                 if (response.ok) {
-                    router.push('/PoseRecognition');
+                    //router.push('/Home');
                 } else if (response.status === 500) {
                     setError('Internal server error. Please try again later.');
                 } else {
@@ -163,9 +165,8 @@ export default function PublishRoutine() {
     }
 
     const handleDescriptionChange = (event) => {
-        // Actualizar el contenido del textarea
         setRoutineDescription(event.target.value);
-        // Calcular el número de palabras restantes
+        
         const wordsUsed = event.target.value.trim().split(/\s+/).length;
         setWordsRemaining(maxWords - wordsUsed);
     };
@@ -173,12 +174,14 @@ export default function PublishRoutine() {
     const StyleSheet = {
         backgroundContainer: {
             height: '100vh',
-            width: '100%',
             //width: '100vw',
             backgroundColor: '#212121',
-            //marginTop: '0px',
+            marginTop: '-16px',
+            marginRight: '-8px',
+            //paddingBottom: '0px',
             userSelect: 'none',
             fontFamily: 'Roboto, sans-serif',
+            //overflowY: 'scroll'
         },
         mainContainer: {
             marginTop: '-10px',
@@ -226,12 +229,14 @@ export default function PublishRoutine() {
             margin: '10px 0',
         },
         addExerciseContainer: {
+            marginTop: '40px',
             marginLeft: '320px',
             marginRight: '20px',
         },
         sectionTitle: {
             color: 'white',
             fontSize: '35px',
+            marginTop: '0px'
         },
         sectionDivider: {
             width: '99%',
@@ -284,7 +289,6 @@ export default function PublishRoutine() {
             marginRight: 'auto',
             marginTop: '30px',
             display: 'block',
-            marginBottom: '10px',
             fontSize: '28px',
             backgroundColor: '#57B900',
             color: 'white',
@@ -293,6 +297,7 @@ export default function PublishRoutine() {
             padding: '15px',
             cursor: 'pointer',
             boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.5)',
+            width: '50%'
         },
         startRoutineButtonHover: {
             backgroundColor: '#69DF00',
@@ -318,6 +323,24 @@ export default function PublishRoutine() {
             color: '#F5F5F5',
             fontSize: '14px',
         },
+        floatingContainer: {
+            backgroundColor: '#2F2F2F',
+            borderRadius: '20px',
+            padding: '20px 20px 20px 20px',
+            boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.3)',
+            marginBottom: '20px'
+        },
+        selectCategory: {
+            backgroundColor: '#0D0D0D',
+            color: 'white',
+            height: '50px',
+            border: 'none',
+            borderRadius: '20px',
+            fontSize: '18px',
+            fontFamily: 'Roboto, sans-serif',
+            marginRight: '20px',
+            cursor: 'pointer'
+        },
     };
 
     return (
@@ -341,6 +364,14 @@ export default function PublishRoutine() {
                             onClick={() => router.push('RoutineBuilding')}
                         >
                             Create your own rouine
+                        </button>
+                        <button
+                            style={StyleSheet.sidebarButton}
+                            onMouseEnter={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButtonHover.backgroundColor}
+                            onMouseLeave={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButton.backgroundColor}
+                            /*onClick={() => router.push('/PublishRoutine')}*/
+                        >
+                            Your published routines
                         </button>
                         <button
                             style={StyleSheet.sidebarButton}
@@ -379,21 +410,21 @@ export default function PublishRoutine() {
                 </div>
 
                 <div style={StyleSheet.addExerciseContainer}>
-                    <p style={StyleSheet.sectionTitle}>Routine construction to be published</p>
-                    <hr style={StyleSheet.sectionDivider} />
+                    <div style={StyleSheet.floatingContainer}>
+                        <p style={StyleSheet.sectionTitle}>Routine construction to be published</p>
 
-                    {exerciseComponents}
-                    <button
-                        style={StyleSheet.addButton}
-                        onMouseEnter={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButtonHover.backgroundColor}
-                        onMouseLeave={(e) => e.target.style.backgroundColor = StyleSheet.addButton.backgroundColor}
-                        onClick={handleAddExercise}
-                    >
-                        Add exercise
-                    </button>
+                        {exerciseComponents}
+                        <button
+                            style={StyleSheet.addButton}
+                            onMouseEnter={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButtonHover.backgroundColor}
+                            onMouseLeave={(e) => e.target.style.backgroundColor = StyleSheet.addButton.backgroundColor}
+                            onClick={handleAddExercise}
+                        >
+                            Add exercise
+                        </button>
+                    </div>
 
-
-                    <div>
+                    <div style={StyleSheet.floatingContainer}>
                         <p style={StyleSheet.sectionTitle}>Set rest time (secs)</p>
                         <hr style={StyleSheet.sectionDivider} />
 
@@ -413,9 +444,8 @@ export default function PublishRoutine() {
                         />
                     </div>
 
-                    <div>
+                    <div style={StyleSheet.floatingContainer}>
                         <p style={StyleSheet.sectionTitle}>Give a description</p>
-                        <hr style={StyleSheet.sectionDivider} />
 
                         <textarea
                             value={routineDescription}
@@ -426,16 +456,21 @@ export default function PublishRoutine() {
                         <p style={StyleSheet.wordsRemaining}>{wordsRemaining} words remaining</p>
                     </div>
 
-                    <div>
+                    <div style={StyleSheet.floatingContainer}>
                         <p style={StyleSheet.sectionTitle}>Select a category</p>
-                        <hr style={StyleSheet.sectionDivider} />
-                        {/*<select style={StyleSheet.selectExercise} value={selectedCategory} /*onChange={handleExerciseChange}*>
-                            {props.exercises.map((exercise) => (
-                                <option key={exercise.id} value={exercise.id}>
-                                    {exercise.name}
-                                </option>
-                            ))}
-                        </select>*/}
+
+                        <select
+                            style={StyleSheet.selectCategory}
+                            value={selectedCategory}
+                            onChange={(event) => setSelectedCategory(event.target.value)}>
+                            <option value="Cardio Burner">Cardio Burner</option>
+                            <option value="Muscle & Strenght">Muscle & Strenght</option>
+                            <option value="Flexibility & Mobility">Flexibility & Mobility</option>
+                            <option value="Rehabilitation">Rehabilitation</option>
+                            <option value="HIIT">HIIT</option>
+                            <option value="Calisthenic">Calisthenic</option>
+                            <option value="Equilibrium">Equilibrium</option>
+                        </select>
                     </div>
 
                     <button
@@ -444,7 +479,7 @@ export default function PublishRoutine() {
                         onMouseLeave={(e) => e.target.style.backgroundColor = StyleSheet.startRoutineButton.backgroundColor}
                         onClick={handleStartRoutine}
                     >
-                        Start routine
+                        Public routine
                     </button>
 
                 </div>

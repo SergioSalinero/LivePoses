@@ -1,48 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import { FaArrowLeft } from 'react-icons/fa6'
 
 import ExerciseCategory from "@/components/ExerciseCategory";
 
-import { GET_CATEGORY_COUNT_URL } from '@/components/Config';
+import { GET_CATEGORY_ROUTINE_URL } from '@/components/Config';
 
-import cardioBurnerImage from '../../public/images/exerciseCategories/Cardio Burner.jpeg';
-import strenghtImage from '../../public/images/exerciseCategories/Strenght.jpeg';
-import flexibilityImage from '../../public/images/exerciseCategories/Flexibility.jpg';
-import rehabilitationImage from '../../public/images/exerciseCategories/Rehabilitation.jpeg';
-import hiitImage from '../../public/images/exerciseCategories/HIIT.jpeg';
-import calisthenicImage from '../../public/images/exerciseCategories/Calisthenic.jpeg';
-//import { backend_util } from '@tensorflow/tfjs';
 
-export default function Home() {
+
+export default function CategoryRoutines() {
 
     const router = useRouter();
-    const [cardioBurnerImageURL, setCardioBurnerImageURL] = useState('');
-    const [strenghtImageURL, setStrenghtImageURL] = useState('');
-    const [flexibilityImageURL, setflexibilityImageURL] = useState('');
-    const [rehabilitationImageURL, setRehabilitationImageURL] = useState('');
-    const [hiitImageURL, setHiitImageURL] = useState('');
-    const [calisthenicImageURL, setCalisthenicImageURL] = useState('');
+    var { category } = router.query;
 
-    const [cardioBurnerCounter, setCardioBurnerCounter] = useState(0);
-    const [strenghtCounter, setStrenghtCounter] = useState(0);
-    const [flesibilityCounter, setFlexibilityCounter] = useState(0);
-    const [rehabilitationCounter, setRehabilitationCounter] = useState(0);
-    const [hiitCounter, setHiitCounter] = useState(0);
-    const [calisthenicCounter, setCalisthenicCounter] = useState(0);
-    const [equilibriumCounter, setEquilibriumCounter] = useState(0);
-
-    var categoryCounter;
+    const [routines, setRoutines] = useState();
+    var intRoutines;
 
     var [token, setToken] = useState('');
 
     useEffect(() => {
-        setCardioBurnerImageURL(cardioBurnerImage.src);
-        setStrenghtImageURL(strenghtImage.src);
-        setflexibilityImageURL(flexibilityImage.src);
-        setRehabilitationImageURL(rehabilitationImage.src);
-        setHiitImageURL(hiitImage.src);
-        setCalisthenicImageURL(calisthenicImage.src);
-
         const storedToken = localStorage.getItem('accessToken');
         if (storedToken !== null && storedToken !== undefined) {
             setToken(storedToken);
@@ -51,63 +27,38 @@ export default function Home() {
         else {
             router.push('/Login');
         }
+    })
 
-        async function fetchCategoryCount() {
-            try {
-                const response = await fetch(GET_CATEGORY_COUNT_URL, {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': token,
-                        'Content-Type': 'application/json'
+    useEffect(() => {
+        if (category) {
+            console.log(category);
+
+            const url = `${GET_CATEGORY_ROUTINE_URL}?${"category=" + category.replace(/\s+/g, '')}`;
+            console.log(url);
+
+            async function fetchCategoryCount() {
+                try {
+                    const response = await fetch(url, {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': token,
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
                     }
-                });
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
+                    intRoutines = await response.json();
+                    setRoutines(intRoutines);
+                    console.log(intRoutines);
+                } catch (error) {
+                    console.error('Error fetching data: ', error);
                 }
-                categoryCounter = await response.json();
-                //setCategoryCounter(jsonData);
-                console.log("Category: " + categoryCounter.length);
-                categoryCounter.forEach((element) => {
-                    if(element.category == 'Cardio Burner')
-                        setCardioBurnerCounter(element.count);
-                    else if(element.category == 'Muscle & Strenght')
-                        setStrenghtCounter(element.count);
-                    else if(element.category == 'Flexibility & Mobility')
-                        setFlexibilityCounter(element.count);
-                    else if(element.category == 'Rehabilitation')
-                        setRehabilitationCounter(element.count);
-                    else if(element.category == 'HIIT')
-                        setHiitCounter(element.count);
-                    else if(element.category == 'Calisilthenic')
-                        setCalisthenicCounter(element.count);
-                    else
-                        setEquilibriumCounter(element.count);
-                })
-            } catch (error) {
-                console.error('Error fetching data: ', error);
             }
-        }
 
-        fetchCategoryCount();
-    }, []);
-
-    const handleClick = (id) => {
-        switch (id) {
-            case 1:
-                router.push('/CategoryRoutines?category=Cardio Burner');
-                break;
-            case 2:
-                console.log("Botón 2 pulsado");
-                // Aquí puedes definir el comportamiento para el botón 2
-                break;
-            case 3:
-                console.log("Botón 3 pulsado");
-                // Aquí puedes definir el comportamiento para el botón 3
-                break;
-            default:
-                console.log("Botón no reconocido");
+            fetchCategoryCount();
         }
-    };
+    }, [category]);
 
     const StyleSheet = {
         backgroundContainer: {
@@ -122,12 +73,12 @@ export default function Home() {
             //overflowY: 'scroll'
         },
         mainContainer: {
-            //marginTop: '-10px',
+            marginTop: '-10px',
             marginLeft: '-10px',
             //marginRight: '-8px',
-            //marginBottom: '-10px',
+            marginBottom: '-10px',
             backgroundColor: '#212121',
-            //height: '100%',
+            height: '100%',
         },
         content: {
             display: 'flex',
@@ -168,17 +119,17 @@ export default function Home() {
         sidebarDivider: {
             margin: '10px 0',
         },
-        exerciseCategory: {
-            //flex: 3,
-            //display: 'grid',
-            //gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-            //gap: '1rem',
-            //padding: '1rem',
+        routines: {
+            flex: 3,
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+            gap: '50px',
+            padding: '1rem',
             //width: '70%',
-            backgroundColor: '#212121',
             marginTop: '25px',
             marginLeft: '320px',
             marginRight: '20px',
+            marginBottom: '20px',
             height: '400px'
         },
         sectionTitle: {
@@ -190,10 +141,6 @@ export default function Home() {
             width: '99%',
             marginTop: '-20px',
             marginBottom: '15px'
-        },
-        horizontalScroll: {
-            overflowX: 'auto',
-            whiteSpace: 'nowrap',
         },
         sidebarButtonHover: {
             backgroundColor: '#4A4A4A',
@@ -217,6 +164,14 @@ export default function Home() {
                             style={StyleSheet.sidebarButton}
                             onMouseEnter={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButtonHover.backgroundColor}
                             onMouseLeave={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButton.backgroundColor}
+                            onClick={() => router.push('/Home')}
+                        >
+                            <FaArrowLeft /> Back to Home
+                        </button>
+                        <button
+                            style={StyleSheet.sidebarButton}
+                            onMouseEnter={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButtonHover.backgroundColor}
+                            onMouseLeave={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButton.backgroundColor}
                             onClick={() => router.push('/RoutineBuilding')}
                         >
                             Create your own rutine
@@ -233,7 +188,7 @@ export default function Home() {
                             style={StyleSheet.sidebarButton}
                             onMouseEnter={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButtonHover.backgroundColor}
                             onMouseLeave={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButton.backgroundColor}
-                            /*onClick={() => router.push('/PublishRoutine')}*/
+                        /*onClick={() => router.push('/PublishRoutine')}*/
                         >
                             Your published routines
                         </button>
@@ -274,47 +229,45 @@ export default function Home() {
                 </div>
 
 
-                <div style={StyleSheet.exerciseCategory}>
+                <div style={StyleSheet.routines}>
                     <div style={StyleSheet.floatingContainer}>
-                        <p style={StyleSheet.sectionTitle}>Select a fitness plan</p>
+                        <p style={StyleSheet.sectionTitle}>{category}</p>
 
-                        <div style={StyleSheet.horizontalScroll}>
-                            <ExerciseCategory
-                                imageURL={cardioBurnerImageURL}
-                                title="Cardio Burner"
-                                numRoutines={cardioBurnerCounter}
-                                onClick={() => handleClick(1)} />
-                            <ExerciseCategory
-                                imageURL={strenghtImageURL}
-                                title="Muscle & Strenght"
-                                numRoutines={strenghtCounter}
-                                onClick={() => handleClick(2)} />
-                            <ExerciseCategory
-                                imageURL={flexibilityImageURL}
-                                title="Flexibility & Mobility"
-                                numRoutines={flesibilityCounter}
-                                onClick={() => handleClick(3)} />
-                            <ExerciseCategory
-                                imageURL={rehabilitationImageURL}
-                                title="Rehabilitation"
-                                numRoutines={rehabilitationCounter}
-                                onClick={() => handleClick(4)} />
-                            <ExerciseCategory
-                                imageURL={hiitImageURL}
-                                title="HIIT"
-                                numRoutines={hiitCounter}
-                                onClick={() => handleClick(5)} />
-                            <ExerciseCategory
-                                imageURL={calisthenicImageURL}
-                                title="Calisthenic"
-                                numRoutines={calisthenicCounter}
-                                onClick={() => handleClick(6)} />
-                            <ExerciseCategory
-                                imageURL={strenghtImageURL}
-                                title="Equilibrium"
-                                numRoutines={equilibriumCounter}
-                                onClick={() => handleClick(7)} />
-                        </div>
+                        {/*<ExerciseCategory
+                            imageURL={cardioBurnerImageURL}
+                            title="Cardio Burner"
+                            numRoutines={cardioBurnerCounter}
+                            onClick={() => handleClick(1)} />
+                        <ExerciseCategory
+                            imageURL={strenghtImageURL}
+                            title="Muscle & Strenght"
+                            numRoutines={strenghtCounter}
+                            onClick={() => handleClick(2)} />
+                        <ExerciseCategory
+                            imageURL={flexibilityImageURL}
+                            title="Flexibility & Mobility"
+                            numRoutines={flesibilityCounter}
+                            onClick={() => handleClick(3)} />
+                        <ExerciseCategory
+                            imageURL={rehabilitationImageURL}
+                            title="Rehabilitation"
+                            numRoutines={rehabilitationCounter}
+                            onClick={() => handleClick(4)} />
+                        <ExerciseCategory
+                            imageURL={hiitImageURL}
+                            title="HIIT"
+                            numRoutines={hiitCounter}
+                            onClick={() => handleClick(5)} />
+                        <ExerciseCategory
+                            imageURL={calisthenicImageURL}
+                            title="Calisthenic"
+                            numRoutines={calisthenicCounter}
+                            onClick={() => handleClick(6)} />
+                        <ExerciseCategory
+                            imageURL={strenghtImageURL}
+                            title="Equilibrium"
+                            numRoutines={equilibriumCounter}
+    onClick={() => handleClick(7)} />*/}
                     </div>
                 </div>
             </div>

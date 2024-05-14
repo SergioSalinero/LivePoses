@@ -27,7 +27,7 @@ export default function RoutineBuilding() {
             token = storedToken;
         }
         else {
-            router.push('/PoseRecognition');
+            router.push('/Login');
         }
 
         async function fetchData() {
@@ -159,12 +159,14 @@ export default function RoutineBuilding() {
     const StyleSheet = {
         backgroundContainer: {
             height: '100vh',
-            width: '100%',
             //width: '100vw',
             backgroundColor: '#212121',
-            //marginTop: '0px',
+            marginTop: '-16px',
+            marginRight: '-8px',
+            //paddingBottom: '0px',
             userSelect: 'none',
             fontFamily: 'Roboto, sans-serif',
+            //overflowY: 'scroll'
         },
         mainContainer: {
             marginTop: '-10px',
@@ -212,12 +214,14 @@ export default function RoutineBuilding() {
             margin: '10px 0',
         },
         addExerciseContainer: {
+            marginTop: '40px',
             marginLeft: '320px',
             marginRight: '20px',
         },
         sectionTitle: {
             color: 'white',
             fontSize: '35px',
+            marginTop: '0px'
         },
         sectionDivider: {
             width: '99%',
@@ -279,9 +283,17 @@ export default function RoutineBuilding() {
             padding: '15px',
             cursor: 'pointer',
             boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.5)',
+            width: '50%'
         },
         startRoutineButtonHover: {
             backgroundColor: '#69DF00',
+        },
+        floatingContainer: {
+            backgroundColor: '#2F2F2F',
+            borderRadius: '20px',
+            padding: '20px 20px 20px 20px',
+            boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.3)',
+            marginBottom: '20px'
         },
     };
 
@@ -306,6 +318,14 @@ export default function RoutineBuilding() {
                             onClick={() => router.push('PublishRoutine')}
                         >
                             Publish a routine
+                        </button>
+                        <button
+                            style={StyleSheet.sidebarButton}
+                            onMouseEnter={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButtonHover.backgroundColor}
+                            onMouseLeave={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButton.backgroundColor}
+                            /*onClick={() => router.push('/PublishRoutine')}*/
+                        >
+                            Your published routines
                         </button>
                         <button
                             style={StyleSheet.sidebarButton}
@@ -344,51 +364,52 @@ export default function RoutineBuilding() {
                 </div>
 
                 <div style={StyleSheet.addExerciseContainer}>
-                    <p style={StyleSheet.sectionTitle}>Routine construction</p>
-                    <hr style={StyleSheet.sectionDivider} />
-                    
-                    {exerciseComponents}
-                    <button
-                        style={StyleSheet.addButton}
-                        onMouseEnter={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButtonHover.backgroundColor}
-                        onMouseLeave={(e) => e.target.style.backgroundColor = StyleSheet.addButton.backgroundColor}
-                        onClick={handleAddExercise}
-                    >
-                        Add exercise
-                    </button>
+                    <div style={StyleSheet.floatingContainer}>
+                        <p style={StyleSheet.sectionTitle}>Routine construction</p>
+
+                        {exerciseComponents}
+                        <button
+                            style={StyleSheet.addButton}
+                            onMouseEnter={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButtonHover.backgroundColor}
+                            onMouseLeave={(e) => e.target.style.backgroundColor = StyleSheet.addButton.backgroundColor}
+                            onClick={handleAddExercise}
+                        >
+                            Add exercise
+                        </button>
+                        </div>
 
 
-                    <div>
-                        <p style={StyleSheet.sectionTitle}>Set rest time (secs)</p>
-                        <hr style={StyleSheet.sectionDivider} />
+                        <div style={StyleSheet.floatingContainer}>
+                            <p style={StyleSheet.sectionTitle}>Set rest time (secs)</p>
+                            <hr style={StyleSheet.sectionDivider} />
 
-                        <input
-                            type="number"
-                            value={breakTime}
-                            style={{ ...StyleSheet.restTimeSliderNumber, marginLeft: `calc(${breakTime}% - 22px)` }}
-                        />
+                            <input
+                                type="number"
+                                value={breakTime}
+                                style={{ ...StyleSheet.restTimeSliderNumber, marginLeft: `calc(${breakTime}% - 22px)` }}
+                            />
 
-                        <input
-                            type="range"
-                            min={0}
-                            max={100}
-                            value={breakTime}
-                            style={StyleSheet.restTimeSlider}
-                            onChange={(event) => setBreakTime(event.target.value)}
-                        />
+                            <input
+                                type="range"
+                                min={0}
+                                max={100}
+                                value={breakTime}
+                                style={StyleSheet.restTimeSlider}
+                                onChange={(event) => setBreakTime(event.target.value)}
+                            />
+                        </div>
+
+                        <button
+                            style={StyleSheet.startRoutineButton}
+                            onMouseEnter={(e) => e.target.style.backgroundColor = StyleSheet.startRoutineButtonHover.backgroundColor}
+                            onMouseLeave={(e) => e.target.style.backgroundColor = StyleSheet.startRoutineButton.backgroundColor}
+                            onClick={handleStartRoutine}
+                        >
+                            Start routine
+                        </button>
+
                     </div>
-
-                    <button
-                        style={StyleSheet.startRoutineButton}
-                        onMouseEnter={(e) => e.target.style.backgroundColor = StyleSheet.startRoutineButtonHover.backgroundColor}
-                        onMouseLeave={(e) => e.target.style.backgroundColor = StyleSheet.startRoutineButton.backgroundColor}
-                        onClick={handleStartRoutine}
-                    >
-                        Start routine
-                    </button>
-
                 </div>
             </div>
-        </div>
-    );
+            );
 }
