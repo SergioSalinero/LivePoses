@@ -83,18 +83,18 @@ export default function BlazePose() {
 
 
                     var point1 = {
-                        x: keypoints[11].x,
-                        y: keypoints[11].y
+                        x: keypoints[12].x,
+                        y: keypoints[12].y
                     }
 
                     var point2 = {
-                        x: keypoints[23].x,
-                        y: keypoints[23].y
+                        x: keypoints[14].x,
+                        y: keypoints[14].y
                     }
 
                     var point3 = {
-                        x: keypoints[25].x,
-                        y: keypoints[25].y
+                        x: keypoints[16].x,
+                        y: keypoints[16].y
                     }
                     
                     console.log(calculateAngleBetweenTwoLines(point1, point2, point3));

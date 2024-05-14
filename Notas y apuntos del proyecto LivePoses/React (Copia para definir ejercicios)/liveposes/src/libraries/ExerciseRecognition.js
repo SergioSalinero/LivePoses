@@ -83,8 +83,8 @@ export function calculateAngleBetweenTwoLines(point1, point2, point3) {
     };
 
     const vectorD2 = {
-        x: point3.x - point1.x,
-        y: point3.y - point1.y
+        x: point3.x - point2.x,
+        y: point3.y - point2.y
     };
 
     const den = Math.abs(vectorD1.x * vectorD2.x + vectorD1.y * vectorD2.y);

@@ -37,8 +37,19 @@ CREATE TABLE `liveposes`.`current_routine` (
 );
 
 
+CREATE TABLE `liveposes`.`public_routines` (
+	id INT AUTO_INCREMENT PRIMARY KEY,
+    exercises JSON    NOT NULL,
+    breakTime   INT NOT NULL,
+    description varchar(1000),
+    category varchar(50) NOT NULL
+);
 
--- First standing exercise configuration
+
+
+INSERT INTO start_signal (name, rightKeyPoint1, rightKeyPoint2, rightKeyPoint3, rightKeyPointDistance1, rightKeyPointDistance2, leftKeyPoint1, leftKeyPoint2, leftKeyPoint3, leftKeyPointDistance1, leftKeyPointDistance2, upperAngleMax, upperAngleMin, lowerAngleMax, lowerAngleMin, recognitionType)
+VALUES ('Señal inicio', 12, 14, 16, 12, 14, 11, 13, 15, 11, 13, 90, 55, 25, 0, 'both');
+
 INSERT INTO exercises (name, rightKeyPoint1, rightKeyPoint2, rightKeyPoint3, leftKeyPoint1, leftKeyPoint2, leftKeyPoint3, upperAngleMax, upperAngleMin, lowerAngleMax, lowerAngleMin, recognitionType)
 VALUES ('Pierna frontal', 12, 24, 26, 11, 23, 25, 60, 40, 20, 0, 'only_angles');
 

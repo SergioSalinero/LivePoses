@@ -25,7 +25,7 @@ UC-012: Elaborar una rutina
     4. El sistema construye la rutina.
 UC-013: Restablecer rutina
 UC-014: Especificar tiempo de descanso entre series
-UC-015: Guardar rutina
+¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿UC-015: Guardar rutina????????????????????????????????
 
 
 <Gestión de ejecución de rutinas>
@@ -36,27 +36,41 @@ UC-018: Terminar rutina
 UC-019: Guardar rutina realizada
 
 
-<Gestión de grupos de ejercicio>
-UC-020: Mostrar grupos
-UC-021: Acceder a un grupo
+<Gestión de categorías de ejerciccios de ejercicio>
+UC-020: Mostrar categorías de ejercicios
+	- Cardiovascular o aeróbico
+	- Entrenamiento de fuerza o musculación
+	- Flexibilidad y movilidad
+	- Equilibrio y estabilidad
+	- Entrenamiento de intervalos de alta intensidad (HIIT)
+	- Entrenamiento funcional
+	- Deportes y actividades recreativas
+	- Ejercicios de rehabilitaión y terapéuticos
+UC-021: Acceder a una categoría
   (Esto puede dar lugar a la ejecución del caso de uso UC-016)
-UC-022: Apuntarse a un grupo
-UC-023: Crear grupo
-  - Pasos:
-    1. El usuario solicita crear un grupo
-    2. El sistema solicita al usuario los datos del grupo (nombre, descripción, clase, ...)
-    3. El usuario proporciona los datos requeridos
-    4. El sistema recopila los datos y crea el grupo
-    5. El usuario puede añadir y/o eliminar rutinas (Postcondición)
-  (Esto puede dar lugar a la ejecución del caso de uso UC-012)
-UC-024: Modificar grupo
-UC-025: Eliminar grupo
+/*****UC-022: Apuntarse a un grupo
+ **UC-023: Crear grupo
+ ** - Pasos:
+ **   1. El usuario solicita crear un grupo
+ **   2. El sistema solicita al usuario los datos del grupo (nombre, descripción, clase, ...)
+ **   3. El usuario proporciona los datos requeridos
+ **   4. El sistema recopila los datos y crea el grupo
+ **   5. El usuario puede añadir y/o eliminar rutinas (Postcondición)
+ ** (Esto puede dar lugar a la ejecución del caso de uso UC-012)
+ ** UC-024: Modificar grupo
+ ** UC-025: Eliminar grupo
+UC-022: Crear rutina pública
+UC-023: Eliminar rutina
+UC-024: Valorar rutina
+UC-025: Guardar rutina
+UC-026: Verificar rutina
+
 
 
 <Gestión de estadísticas y rutinas personales>
-UC-026: Mostrar histórico de rutinas
-UC-027: Mostrar rutinas guardadas
-UC-028: Mostrar estadísticas personales
+UC-027: Mostrar histórico de rutinas
+UC-028: Mostrar rutinas guardadas
+UC-029: Mostrar estadísticas personales
 
 
 
