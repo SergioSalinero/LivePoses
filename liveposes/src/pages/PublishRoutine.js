@@ -3,8 +3,20 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { FaArrowLeft } from 'react-icons/fa6'
 
-import { GET_EXERCISES_URL, POST_PUBLIC_ROUTINE_URL } from '@/components/Config';
+import { GET_EXERCISES_URL, POST_PUBLISH_ROUTINE_URL } from '@/utils/Config';
 import AddExercise from '@/components/AddExercise';
+
+import { BACKGROUND_COLOR } from '@/utils/Colors';
+import { SIDE_BAR_COLOR } from '@/utils/Colors';
+import { SIDE_BAR_BUTTON_COLOR } from '@/utils/Colors';
+import { SIDE_BAR_BUTTON_HOVER_COLOR } from '@/utils/Colors';
+import { SIDE_BAR_TEX_COLOR } from '@/utils/Colors';
+import { FLOATING_CONTAINER_COLOR } from '@/utils/Colors';
+import { SECTION_TEXT_COLOR } from '@/utils/Colors';
+import { SECTION_BUTTON_COLOR } from '@/utils/Colors';
+import { SECTION_BUTTON_HOVER_COLOR } from '@/utils/Colors';
+import { START_ROUTINE_BUTTON_COLOR } from '@/utils/Colors';
+import { START_ROUTINE_BUTTON_HOVER_COLOR } from '@/utils/Colors';
 
 
 export default function PublishRoutine() {
@@ -27,6 +39,8 @@ export default function PublishRoutine() {
 
 
     useEffect(() => {
+        document.body.style.backgroundColor = BACKGROUND_COLOR;
+
         const storedToken = localStorage.getItem('accessToken');
         if (storedToken !== null && storedToken !== undefined) {
             setToken(storedToken);
@@ -141,7 +155,7 @@ export default function PublishRoutine() {
 
         if (currentRoutine.exercises.length > 0) {
             try {
-                const response = await fetch(POST_PUBLIC_ROUTINE_URL, {
+                const response = await fetch(POST_PUBLISH_ROUTINE_URL, {
                     method: 'POST',
                     headers: {
                         'Authorization': token,
@@ -175,7 +189,7 @@ export default function PublishRoutine() {
         backgroundContainer: {
             height: '100vh',
             //width: '100vw',
-            backgroundColor: '#212121',
+            backgroundColor: BACKGROUND_COLOR,
             marginTop: '-16px',
             marginRight: '-8px',
             //paddingBottom: '0px',
@@ -188,7 +202,7 @@ export default function PublishRoutine() {
             marginLeft: '-10px',
             //marginRight: '-8px',
             marginBottom: '-10px',
-            backgroundColor: '#212121',
+            backgroundColor: BACKGROUND_COLOR,
         },
         content: {
             display: 'flex',
@@ -197,7 +211,7 @@ export default function PublishRoutine() {
         sidebar: {
             flex: '0 0 300px',
             padding: '1rem',
-            backgroundColor: '#171717 ',
+            backgroundColor: SIDE_BAR_COLOR,
             height: '100%',
             position: 'fixed',
             //marginTop: '80px',
@@ -206,11 +220,12 @@ export default function PublishRoutine() {
             //boxShadow: '0px 5px 15px rgba(0, 0, 0, 0.4)',
         },
         sidebarTitle: {
-            color: 'white',
-            fontSize: '32px',
-
+            color: SIDE_BAR_TEX_COLOR,
+            fontSize: '38px',
             fontWeight: 'bold',
+            fontFamily: 'Montserrat, sans-serif',
             marginLeft: '15px',
+            marginTop: '30px',
             width: '250px'
         },
         sidebarButton: {
@@ -220,22 +235,26 @@ export default function PublishRoutine() {
             fontSize: '20px',
             textAlign: 'left',
             padding: '15px',
-            backgroundColor: '#212121',
+            backgroundColor: SIDE_BAR_BUTTON_COLOR,
             color: 'white',
             borderRadius: '20px',
-
+        },
+        sidebarButtonHover: {
+            backgroundColor: SIDE_BAR_BUTTON_HOVER_COLOR,
         },
         sidebarDivider: {
-            margin: '10px 0',
+            margin: '10px 5px 10px 5px',
         },
         addExerciseContainer: {
-            marginTop: '40px',
+            marginTop: '30px',
             marginLeft: '320px',
             marginRight: '20px',
         },
         sectionTitle: {
-            color: 'white',
+            color: SECTION_TEXT_COLOR,
             fontSize: '35px',
+            fontFamily: 'Montserrat, sans-serif',
+            fontWeight: '600',
             marginTop: '0px'
         },
         sectionDivider: {
@@ -243,16 +262,14 @@ export default function PublishRoutine() {
             marginTop: '-20px',
             marginBottom: '15px'
         },
-        sidebarButtonHover: {
-            backgroundColor: '#4A4A4A',
-        },
         addButton: {
             marginLeft: 'auto',
             marginRight: 'auto',
             display: 'block',
             marginBottom: '10px',
-            fontSize: '28px',
-            backgroundColor: '#0D0D0D',
+            fontSize: '32px',
+            fontWeight: 600,
+            backgroundColor: SECTION_BUTTON_COLOR,
             color: 'white',
             border: 'none',
             borderRadius: '20px',
@@ -289,8 +306,9 @@ export default function PublishRoutine() {
             marginRight: 'auto',
             marginTop: '30px',
             display: 'block',
-            fontSize: '28px',
-            backgroundColor: '#57B900',
+            fontSize: '32px',
+            fontWeight: 600,
+            backgroundColor: START_ROUTINE_BUTTON_COLOR,
             color: 'white',
             border: 'none',
             borderRadius: '20px',
@@ -300,7 +318,7 @@ export default function PublishRoutine() {
             width: '50%'
         },
         startRoutineButtonHover: {
-            backgroundColor: '#69DF00',
+            backgroundColor: START_ROUTINE_BUTTON_HOVER_COLOR,
         },
         textarea: {
             width: '70%',
@@ -324,14 +342,14 @@ export default function PublishRoutine() {
             fontSize: '14px',
         },
         floatingContainer: {
-            backgroundColor: '#2F2F2F',
+            backgroundColor: FLOATING_CONTAINER_COLOR,
             borderRadius: '20px',
             padding: '20px 20px 20px 20px',
-            boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.3)',
+            boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.5)',
             marginBottom: '20px'
         },
         selectCategory: {
-            backgroundColor: '#0D0D0D',
+            backgroundColor: SECTION_BUTTON_COLOR,
             color: 'white',
             height: '50px',
             border: 'none',
@@ -399,7 +417,10 @@ export default function PublishRoutine() {
                         </button>
                         <hr style={StyleSheet.sidebarDivider} />
                         <button
-                            style={StyleSheet.sidebarButton}
+                            style={{
+                                ...StyleSheet.sidebarButton,
+                                marginTop: '10px',
+                            }}
                             onMouseEnter={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButtonHover.backgroundColor}
                             onMouseLeave={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButton.backgroundColor}
                         /*onClick={() => handleClick(3)}*/
@@ -416,7 +437,7 @@ export default function PublishRoutine() {
                         {exerciseComponents}
                         <button
                             style={StyleSheet.addButton}
-                            onMouseEnter={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButtonHover.backgroundColor}
+                            onMouseEnter={(e) => e.target.style.backgroundColor = SECTION_BUTTON_HOVER_COLOR}
                             onMouseLeave={(e) => e.target.style.backgroundColor = StyleSheet.addButton.backgroundColor}
                             onClick={handleAddExercise}
                         >
@@ -479,7 +500,7 @@ export default function PublishRoutine() {
                         onMouseLeave={(e) => e.target.style.backgroundColor = StyleSheet.startRoutineButton.backgroundColor}
                         onClick={handleStartRoutine}
                     >
-                        Public routine
+                        Publish routine
                     </button>
 
                 </div>

@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+//import { backend_util } from '@tensorflow/tfjs';
 
 import ExerciseCategory from "@/components/ExerciseCategory";
 
-import { GET_CATEGORY_COUNT_URL } from '@/components/Config';
+import { GET_CATEGORY_COUNT_URL } from '@/utils/Config';
 
 import cardioBurnerImage from '../../public/images/exerciseCategories/Cardio Burner.jpeg';
 import strenghtImage from '../../public/images/exerciseCategories/Strenght.jpeg';
@@ -11,7 +12,15 @@ import flexibilityImage from '../../public/images/exerciseCategories/Flexibility
 import rehabilitationImage from '../../public/images/exerciseCategories/Rehabilitation.jpeg';
 import hiitImage from '../../public/images/exerciseCategories/HIIT.jpeg';
 import calisthenicImage from '../../public/images/exerciseCategories/Calisthenic.jpeg';
-//import { backend_util } from '@tensorflow/tfjs';
+
+import { BACKGROUND_COLOR } from '@/utils/Colors';
+import { SIDE_BAR_COLOR } from '@/utils/Colors';
+import { SIDE_BAR_BUTTON_COLOR } from '@/utils/Colors';
+import { SIDE_BAR_BUTTON_HOVER_COLOR } from '@/utils/Colors';
+import { SIDE_BAR_TEX_COLOR } from '@/utils/Colors';
+import { FLOATING_CONTAINER_COLOR } from '@/utils/Colors';
+import { SECTION_TEXT_COLOR } from '@/utils/Colors';
+
 
 export default function Home() {
 
@@ -36,6 +45,8 @@ export default function Home() {
     var [token, setToken] = useState('');
 
     useEffect(() => {
+        document.body.style.backgroundColor = BACKGROUND_COLOR;
+
         setCardioBurnerImageURL(cardioBurnerImage.src);
         setStrenghtImageURL(strenghtImage.src);
         setflexibilityImageURL(flexibilityImage.src);
@@ -68,17 +79,17 @@ export default function Home() {
                 //setCategoryCounter(jsonData);
                 console.log("Category: " + categoryCounter.length);
                 categoryCounter.forEach((element) => {
-                    if(element.category == 'Cardio Burner')
+                    if (element.category == 'Cardio Burner')
                         setCardioBurnerCounter(element.count);
-                    else if(element.category == 'Muscle & Strenght')
+                    else if (element.category == 'Muscle & Strenght')
                         setStrenghtCounter(element.count);
-                    else if(element.category == 'Flexibility & Mobility')
+                    else if (element.category == 'Flexibility & Mobility')
                         setFlexibilityCounter(element.count);
-                    else if(element.category == 'Rehabilitation')
+                    else if (element.category == 'Rehabilitation')
                         setRehabilitationCounter(element.count);
-                    else if(element.category == 'HIIT')
+                    else if (element.category == 'HIIT')
                         setHiitCounter(element.count);
-                    else if(element.category == 'Calisilthenic')
+                    else if (element.category == 'Calisilthenic')
                         setCalisthenicCounter(element.count);
                     else
                         setEquilibriumCounter(element.count);
@@ -113,21 +124,23 @@ export default function Home() {
         backgroundContainer: {
             height: '100vh',
             //width: '100vw',
-            backgroundColor: '#212121',
+            //backgroundColor: BACKGROUND_COLOR,
             marginTop: '-16px',
             marginRight: '-8px',
-            //paddingBottom: '0px',
+            paddingBottom: '0px',
             userSelect: 'none',
             fontFamily: 'Roboto, sans-serif',
-            //overflowY: 'scroll'
+            //overflowY: 'hidden',
+            //overflowX: 'hidden'
         },
         mainContainer: {
             //marginTop: '-10px',
             marginLeft: '-10px',
             //marginRight: '-8px',
             //marginBottom: '-10px',
-            backgroundColor: '#212121',
+            backgroundColor: BACKGROUND_COLOR,
             //height: '100%',
+            height: '100vh'
         },
         content: {
             display: 'flex',
@@ -136,7 +149,7 @@ export default function Home() {
         sidebar: {
             flex: '0 0 300px',
             padding: '1rem',
-            backgroundColor: '#171717 ',
+            backgroundColor: SIDE_BAR_COLOR,
             height: '100%',
             position: 'fixed',
             //marginTop: '80px',
@@ -145,10 +158,12 @@ export default function Home() {
             //boxShadow: '0px 5px 15px rgba(0, 0, 0, 0.4)',
         },
         sidebarTitle: {
-            color: 'white',
-            fontSize: '32px',
+            color: SIDE_BAR_TEX_COLOR,
+            fontSize: '38px',
             fontWeight: 'bold',
+            fontFamily: 'Montserrat, sans-serif',
             marginLeft: '15px',
+            marginTop: '30px',
             width: '250px'
         },
         sidebarButton: {
@@ -158,15 +173,15 @@ export default function Home() {
             fontSize: '20px',
             textAlign: 'left',
             padding: '15px',
-            backgroundColor: '#212121',
-            color: 'white',
+            backgroundColor: SIDE_BAR_BUTTON_COLOR,
+            color: SIDE_BAR_TEX_COLOR,
             borderRadius: '20px',
         },
         sidebarButtonHover: {
-            backgroundColor: '#4A4A4A'
+            backgroundColor: SIDE_BAR_BUTTON_HOVER_COLOR
         },
         sidebarDivider: {
-            margin: '10px 0',
+            margin: '10px 5px 10px 5px',
         },
         exerciseCategory: {
             //flex: 3,
@@ -175,35 +190,32 @@ export default function Home() {
             //gap: '1rem',
             //padding: '1rem',
             //width: '70%',
-            backgroundColor: '#212121',
+            backgroundColor: 'transparent',
             marginTop: '25px',
             marginLeft: '320px',
             marginRight: '20px',
             height: '400px'
         },
         sectionTitle: {
-            color: 'white',
+            color: SECTION_TEXT_COLOR,
             fontSize: '35px',
+            fontFamily: 'Montserrat, sans-serif',
+            fontWeight: '600',
             marginTop: '0px',
-        },
-        sectionDivider: {
-            width: '99%',
-            marginTop: '-20px',
-            marginBottom: '15px'
         },
         horizontalScroll: {
             overflowX: 'auto',
             whiteSpace: 'nowrap',
-        },
-        sidebarButtonHover: {
-            backgroundColor: '#4A4A4A',
+            scrollbarColor: 'rgba(248, 248, 248, 0.8) transparent'
         },
         floatingContainer: {
-            backgroundColor: '#2F2F2F',
+            backgroundColor: FLOATING_CONTAINER_COLOR,
             borderRadius: '20px',
             padding: '20px 20px 20px 20px',
-            boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.3)',
-            marginBottom: '20px'
+            boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.5)',
+            marginBottom: '20px',
+            marginTop: '30px',
+            //textAlign: 'center'
         },
     };
 
@@ -233,7 +245,7 @@ export default function Home() {
                             style={StyleSheet.sidebarButton}
                             onMouseEnter={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButtonHover.backgroundColor}
                             onMouseLeave={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButton.backgroundColor}
-                            /*onClick={() => router.push('/PublishRoutine')}*/
+                        /*onClick={() => router.push('/PublishRoutine')}*/
                         >
                             Your published routines
                         </button>
@@ -263,7 +275,10 @@ export default function Home() {
                         </button>
                         <hr style={StyleSheet.sidebarDivider} />
                         <button
-                            style={StyleSheet.sidebarButton}
+                            style={{
+                                ...StyleSheet.sidebarButton,
+                                marginTop: '10px',
+                            }}
                             onMouseEnter={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButtonHover.backgroundColor}
                             onMouseLeave={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButton.backgroundColor}
                         /*onClick={() => handleClick(3)}*/
@@ -280,6 +295,16 @@ export default function Home() {
 
                         <div style={StyleSheet.horizontalScroll}>
                             <ExerciseCategory
+                                imageURL={rehabilitationImageURL}
+                                title="Rehabilitation"
+                                numRoutines={rehabilitationCounter}
+                                onClick={() => handleClick(4)} />
+                            <ExerciseCategory
+                                imageURL={flexibilityImageURL}
+                                title="Flexibility & Mobility"
+                                numRoutines={flesibilityCounter}
+                                onClick={() => handleClick(3)} />
+                            <ExerciseCategory
                                 imageURL={cardioBurnerImageURL}
                                 title="Cardio Burner"
                                 numRoutines={cardioBurnerCounter}
@@ -289,16 +314,8 @@ export default function Home() {
                                 title="Muscle & Strenght"
                                 numRoutines={strenghtCounter}
                                 onClick={() => handleClick(2)} />
-                            <ExerciseCategory
-                                imageURL={flexibilityImageURL}
-                                title="Flexibility & Mobility"
-                                numRoutines={flesibilityCounter}
-                                onClick={() => handleClick(3)} />
-                            <ExerciseCategory
-                                imageURL={rehabilitationImageURL}
-                                title="Rehabilitation"
-                                numRoutines={rehabilitationCounter}
-                                onClick={() => handleClick(4)} />
+
+
                             <ExerciseCategory
                                 imageURL={hiitImageURL}
                                 title="HIIT"

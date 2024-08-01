@@ -5,7 +5,7 @@ import * as poseDetection from '@tensorflow-models/pose-detection';
 import { exerciseRecognitionByAngles, exerciseRecognitionByAnglesAndDistances } from '@/libraries/ExerciseRecognition';
 import Chronometer from '@/components/Chronometer';
 import CountdownTimer from '@/components/CountDownTimer';
-import { GET_EXERCISES_URL, GET_CURRENT_ROUTINE_URL, GET_START_SIGNAL } from '@/components/Config';
+import { GET_EXERCISES_URL, GET_CURRENT_ROUTINE_URL, GET_START_SIGNAL } from '@/utils/Config';
 
 
 export default function PoseRecognition() {
@@ -360,6 +360,17 @@ export default function PoseRecognition() {
             if (exerciseStatus != previousExerciseStatus && exerciseStatus == 'START') {
                 setCurrentRepetitions(prevRepetitions => prevRepetitions + 1);
                 currentRepetitionsAux++;
+                setColor('green');
+                color = 'green';
+            }
+
+            if(exerciseStatus == 'END') {
+                setColor('green');
+                color = 'green';
+            }
+            else {
+                setColor('white');
+                color = 'white';
             }
 
             previousExerciseStatus = exerciseStatus;

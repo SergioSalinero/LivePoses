@@ -4,6 +4,7 @@ import { FaRegTrashCan, FaArrowUp, FaArrowDown } from 'react-icons/fa6'
 export default function handleAddExercise(props) {
     const [repetitions, setRepetitions] = useState(0);
     const [selectedExercise, setSelectedExercise] = useState('1');
+    
 
     function handleAddRepetition() {
         setRepetitions(repetitions + 1);
@@ -36,7 +37,7 @@ export default function handleAddExercise(props) {
 
     const StyleSheet = {
         containerStyle: {
-            backgroundColor: '#0D0D0D',
+            backgroundColor: '#4A4A4A',
             borderRadius: '20px',
             marginBottom: '15px',
             boxShadow: '0px 5px 15px rgba(0, 0, 0, 0.3)',

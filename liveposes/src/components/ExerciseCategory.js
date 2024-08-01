@@ -15,7 +15,7 @@ export default function ExerciseCategory({ imageURL, title, cardio, strenght, mo
             cursor: 'pointer',
             outline: 'none',
             borderRadius: '20px',
-            boxShadow: '0px 5px 15px rgba(0, 0, 0, 0.7)',
+            boxShadow: '0px 5px 15px rgba(0, 0, 0, 0.5)',
             position: 'relative',
             marginRight: '20px',
             fontFamily: 'Roboto, sans-serif',

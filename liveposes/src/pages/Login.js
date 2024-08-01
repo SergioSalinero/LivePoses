@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 
-import { POST_LOGING_URL } from '@/components/Config';
+import { POST_LOGING_URL } from '@/utils/Config';
 
 
 export default function Login() {

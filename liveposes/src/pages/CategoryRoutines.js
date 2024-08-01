@@ -2,9 +2,21 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { FaArrowLeft } from 'react-icons/fa6'
 
-import ExerciseCategory from "@/components/ExerciseCategory";
+import Routine from '@/components/Routine';
 
-import { GET_CATEGORY_ROUTINE_URL } from '@/components/Config';
+import { GET_EXERCISES_URL, GET_CATEGORY_ROUTINE_URL } from '@/utils/Config';
+
+import { BACKGROUND_COLOR } from '@/utils/Colors';
+import { SIDE_BAR_COLOR } from '@/utils/Colors';
+import { SIDE_BAR_BUTTON_COLOR } from '@/utils/Colors';
+import { SIDE_BAR_BUTTON_HOVER_COLOR } from '@/utils/Colors';
+import { SIDE_BAR_TEX_COLOR } from '@/utils/Colors';
+import { FLOATING_CONTAINER_COLOR } from '@/utils/Colors';
+import { SECTION_TEXT_COLOR } from '@/utils/Colors';
+import { SECTION_BUTTON_COLOR } from '@/utils/Colors';
+import { SECTION_BUTTON_HOVER_COLOR } from '@/utils/Colors';
+import { START_ROUTINE_BUTTON_COLOR } from '@/utils/Colors';
+import { START_ROUTINE_BUTTON_HOVER_COLOR } from '@/utils/Colors';
 
 
 
@@ -13,12 +25,16 @@ export default function CategoryRoutines() {
     const router = useRouter();
     var { category } = router.query;
 
-    const [routines, setRoutines] = useState();
+    const [routines, setRoutines] = useState([]);
     var intRoutines;
+
+    const [exercises, setExercises] = useState([]);
 
     var [token, setToken] = useState('');
 
     useEffect(() => {
+        document.body.style.backgroundColor = BACKGROUND_COLOR;
+        
         const storedToken = localStorage.getItem('accessToken');
         if (storedToken !== null && storedToken !== undefined) {
             setToken(storedToken);
@@ -50,21 +66,45 @@ export default function CategoryRoutines() {
                     }
                     intRoutines = await response.json();
                     setRoutines(intRoutines);
-                    console.log(intRoutines);
+                    //console.log(routines);
                 } catch (error) {
                     console.error('Error fetching data: ', error);
                 }
             }
 
+            async function fetchExerciseData() {
+                try {
+                    const response = await fetch(GET_EXERCISES_URL, {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': token,
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    const jsonData = await response.json();
+                    setExercises(jsonData);
+                } catch (error) {
+                    console.error('Error fetching data: ', error);
+                }
+            }
+            
+            fetchExerciseData();
             fetchCategoryCount();
         }
     }, [category]);
+
+    function handleRoutineClick(index) {
+        console.log(index);
+    }
 
     const StyleSheet = {
         backgroundContainer: {
             height: '100vh',
             //width: '100vw',
-            backgroundColor: '#212121',
+            backgroundColor: BACKGROUND_COLOR,
             marginTop: '-16px',
             marginRight: '-8px',
             //paddingBottom: '0px',
@@ -77,7 +117,7 @@ export default function CategoryRoutines() {
             marginLeft: '-10px',
             //marginRight: '-8px',
             marginBottom: '-10px',
-            backgroundColor: '#212121',
+            backgroundColor: BACKGROUND_COLOR,
             height: '100%',
         },
         content: {
@@ -87,7 +127,7 @@ export default function CategoryRoutines() {
         sidebar: {
             flex: '0 0 300px',
             padding: '1rem',
-            backgroundColor: '#171717 ',
+            backgroundColor: SIDE_BAR_COLOR,
             height: '100%',
             position: 'fixed',
             //marginTop: '80px',
@@ -96,11 +136,13 @@ export default function CategoryRoutines() {
             //boxShadow: '0px 5px 15px rgba(0, 0, 0, 0.4)',
         },
         sidebarTitle: {
-            color: 'white',
-            fontSize: '32px',
+            color: SIDE_BAR_TEX_COLOR,
+            fontSize: '38px',
             fontWeight: 'bold',
+            fontFamily: 'Montserrat, sans-serif',
             marginLeft: '15px',
-            width: '250px'
+            width: '250px',
+            marginTop: '30px'
         },
         sidebarButton: {
             border: 'none',
@@ -109,49 +151,44 @@ export default function CategoryRoutines() {
             fontSize: '20px',
             textAlign: 'left',
             padding: '15px',
-            backgroundColor: '#212121',
+            backgroundColor: SIDE_BAR_BUTTON_COLOR,
             color: 'white',
             borderRadius: '20px',
         },
         sidebarButtonHover: {
-            backgroundColor: '#4A4A4A'
+            backgroundColor: SIDE_BAR_BUTTON_HOVER_COLOR
         },
         sidebarDivider: {
-            margin: '10px 0',
+            margin: '10px 5px 10px 5px',
         },
         routines: {
-            flex: 3,
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-            gap: '50px',
-            padding: '1rem',
-            //width: '70%',
+            backgroundColor: 'transparent',
             marginTop: '25px',
             marginLeft: '320px',
             marginRight: '20px',
-            marginBottom: '20px',
-            height: '400px'
+            height: '400px',
         },
         sectionTitle: {
-            color: 'white',
+            color: SECTION_TEXT_COLOR,
             fontSize: '35px',
+            fontFamily: 'Montserrat, sans-serif',
+            fontWeight: '600',
             marginTop: '0px',
         },
-        sectionDivider: {
-            width: '99%',
-            marginTop: '-20px',
-            marginBottom: '15px'
-        },
-        sidebarButtonHover: {
-            backgroundColor: '#4A4A4A',
-        },
         floatingContainer: {
-            backgroundColor: '#2F2F2F',
+            backgroundColor: FLOATING_CONTAINER_COLOR,
             borderRadius: '20px',
             padding: '20px 20px 20px 20px',
-            boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.3)',
-            marginBottom: '20px'
+            boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.5)',
+            marginBottom: '20px',
+            marginTop: '30px'
         },
+        showRoutines: {
+            flex: 3,
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
+            gap: '50px',
+        }
     };
 
     return (
@@ -218,7 +255,10 @@ export default function CategoryRoutines() {
                         </button>
                         <hr style={StyleSheet.sidebarDivider} />
                         <button
-                            style={StyleSheet.sidebarButton}
+                            style={{
+                                ...StyleSheet.sidebarButton,
+                                marginTop: '10px',
+                            }}
                             onMouseEnter={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButtonHover.backgroundColor}
                             onMouseLeave={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButton.backgroundColor}
                         /*onClick={() => handleClick(3)}*/
@@ -232,42 +272,16 @@ export default function CategoryRoutines() {
                 <div style={StyleSheet.routines}>
                     <div style={StyleSheet.floatingContainer}>
                         <p style={StyleSheet.sectionTitle}>{category}</p>
-
-                        {/*<ExerciseCategory
-                            imageURL={cardioBurnerImageURL}
-                            title="Cardio Burner"
-                            numRoutines={cardioBurnerCounter}
-                            onClick={() => handleClick(1)} />
-                        <ExerciseCategory
-                            imageURL={strenghtImageURL}
-                            title="Muscle & Strenght"
-                            numRoutines={strenghtCounter}
-                            onClick={() => handleClick(2)} />
-                        <ExerciseCategory
-                            imageURL={flexibilityImageURL}
-                            title="Flexibility & Mobility"
-                            numRoutines={flesibilityCounter}
-                            onClick={() => handleClick(3)} />
-                        <ExerciseCategory
-                            imageURL={rehabilitationImageURL}
-                            title="Rehabilitation"
-                            numRoutines={rehabilitationCounter}
-                            onClick={() => handleClick(4)} />
-                        <ExerciseCategory
-                            imageURL={hiitImageURL}
-                            title="HIIT"
-                            numRoutines={hiitCounter}
-                            onClick={() => handleClick(5)} />
-                        <ExerciseCategory
-                            imageURL={calisthenicImageURL}
-                            title="Calisthenic"
-                            numRoutines={calisthenicCounter}
-                            onClick={() => handleClick(6)} />
-                        <ExerciseCategory
-                            imageURL={strenghtImageURL}
-                            title="Equilibrium"
-                            numRoutines={equilibriumCounter}
-    onClick={() => handleClick(7)} />*/}
+                        <div style={StyleSheet.showRoutines}>
+                            {routines.map((item, index) => (
+                                <Routine
+                                    key={index}
+                                    onclick={() => handleRoutineClick(index)}
+                                    routine={item}
+                                    exercises={exercises}
+                                />
+                            ))}
+                        </div>
                     </div>
                 </div>
             </div>
