@@ -2,10 +2,15 @@ import React, { useRef, useState, useEffect } from 'react';
 import * as tf from '@tensorflow/tfjs';
 import * as poseDetection from '@tensorflow-models/pose-detection';
 
-import { exerciseRecognitionByAngles, exerciseRecognitionByAnglesAndDistances } from '@/libraries/ExerciseRecognition';
+import { exerciseRecognitionByAngles, exerciseRecognitionByAnglesAndDistances, calculateAngleBetweenTwoLines } from '@/libraries/ExerciseRecognition';
+import AccuracyRepsRectangle1 from '@/components/AccuracyRepsRectangle1';
+import AccuracyRepsRectangle2 from '@/components/AccuracyRepsRectangle2';
 import Chronometer from '@/components/Chronometer';
 import CountdownTimer from '@/components/CountDownTimer';
+
 import { GET_EXERCISES_URL, GET_CURRENT_ROUTINE_URL, GET_START_SIGNAL } from '@/utils/Config';
+
+import { POSE_ESTIMATION_BACKGROUND_COLOR } from '@/utils/Colors';
 
 
 export default function PoseRecognition() {
@@ -34,6 +39,11 @@ export default function PoseRecognition() {
     const [currentRepetitions, setCurrentRepetitions] = useState(0);
     const [currentExerciseRepetitions, setCurrentExerciseRepetition] = useState(0);
     const [currentExerciseName, setCurrentExerciseName] = useState('');
+    const [totalReps, setTotalReps] = useState(0);
+    const [rectangleHeightArray, setRectangleHeightArray] = useState([]);
+    let rectangleHeightArrayAux, rectangleHeightArrayTransformed;
+
+    var globalRepetitions = 0;
 
 
     const videoRef = useRef(null);
@@ -41,6 +51,8 @@ export default function PoseRecognition() {
 
 
     useEffect(() => {
+        document.body.style.backgroundColor = POSE_ESTIMATION_BACKGROUND_COLOR;
+
         const storedToken = localStorage.getItem('accessToken');
         if (storedToken !== null && storedToken !== undefined) {
             token = storedToken;
@@ -62,7 +74,6 @@ export default function PoseRecognition() {
                 const jsonData = await response.json();
                 exercises = jsonData;
                 console.log(exercises);
-                fetchStartSignal();
             } catch (error) {
                 console.error('Error fetching data: ', error);
             }
@@ -84,7 +95,6 @@ export default function PoseRecognition() {
                 const jsonData = await response.json();
                 startSignal = jsonData;
                 console.log(startSignal);
-                fetchCurrentRoutine();
             } catch (error) {
                 console.error('Error fetching data: ', error);
             }
@@ -109,6 +119,17 @@ export default function PoseRecognition() {
                 setBreakTime(currentRoutine.breakTime);
                 breakTime = currentRoutine.breakTime;
                 setSeconds(currentRoutine.breakTime);
+
+                var sumTotalReps = 0;
+                currentRoutine.exercises.forEach((element) => {
+                    sumTotalReps += element.repetitions;
+                });
+
+                setTotalReps(sumTotalReps);
+
+                rectangleHeightArrayAux = Array(sumTotalReps).fill(0);
+                rectangleHeightArrayTransformed = Array(sumTotalReps).fill(0);
+
                 setExerciseStatus();
             } catch (error) {
                 console.error('Error fetching data: ', error);
@@ -116,6 +137,8 @@ export default function PoseRecognition() {
         }
 
         fecthExercises();
+        fetchStartSignal();
+        fetchCurrentRoutine();
     }, []);
 
 
@@ -146,7 +169,7 @@ export default function PoseRecognition() {
             color = 'red';*/
         }
 
-        console.log(currentExerciseIndex, currentExercise, currentExerciseRepetitions, currentRepetitions);
+        //console.log(currentExerciseIndex, currentExercise, currentExerciseRepetitions, currentRepetitions);
     }
 
     /* Set the configurations of the camera */
@@ -246,21 +269,21 @@ export default function PoseRecognition() {
                     if (isBreakTimeActive && isFirstTimeBreakTimeActive) {
                         isFirstTimeBreakTimeActive = false;
 
-                            interval = setInterval(() => {
-                                console.log("2: " + seconds)
-                                setSeconds(seconds => {
-                                    if (seconds == 0) {
-                                        clearInterval(interval);
-                                        handleCountDownTimerComplete(); // Call the callback function provided by the parent component
-                                        return 0;
-                                    }
-                                    return seconds - 1;
-                                });
-                            }, 1000);
+                        interval = setInterval(() => {
+                            //console.log("2: " + seconds)
+                            setSeconds(seconds => {
+                                if (seconds == 0) {
+                                    clearInterval(interval);
+                                    handleCountDownTimerComplete(); // Call the callback function provided by the parent component
+                                    return 0;
+                                }
+                                return seconds - 1;
+                            });
+                        }, 1000);
 
                         return () => clearInterval(interval);
                     }
-                    else if(!isBreakTimeActive) {
+                    else if (!isBreakTimeActive) {
                         isFirstTimeBreakTimeActive = true;
                         clearInterval(interval);
                     }
@@ -331,7 +354,9 @@ export default function PoseRecognition() {
             }
 
             if (currentExercise.recognitionType == 'only_angles') {
-                var exerciseStatus = exerciseRecognitionByAngles(rightPoint1, rightPoint2, rightPoint3, leftPoint1, leftPoint2, leftPoint3, upperAngleMax, upperAngleMin, lowerAngleMax, lowerAngleMin);
+                var rightAngle = calculateAngleBetweenTwoLines(rightPoint1, rightPoint2, rightPoint3);
+                var leftAngle = calculateAngleBetweenTwoLines(leftPoint1, leftPoint2, leftPoint3);
+                var exerciseStatus = exerciseRecognitionByAngles(rightPoint1, rightPoint2, rightPoint3, leftPoint1, leftPoint2, leftPoint3, upperAngleMax, upperAngleMin, lowerAngleMax, lowerAngleMin, rightAngle, leftAngle);
             }
             else if (currentExercise.recognitionType == 'both') {
                 var rightPointDistance1 = {
@@ -351,7 +376,10 @@ export default function PoseRecognition() {
                     y: keypoints[leftKeyPointDistance2].y
                 }
 
-                var exerciseStatus = exerciseRecognitionByAnglesAndDistances(rightPoint1, rightPoint2, rightPoint3, rightPointDistance1, rightPointDistance2, leftPoint1, leftPoint2, leftPoint3, leftPointDistance1, leftPointDistance2, upperAngleMax, upperAngleMin, lowerAngleMax, lowerAngleMin);
+                var rightAngle = calculateAngleBetweenTwoLines(rightPoint1, rightPoint2, rightPoint3);
+                var leftAngle = calculateAngleBetweenTwoLines(leftPoint1, leftPoint2, leftPoint3);
+
+                var exerciseStatus = exerciseRecognitionByAnglesAndDistances(rightPoint1, rightPoint2, rightPoint3, rightPointDistance1, rightPointDistance2, leftPoint1, leftPoint2, leftPoint3, leftPointDistance1, leftPointDistance2, upperAngleMax, upperAngleMin, lowerAngleMax, lowerAngleMin, rightAngle, leftAngle);
             }
 
             if (typeof exerciseStatus == 'undefined')
@@ -360,13 +388,38 @@ export default function PoseRecognition() {
             if (exerciseStatus != previousExerciseStatus && exerciseStatus == 'START') {
                 setCurrentRepetitions(prevRepetitions => prevRepetitions + 1);
                 currentRepetitionsAux++;
+                globalRepetitions++;
                 setColor('green');
                 color = 'green';
             }
 
-            if(exerciseStatus == 'END') {
+            if (exerciseStatus == 'END') {
                 setColor('green');
                 color = 'green';
+
+                var rightAngleAccuracy = Math.abs(upperAngleMax - rightAngle);
+                var leftAngleAccuracy = Math.abs(upperAngleMax - leftAngle);
+                var previousAngleAccuracy = Math.abs(upperAngleMax - rectangleHeightArrayAux[globalRepetitions]);
+
+                var compareAccuracy, compareAngle;
+                if(rightAngleAccuracy < leftAngleAccuracy) {
+                    compareAccuracy = rightAngleAccuracy;
+                    compareAngle = rightAngle;
+                } 
+                else {
+                    compareAccuracy = leftAngleAccuracy;
+                    compareAngle = leftAngle;
+                }
+
+                    //console.log('Accuracy' + rightAngleAccuracy + '    ' + rightAngle + '    ' + previousAngleAccuracy + '    ' + rectangleHeightArrayAux[currentExerciseIndex] + '    ' + compareAngle)
+
+                if(previousAngleAccuracy > compareAccuracy){
+                    rectangleHeightArrayAux[globalRepetitions] = compareAngle;
+                    //console.log(rectangleHeightArrayAux);
+                    rectangleHeightArrayTransformed[globalRepetitions] = Math.abs((compareAngle * 15) / upperAngleMax);
+                    setRectangleHeightArray(rectangleHeightArrayTransformed);
+                }
+                    
             }
             else {
                 setColor('white');
@@ -381,6 +434,11 @@ export default function PoseRecognition() {
                 setExerciseStatus();
         }
     }
+
+    useEffect(() => {
+        // Este efecto se ejecuta cada vez que rectangleHeightArray cambia
+        //console.log('Estado actualizado:', rectangleHeightArray);
+      }, [rectangleHeightArray]);
 
     function startRecognition(keypoints) {
         if (typeof startSignal != 'undefined') {
@@ -443,7 +501,10 @@ export default function PoseRecognition() {
                 y: keypoints[leftKeyPointDistance2].y
             }
 
-            var exerciseStatus = exerciseRecognitionByAnglesAndDistances(rightPoint1, rightPoint2, rightPoint3, rightPointDistance1, rightPointDistance2, leftPoint1, leftPoint2, leftPoint3, leftPointDistance1, leftPointDistance2, upperAngleMax, upperAngleMin, lowerAngleMax, lowerAngleMin);
+            var rightAngle = calculateAngleBetweenTwoLines(rightPoint1, rightPoint2, rightPoint3);
+            var leftAngle = calculateAngleBetweenTwoLines(leftPoint1, leftPoint2, leftPoint3);
+
+            var exerciseStatus = exerciseRecognitionByAnglesAndDistances(rightPoint1, rightPoint2, rightPoint3, rightPointDistance1, rightPointDistance2, leftPoint1, leftPoint2, leftPoint3, leftPointDistance1, leftPointDistance2, upperAngleMax, upperAngleMin, lowerAngleMax, lowerAngleMin, rightAngle, leftAngle);
 
 
             if (typeof exerciseStatus == 'undefined')
@@ -474,7 +535,7 @@ export default function PoseRecognition() {
     };
 
     function handleCountDownTimerComplete() {
-        console.log('Timer completed');
+        //console.log('Timer completed');
         isBreakTimeActive = false;
         setIsRoutineActive(true);
         isRoutineActive = true;
@@ -482,7 +543,7 @@ export default function PoseRecognition() {
         setSeconds(breakTime);
         seconds = breakTime;
 
-        console.log("1: " + breakTime);
+        //console.log("1: " + breakTime);
 
         //setColor('white');
         //color = 'white';
@@ -490,13 +551,16 @@ export default function PoseRecognition() {
     }
 
     const StyleSheet = {
+        mainContainer: {
+            fontFamily: 'Montserrat, sans-serif',
+        },
         videoCanvasStyle: {
             width: '50%',
             height: 'auto',
             position: 'absolute',
             left: '0px',
             top: '0px',
-            transform: 'scaleX(-1)'
+            transform: 'scaleX(-1)',
         },
         dataDivContainer: {
             width: '50%',
@@ -505,7 +569,33 @@ export default function PoseRecognition() {
             right: '0%',
             top: '0px',
             fontSize: '38px',
+            color: 'white'
         },
+        repetitionsDivContainer: {
+            width: '90%',
+            height: 'auto',
+            position: 'absolute',
+            left: '0',
+            paddingLeft: '30px',
+            //top: '70%',
+            bottom: '20px',
+            //fontSize: '38px',
+            //backgroundColor: POSE_ESTIMATION_BACKGROUND_COLOR,
+            color: 'white'
+        },
+        accuracyTitle: {
+            padding: '0',
+            fontSize: '30px',
+            position: 'absolute',
+            width: '90%',
+            height: '20vh',
+            bottom: '0',
+            left: '0',
+            paddingLeft: '30px',
+            backgroundColor: POSE_ESTIMATION_BACKGROUND_COLOR,
+            color: 'white',
+            borderRadius: '20px'
+        }
     }
 
     return (
@@ -513,7 +603,7 @@ export default function PoseRecognition() {
         <video ref={videoRef} width="640" height="480" style={StyleSheet.videoCanvasStyle} autoPlay></video>
         <canvas className="output_canvas" ref={canvasRef} style={StyleSheet.videoCanvasStyle}></canvas>
         */
-        <div>
+        <div style={StyleSheet.mainContainer}>
             <div style={StyleSheet.dataDivContainer}>
                 <div>Name: {currentExerciseName}</div>
                 <div>Reps: {currentRepetitions}/{currentExerciseRepetitions}</div>
@@ -530,6 +620,20 @@ export default function PoseRecognition() {
             </div>
             <video ref={videoRef} width="640" height="480" style={StyleSheet.videoCanvasStyle} autoPlay></video>
             <canvas className="output_canvas" ref={canvasRef} style={StyleSheet.videoCanvasStyle}></canvas>
+
+            <p style={StyleSheet.accuracyTitle}>Accuracy</p>
+            <div style={StyleSheet.repetitionsDivContainer}>
+                <AccuracyRepsRectangle1
+                    numRectangles={totalReps}
+                />
+            </div>
+
+            <div style={StyleSheet.repetitionsDivContainer}>
+                <AccuracyRepsRectangle2
+                    numRectangles={totalReps}
+                    heightsArray={rectangleHeightArray}
+                />
+            </div>
         </div>
     );
 }

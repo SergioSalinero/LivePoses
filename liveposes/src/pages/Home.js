@@ -77,13 +77,13 @@ export default function Home() {
                 }
                 categoryCounter = await response.json();
                 //setCategoryCounter(jsonData);
-                console.log("Category: " + categoryCounter.length);
+
                 categoryCounter.forEach((element) => {
-                    if (element.category == 'Cardio Burner')
+                    if (element.category == 'CardioBurner')
                         setCardioBurnerCounter(element.count);
-                    else if (element.category == 'Muscle & Strenght')
+                    else if (element.category == 'Muscle&Strenght')
                         setStrenghtCounter(element.count);
-                    else if (element.category == 'Flexibility & Mobility')
+                    else if (element.category == 'Flexibility&Mobility')
                         setFlexibilityCounter(element.count);
                     else if (element.category == 'Rehabilitation')
                         setRehabilitationCounter(element.count);
@@ -103,20 +103,53 @@ export default function Home() {
     }, []);
 
     const handleClick = (id) => {
+        var category;
+        var encodedCategory;
+        var url;
+
         switch (id) {
             case 1:
-                router.push('/CategoryRoutines?category=Cardio Burner');
+                category = "Cardio Burner";
+                encodedCategory = encodeURIComponent(category);
+                url = `/CategoryRoutines?category=${encodedCategory}`;
+                router.push(url);
                 break;
             case 2:
-                console.log("Botón 2 pulsado");
-                // Aquí puedes definir el comportamiento para el botón 2
+                category = "Muscle & Strenght";
+                encodedCategory = encodeURIComponent(category);
+                url = `/CategoryRoutines?category=${encodedCategory}`;
+                router.push(url);
                 break;
             case 3:
-                console.log("Botón 3 pulsado");
-                // Aquí puedes definir el comportamiento para el botón 3
+                category = "Flexibility & Mobility";
+                encodedCategory = encodeURIComponent(category);
+                url = `/CategoryRoutines?category=${encodedCategory}`;
+                router.push(url);
                 break;
-            default:
-                console.log("Botón no reconocido");
+            case 4:
+                category = "Rehabilitation";
+                encodedCategory = encodeURIComponent(category);
+                url = `/CategoryRoutines?category=${encodedCategory}`;
+                router.push(url);
+                break;
+            case 5:
+                category = "HIIT";
+                encodedCategory = encodeURIComponent(category);
+                url = `/CategoryRoutines?category=${encodedCategory}`;
+                router.push(url);
+                break;
+            case 6:
+                category = "Calisthenic";
+                encodedCategory = encodeURIComponent(category);
+                url = `/CategoryRoutines?category=${encodedCategory}`;
+                router.push(url);
+                break;
+            case 7:
+                category = "Equilibrium";
+                encodedCategory = encodeURIComponent(category);
+                url = `/CategoryRoutines?category=${encodedCategory}`;
+                router.push(url);
+                break;
         }
     };
 
@@ -194,6 +227,7 @@ export default function Home() {
             marginTop: '25px',
             marginLeft: '320px',
             marginRight: '20px',
+            marginBottom: '157px',
             height: '400px'
         },
         sectionTitle: {
@@ -314,8 +348,6 @@ export default function Home() {
                                 title="Muscle & Strenght"
                                 numRoutines={strenghtCounter}
                                 onClick={() => handleClick(2)} />
-
-
                             <ExerciseCategory
                                 imageURL={hiitImageURL}
                                 title="HIIT"
@@ -332,6 +364,12 @@ export default function Home() {
                                 numRoutines={equilibriumCounter}
                                 onClick={() => handleClick(7)} />
                         </div>
+                    </div>
+                </div>
+
+                <div style={StyleSheet.exerciseCategory}>
+                    <div style={StyleSheet.floatingContainer}>
+                        <p style={StyleSheet.sectionTitle}>Your statistics</p>
                     </div>
                 </div>
             </div>

@@ -165,7 +165,7 @@ export default function PublishRoutine() {
                 });
 
                 if (response.ok) {
-                    //router.push('/Home');
+                    router.push('/Home');
                 } else if (response.status === 500) {
                     setError('Internal server error. Please try again later.');
                 } else {

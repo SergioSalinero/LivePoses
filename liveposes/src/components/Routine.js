@@ -1,13 +1,64 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import { FaRegTrashCan, FaArrowUp, FaArrowDown } from 'react-icons/fa6'
+
+import { POST_CURRENT_ROUTINE_URL } from '@/utils/Config';
 
 import RoutineExercise from '@/components/RoutineExercise';
 
 export default function Routine({ exercises, routine }) {
-    const [repetitions, setRepetitions] = useState(0);
-    const [selectedExercise, setSelectedExercise] = useState('1');
+    const router = useRouter();
+    var [token, setToken] = useState('');
 
-    console.log(routine);
+    useEffect(() => {
+        const storedToken = localStorage.getItem('accessToken');
+        if (storedToken !== null && storedToken !== undefined) {
+            setToken(storedToken);
+            token = storedToken;
+        }
+        else {
+            router.push('/Login');
+        }
+    },[]);
+
+    async function handleRoutineClicked() {
+        const currentRoutine = {
+            exercises: [],
+            breakTime: routine.breakTime
+        }
+
+        for(let i=0; i<routine.exercises.length; i++) {
+            const exerciseData = {
+                exerciseId: routine.exercises[i].exerciseId,
+                repetitions: routine.exercises[i].repetitions
+            }
+            currentRoutine.exercises.push(exerciseData);
+        }
+
+        if (currentRoutine.exercises.length > 0) {
+            try {
+                const response = await fetch(POST_CURRENT_ROUTINE_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': token,
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(currentRoutine),
+                });
+
+                if (response.ok) {
+                    router.push('/PoseRecognition');
+                } else if (response.status === 500) {
+                    console.log('Internal server error. Please try again later.');
+                } else {
+                    console.log('Invalid credentials');
+                }
+            } catch (error) {
+                console.error('Error processing request:', error);
+                console.log('Error processing request. Please try again later.');
+            }
+        }
+    }
 
     const StyleSheet = {
         containerStyle: {
@@ -21,19 +72,41 @@ export default function Routine({ exercises, routine }) {
             overflowY: 'auto',
             overflowX: 'hidden',
             scrollbarWidth: 'thin',
-            scrollbarColor: 'rgba(248, 248, 248, 0.8) transparent'
+            scrollbarColor: 'rgba(255, 255, 255, 0.8) transparent',
+            border: 'none',
+            cursor: 'pointer',
+            outline: 'none',
+
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'right',
         },
         descriptionStyle: {
-            wordWrap: 'break-word',    
-            wordBreak: 'break-all',  
-            whiteSpace: 'normal',  
-            color: '#FFFFFF',    
+            wordWrap: 'break-word',
+            wordBreak: 'break-all',
+            whiteSpace: 'normal',
+            color: '#f7f7f7',
+            fontSize: '16px',
+            marginLeft: '10px'
         },
     }
 
     return (
-        <div style={StyleSheet.containerStyle}>
-            <p style={StyleSheet.descriptionStyle}>Description: {routine.description}</p>
+        <button
+            style={StyleSheet.containerStyle}
+            onClick={handleRoutineClicked}
+        >
+            <p style={StyleSheet.descriptionStyle}>
+                {routine.description ? (
+                    <>
+                        <span style={{ fontWeight: 'bold', fontSize: '20px' }}>Description:</span> {routine.description}
+                    </>
+                ) : (
+                    <>
+                        <span style={{ fontWeight: 'bold', fontSize: '20px' }}>Description:</span> Ø
+                    </>
+                )}
+            </p>
             {routine.exercises.map((item, index) => (
                 <RoutineExercise
                     key={index}
@@ -42,7 +115,8 @@ export default function Routine({ exercises, routine }) {
                 />
             ))}
 
-            <p>Break Time: {routine.breakTime}</p>
-        </div>
+            <p style={StyleSheet.descriptionStyle}>
+                <span style={{ fontWeight: 'bold', fontSize: '20px' }}>Break Time: {routine.breakTime} secs</span></p>
+        </button>
     );
 }

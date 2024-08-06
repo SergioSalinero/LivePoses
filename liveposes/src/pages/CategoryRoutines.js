@@ -24,6 +24,7 @@ export default function CategoryRoutines() {
 
     const router = useRouter();
     var { category } = router.query;
+    console.log(router.query)
 
     const [routines, setRoutines] = useState([]);
     var intRoutines;
@@ -48,8 +49,9 @@ export default function CategoryRoutines() {
     useEffect(() => {
         if (category) {
             console.log(category);
-
-            const url = `${GET_CATEGORY_ROUTINE_URL}?${"category=" + category.replace(/\s+/g, '')}`;
+            category = category.replace(/\s+/g, '')
+            const encodedCategory = encodeURIComponent(category);
+            const url = `${GET_CATEGORY_ROUTINE_URL}?${"category=" + encodedCategory}`;
             console.log(url);
 
             async function fetchCategoryCount() {

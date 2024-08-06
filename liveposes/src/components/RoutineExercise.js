@@ -16,18 +16,25 @@ export default function RoutineExercise({ exercise, exercises }) {
 
     const StyleSheet = {
         containerStyle: {
-            backgroundColor: '#4A4A4A',
+            backgroundColor: '#171717',
             borderRadius: '20px',
             marginBottom: '15px',
             boxShadow: '0px 5px 15px rgba(0, 0, 0, 0.3)',
-            width: '400px'
+            width: '380px',
+            fontSize: '20px',
+            fontWeight: '600',
+            color: '#f7f7f7',
+            padding: '1px'
         },
-        
+        text: {
+            //padding: '1px',
+            margin: '15px'
+        }
     }
 
     return (
         <div style={StyleSheet.containerStyle}>
-            <p>ID: {exerciseName} Reps: {exercise.repetitions}</p>
+            <p style={StyleSheet.text}>{exercise.repetitions}x {exerciseName}</p>
         </div>
     );
 }
