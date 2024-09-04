@@ -111,9 +111,9 @@ DATOS PARA EJERCICIOS:
 		leftKeyPoint1: 11
 		leftKeyPoint2: 23
 		leftKeyPoint3: 25
-		upperAngleMax: 60
+		upperAngleMax: 90
 		upperAngleMin: 40
-		lowerAngleMax: 20
+		lowerAngleMax: 40
 		lowerAngleMin: 0
 		recognitionType: only_angles
 		
@@ -131,6 +131,19 @@ DATOS PARA EJERCICIOS:
 		leftKeyPointDistance2: 25
 		upperAngleMax: 90
 		upperAngleMin: 55
-		lowerAngleMax: 25
+		lowerAngleMax: 55
 		lowerAngleMin: 0
 		recognitionType: both
+
+
+DATOS PARA ESTADÍSTICAS:
+	- En la tabla "users":
+		· Runitas realizadas totales y por días en menses
+		· Tiempo entrenado total y por días en menses
+		· Calorías quemadas totales y por días en meses
+		· Precisión media
+		· Distribución de grupos musculares entrenados
+		· Tiempo descansado total
+		· Progreso: hay que tener en cuenta las rutinas realizadas junto con la cantidad de ejercicios, 
+		  repeticiones que contiene, el tiempo descansado y de actividad, además de que la distribución
+		  de grupos musculares entrenados debe ser uniforme. INVERTARSE UNA FÓRMULA MATEMÁTICA
