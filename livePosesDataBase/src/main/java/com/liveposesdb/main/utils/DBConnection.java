@@ -47,13 +47,16 @@ public class DBConnection {
 			else if(type.equals("INSERT") || type.equals("DELETE")) {
 				statement.executeUpdate(sqlQuery);
 			}
+			else if(type.equals("UPDATE")) {
+				statement.executeUpdate(sqlQuery);
+			}
 
 			return resultList;
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;
 		} finally {
-			// Cierra la conexión
+			// Close the connection
 			if (connection != null) {
 				try {
 					connection.close();

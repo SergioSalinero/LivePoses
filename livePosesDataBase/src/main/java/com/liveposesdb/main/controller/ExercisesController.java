@@ -70,7 +70,7 @@ public class ExercisesController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 	}
 	
-	@PostMapping("/post/public_routine")
+	@PostMapping("/post/publish_routine")
 	public ResponseEntity<String> setPublicRoutine(@RequestBody PublicRoutine publicRoutine) {
 		if(exercisesServices.setPublicRoutine(publicRoutine))
 			return ResponseEntity.status(HttpStatus.OK).body("The routine has been published successfully");
