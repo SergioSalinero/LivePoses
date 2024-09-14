@@ -88,6 +88,8 @@ Parámetro nuevo en la base de datos: Tipo de Reconocimiento:
 	Solo distancias
 	Ambos
 	
+Comando arrancar servidor Reac:
+	npm run dev
 	
 Se utiliza:
 	Eclipse 2024-03-R-linux
@@ -138,12 +140,15 @@ DATOS PARA EJERCICIOS:
 
 DATOS PARA ESTADÍSTICAS:
 	- En la tabla "users":
-		· Runitas realizadas totales y por días en menses
-		· Tiempo entrenado total y por días en menses
-		· Calorías quemadas totales y por días en meses
-		· Precisión media
+		· Runitas realizadas totales. DEFINIDO EN LA BASE DE DATOS
+		· Rutinas por días en menses
+		· Tiempo entrenado total. DEFINIDO EN LA BASE DE DATOS
+		· Tiempo por días en menses
+		· Calorías quemadas totales. DEFINIDO EN LA BASE DE DATOS
+		· Calorías quemadas por días en meses
+		· Precisión media. DEFINIDO EN LA BASE DE DATOS
 		· Distribución de grupos musculares entrenados
-		· Tiempo descansado total
+		· Tiempo descansado total. DEFINIDO EN LA BASE DE DATOS
 		· Progreso: hay que tener en cuenta las rutinas realizadas junto con la cantidad de ejercicios, 
 		  repeticiones que contiene, el tiempo descansado y de actividad, además de que la distribución
 		  de grupos musculares entrenados debe ser uniforme. INVERTARSE UNA FÓRMULA MATEMÁTICA
