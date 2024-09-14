@@ -1,6 +1,8 @@
 import React, { useRef, useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import * as tf from '@tensorflow/tfjs';
 import * as poseDetection from '@tensorflow-models/pose-detection';
+
 
 import { exerciseRecognitionByAngles, exerciseRecognitionByAnglesAndDistances, calculateAngleBetweenTwoLines } from '@/libraries/ExerciseRecognition';
 import AccuracyRepsRectangle1 from '@/components/AccuracyRepsRectangle1';
@@ -8,7 +10,12 @@ import AccuracyRepsRectangle2 from '@/components/AccuracyRepsRectangle2';
 import Chronometer from '@/components/Chronometer';
 import CountdownTimer from '@/components/CountDownTimer';
 
-import { GET_EXERCISES_URL, GET_CURRENT_ROUTINE_URL, GET_START_SIGNAL } from '@/utils/Config';
+import { 
+    GET_EXERCISES_URL, 
+    GET_CURRENT_ROUTINE_URL, 
+    GET_START_SIGNAL,
+    POST_BASIC_STATISTICS_URL
+} from '@/utils/Config';
 
 import { POSE_ESTIMATION_BACKGROUND_COLOR } from '@/utils/Colors';
 
@@ -18,9 +25,11 @@ export default function PoseRecognition() {
     var startSignal;
     var exercises;
     var currentRoutine;
-    var token;
+    var [token, setToken] = useState('');
 
     var createdDetector = false;
+
+    const router = useRouter();
 
     var [color, setColor] = useState('red');
     var [isRoutineActive, setIsRoutineActive] = useState(false);
@@ -32,7 +41,7 @@ export default function PoseRecognition() {
     var [seconds, setSeconds] = useState(0);
 
     var currentExercise;
-    var currentExerciseIndex = -1;
+    var [currentExerciseIndex, setCurrentExerciseIndex] = useState(-1);
     var previousExerciseStatus = 'START';
     var currentExerciseRepetitionsAux = -1;
     var currentRepetitionsAux = 0;
@@ -42,8 +51,13 @@ export default function PoseRecognition() {
     const [totalReps, setTotalReps] = useState(0);
     const [rectangleHeightArray, setRectangleHeightArray] = useState([]);
     let rectangleHeightArrayAux, rectangleHeightArrayTransformed;
+    var sumTotalReps = 0;
+    var accuracy = 0;
 
     var globalRepetitions = 0;
+    var [totalExercises, setTotalExercises] = useState(-5);
+    var [breakTimeCounter, setBreakTimeCounter] = useState(0);
+    var [timeCounter, setTimeCounter] = useState(0);
 
 
     const videoRef = useRef(null);
@@ -55,7 +69,11 @@ export default function PoseRecognition() {
 
         const storedToken = localStorage.getItem('accessToken');
         if (storedToken !== null && storedToken !== undefined) {
+            setToken(storedToken);
             token = storedToken;
+        }
+        else {
+            router.push('/Login');
         }
 
         /* Get general data of exercises */
@@ -76,6 +94,7 @@ export default function PoseRecognition() {
                 console.log(exercises);
             } catch (error) {
                 console.error('Error fetching data: ', error);
+                router.push('/PoseRecognition');
             }
         }
 
@@ -97,6 +116,7 @@ export default function PoseRecognition() {
                 console.log(startSignal);
             } catch (error) {
                 console.error('Error fetching data: ', error);
+                router.push('/PoseRecognition');
             }
         }
 
@@ -120,7 +140,7 @@ export default function PoseRecognition() {
                 breakTime = currentRoutine.breakTime;
                 setSeconds(currentRoutine.breakTime);
 
-                var sumTotalReps = 0;
+                
                 currentRoutine.exercises.forEach((element) => {
                     sumTotalReps += element.repetitions;
                 });
@@ -129,10 +149,14 @@ export default function PoseRecognition() {
 
                 rectangleHeightArrayAux = Array(sumTotalReps).fill(0);
                 rectangleHeightArrayTransformed = Array(sumTotalReps).fill(0);
+                
+                totalExercises = currentRoutine.exercises.length;
+                setTotalExercises(currentRoutine.exercises.length);
 
                 setExerciseStatus();
             } catch (error) {
                 console.error('Error fetching data: ', error);
+                router.push('/PoseRecognition');
             }
         }
 
@@ -143,7 +167,13 @@ export default function PoseRecognition() {
 
 
     function setExerciseStatus() {
+        setCurrentExerciseIndex(prevIndex => prevIndex + 1);
         currentExerciseIndex++;
+
+        /* END OF ROUTINE */
+        if(currentExerciseIndex == totalExercises && typeof totalExercises != 'undefined')
+            return;
+              
 
         let found = false;
         exercises.forEach((exercise) => {
@@ -168,6 +198,10 @@ export default function PoseRecognition() {
             /*setColor('red');
             color = 'red';*/
         }
+
+        rectangleHeightArrayAux = Array(sumTotalReps).fill(0);
+        rectangleHeightArrayTransformed = Array(sumTotalReps).fill(0);
+        setRectangleHeightArray(rectangleHeightArrayTransformed);
 
         //console.log(currentExerciseIndex, currentExercise, currentExerciseRepetitions, currentRepetitions);
     }
@@ -267,6 +301,7 @@ export default function PoseRecognition() {
 
                     let interval;
                     if (isBreakTimeActive && isFirstTimeBreakTimeActive) {
+                        setBreakTimeCounter(prevCounter => prevCounter + breakTime);
                         isFirstTimeBreakTimeActive = false;
 
                         interval = setInterval(() => {
@@ -388,7 +423,7 @@ export default function PoseRecognition() {
             if (exerciseStatus != previousExerciseStatus && exerciseStatus == 'START') {
                 setCurrentRepetitions(prevRepetitions => prevRepetitions + 1);
                 currentRepetitionsAux++;
-                globalRepetitions++;
+                //globalRepetitions++;
                 setColor('green');
                 color = 'green';
             }
@@ -397,29 +432,7 @@ export default function PoseRecognition() {
                 setColor('green');
                 color = 'green';
 
-                var rightAngleAccuracy = Math.abs(upperAngleMax - rightAngle);
-                var leftAngleAccuracy = Math.abs(upperAngleMax - leftAngle);
-                var previousAngleAccuracy = Math.abs(upperAngleMax - rectangleHeightArrayAux[globalRepetitions]);
-
-                var compareAccuracy, compareAngle;
-                if(rightAngleAccuracy < leftAngleAccuracy) {
-                    compareAccuracy = rightAngleAccuracy;
-                    compareAngle = rightAngle;
-                } 
-                else {
-                    compareAccuracy = leftAngleAccuracy;
-                    compareAngle = leftAngle;
-                }
-
-                    //console.log('Accuracy' + rightAngleAccuracy + '    ' + rightAngle + '    ' + previousAngleAccuracy + '    ' + rectangleHeightArrayAux[currentExerciseIndex] + '    ' + compareAngle)
-
-                if(previousAngleAccuracy > compareAccuracy){
-                    rectangleHeightArrayAux[globalRepetitions] = compareAngle;
-                    //console.log(rectangleHeightArrayAux);
-                    rectangleHeightArrayTransformed[globalRepetitions] = Math.abs((compareAngle * 15) / upperAngleMax);
-                    setRectangleHeightArray(rectangleHeightArrayTransformed);
-                }
-                    
+                setAccuracy(rightAngle, leftAngle, upperAngleMax, upperAngleMin);                    
             }
             else {
                 setColor('white');
@@ -435,10 +448,30 @@ export default function PoseRecognition() {
         }
     }
 
-    useEffect(() => {
-        // Este efecto se ejecuta cada vez que rectangleHeightArray cambia
-        //console.log('Estado actualizado:', rectangleHeightArray);
-      }, [rectangleHeightArray]);
+    function setAccuracy(rightAngle, leftAngle, upperAngleMax, upperAngleMin) {
+        var rightAngleAccuracy = Math.abs(upperAngleMax - rightAngle);
+        var leftAngleAccuracy = Math.abs(upperAngleMax - leftAngle);
+        var previousAngleAccuracy = Math.abs(upperAngleMax - rectangleHeightArrayAux[currentRepetitionsAux]);
+
+        var compareAccuracy, compareAngle;
+        if(rightAngleAccuracy < leftAngleAccuracy) {
+            compareAccuracy = rightAngleAccuracy;
+            compareAngle = rightAngle;
+        } 
+        else {
+            compareAccuracy = leftAngleAccuracy;
+            compareAngle = leftAngle;
+        }
+
+        //console.log('Accuracy' + rightAngleAccuracy + '    ' + rightAngle + '    ' + previousAngleAccuracy + '    ' + rectangleHeightArrayAux[currentExerciseIndex] + '    ' + compareAngle)
+
+        if(previousAngleAccuracy > compareAccuracy){
+            rectangleHeightArrayAux[currentRepetitionsAux] = compareAngle;
+            rectangleHeightArrayTransformed[currentRepetitionsAux] = Math.abs(1 + ((compareAngle - upperAngleMin) / (upperAngleMax - upperAngleMin)) * (15 - 1));
+            setRectangleHeightArray(rectangleHeightArrayTransformed);
+            accuracy += rectangleHeightArrayTransformed[currentRepetitionsAux];
+        }
+    }
 
     function startRecognition(keypoints) {
         if (typeof startSignal != 'undefined') {
@@ -524,14 +557,47 @@ export default function PoseRecognition() {
         }
     }
 
+    async function setRoutineFinishedData(seconds) {
+        console.log("timeCounter ", timeCounter, seconds);
+        const basicStatistics = {
+            timeCounter: seconds,
+            breakTimeCounter: breakTimeCounter
+        }
 
+        try {
+            const response = await fetch(POST_BASIC_STATISTICS_URL, {
+                method: 'POST',
+                headers: {
+                    'Authorization': token,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(basicStatistics),
+            });
+
+            if (response.ok) {
+                router.push('/PoseRecognition');
+            } else if (response.status === 500) {
+                setError('Internal server error. Please try again later.');
+            } else {
+                setError('Invalid credentials');
+            }
+        } catch (error) {
+            console.error('Error processing request:', error);
+            setError('Error processing request. Please try again later.');
+        }
+    }
 
 
 
 
 
     const handleTick = (seconds) => {
-        //console.log("Seconds passed:", seconds);
+        console.log("Seconds passed:", seconds);
+        setTimeCounter(seconds);
+        
+        console.log(currentExerciseIndex, totalExercises)
+        if(currentExerciseIndex == totalExercises && typeof totalExercises != 'undefined')
+            setRoutineFinishedData(seconds)
     };
 
     function handleCountDownTimerComplete() {
@@ -624,13 +690,13 @@ export default function PoseRecognition() {
             <p style={StyleSheet.accuracyTitle}>Accuracy</p>
             <div style={StyleSheet.repetitionsDivContainer}>
                 <AccuracyRepsRectangle1
-                    numRectangles={totalReps}
+                    numRectangles={currentExerciseRepetitions}
                 />
             </div>
 
             <div style={StyleSheet.repetitionsDivContainer}>
                 <AccuracyRepsRectangle2
-                    numRectangles={totalReps}
+                    numRectangles={currentExerciseRepetitions}
                     heightsArray={rectangleHeightArray}
                 />
             </div>

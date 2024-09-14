@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-export default function Chronometer({ onTick, isRunning }) {
+export default function Chronometer({ isRunning, onTick }) {
   const [seconds, setSeconds] = useState(0);
 
   useEffect(() => {
@@ -8,9 +8,9 @@ export default function Chronometer({ onTick, isRunning }) {
 
     if (isRunning) {
       interval = setInterval(() => {
-        setSeconds(seconds => {
-          onTick(seconds + 1); // Call the function provided by the parent component
-          return seconds + 1;
+        setSeconds(prevSeconds => {
+          const updatedSeconds = prevSeconds + 1;
+          return updatedSeconds;
         });
       }, 1000);
     } else {
@@ -18,11 +18,18 @@ export default function Chronometer({ onTick, isRunning }) {
     }
 
     return () => clearInterval(interval);
-  }, [isRunning, onTick]);
+  }, [isRunning]);
+
+  // Llamamos a onTick cuando se actualizan los segundos, pero fuera del render
+  useEffect(() => {
+    if (onTick) {
+      onTick(seconds);  // Llamada a la función onTick fuera de la renderización
+    }
+  }, [seconds, onTick]);
 
   return (
     <div>
-      <p>{seconds} seconds</p>
+      <p>{seconds} segundos</p>
     </div>
   );
 }

@@ -54,6 +54,7 @@ export default function RoutineBuilding() {
                     }
                 });
                 if (!response.ok) {
+                    //router.push('/Login');
                     throw new Error('Network response was not ok');
                 }
                 const jsonData = await response.json();

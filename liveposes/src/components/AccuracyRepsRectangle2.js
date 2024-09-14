@@ -21,12 +21,12 @@ export default function AccuracyRepsRectangle2({ numRectangles, heightsArray }) 
 
 const styles = {
   container: {
-    display: 'flex', // Usa flexbox para distribuir los rectángulos
-    justifyContent: 'space-between', // Distribuye los rectángulos uniformemente
-    alignItems: 'flex-end', // Alinea los rectángulos por la base
+    display: 'flex', 
+    justifyContent: 'space-between', 
+    alignItems: 'flex-end',
     width: '100%', 
     padding: '0 10px',
-    height: '100vh', // Ajusta según tus necesidades
+    height: '100vh', 
     //backgroundColor: 'green'
   },
   rectangle: {
