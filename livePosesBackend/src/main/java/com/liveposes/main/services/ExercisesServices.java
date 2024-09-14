@@ -107,7 +107,7 @@ public class ExercisesServices {
 
 	public boolean setPublicRoutine(PublicRoutine publicRoutine) {
 		try {
-			ResponseEntity<Void> response = restTemplate.postForEntity(RemoteServices.POST_PUBLIC_ROUTINE, publicRoutine, Void.class);
+			ResponseEntity<Void> response = restTemplate.postForEntity(RemoteServices.POST_PUBLISH_ROUTINE, publicRoutine, Void.class);
 			
 			if (response.getStatusCode() == HttpStatus.OK) {
             	return true;
