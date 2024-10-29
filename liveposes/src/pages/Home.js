@@ -4,7 +4,10 @@ import { useRouter } from 'next/router';
 
 import ExerciseCategory from "@/components/ExerciseCategory";
 
-import { GET_CATEGORY_COUNT_URL } from '@/utils/Config';
+import { 
+    GET_CATEGORY_COUNT_URL,
+    GET_BASIC_STATISTICS_URL
+} from '@/utils/Config';
 
 import cardioBurnerImage from '../../public/images/exerciseCategories/Cardio Burner.jpeg';
 import strenghtImage from '../../public/images/exerciseCategories/Strenght.jpeg';
@@ -41,6 +44,8 @@ export default function Home() {
     const [equilibriumCounter, setEquilibriumCounter] = useState(0);
 
     var categoryCounter;
+
+    var [basicStatistics, setBasicStatistics] = useState([]);
 
     var [token, setToken] = useState('');
 
@@ -99,7 +104,26 @@ export default function Home() {
             }
         }
 
+        async function fetchBasicStatistics() {
+            try {
+                const response = await fetch(GET_BASIC_STATISTICS_URL, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': token,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                setBasicStatistics(await response.json());
+            } catch (error) {
+                console.error('Error fetching data: ', error);
+            }
+        }
+
         fetchCategoryCount();
+        fetchBasicStatistics();
     }, []);
 
     const handleClick = (id) => {
@@ -370,6 +394,11 @@ export default function Home() {
                 <div style={StyleSheet.exerciseCategory}>
                     <div style={StyleSheet.floatingContainer}>
                         <p style={StyleSheet.sectionTitle}>Your statistics</p>
+                        <p>Routine counter: {basicStatistics['routineCounter']}</p>
+                        <p>Time counter: {basicStatistics['timeCounter']}</p>
+                        <p>Calories counter: {basicStatistics['caloriesCounter']}</p>
+                        <p>Breaktime counter: {basicStatistics['breakTimeCounter']}</p>
+                        <p>Average Accuracy: {basicStatistics['averageAccuracy']}</p>
                     </div>
                 </div>
             </div>

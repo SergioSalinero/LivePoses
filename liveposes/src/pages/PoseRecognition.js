@@ -52,9 +52,12 @@ export default function PoseRecognition() {
     const [rectangleHeightArray, setRectangleHeightArray] = useState([]);
     let rectangleHeightArrayAux, rectangleHeightArrayTransformed;
     var sumTotalReps = 0;
-    var accuracy = 0;
 
-    var globalRepetitions = 0;
+    const [accuracy, setAccuracyValue] = useState(0);
+    const [globalRepetitions, setGlobalRepetitions] = useState(0);
+    const [rectangleHeight, setRectangleHeight] = useState(0);
+    let rectangleHeightAux;
+
     var [totalExercises, setTotalExercises] = useState(-5);
     var [breakTimeCounter, setBreakTimeCounter] = useState(0);
     var [timeCounter, setTimeCounter] = useState(0);
@@ -91,7 +94,6 @@ export default function PoseRecognition() {
                 }
                 const jsonData = await response.json();
                 exercises = jsonData;
-                console.log(exercises);
             } catch (error) {
                 console.error('Error fetching data: ', error);
                 router.push('/PoseRecognition');
@@ -113,7 +115,6 @@ export default function PoseRecognition() {
                 }
                 const jsonData = await response.json();
                 startSignal = jsonData;
-                console.log(startSignal);
             } catch (error) {
                 console.error('Error fetching data: ', error);
                 router.push('/PoseRecognition');
@@ -135,7 +136,7 @@ export default function PoseRecognition() {
                 }
                 const jsonData = await response.json();
                 currentRoutine = jsonData;
-                console.log(currentRoutine);
+
                 setBreakTime(currentRoutine.breakTime);
                 breakTime = currentRoutine.breakTime;
                 setSeconds(currentRoutine.breakTime);
@@ -422,8 +423,11 @@ export default function PoseRecognition() {
 
             if (exerciseStatus != previousExerciseStatus && exerciseStatus == 'START') {
                 setCurrentRepetitions(prevRepetitions => prevRepetitions + 1);
+
+                setAccuracyValue(prevAccuracy => prevAccuracy + rectangleHeightAux); 
+                setGlobalRepetitions(prevGlobalRepetitions => prevGlobalRepetitions + 1)
+
                 currentRepetitionsAux++;
-                //globalRepetitions++;
                 setColor('green');
                 color = 'green';
             }
@@ -468,8 +472,9 @@ export default function PoseRecognition() {
         if(previousAngleAccuracy > compareAccuracy){
             rectangleHeightArrayAux[currentRepetitionsAux] = compareAngle;
             rectangleHeightArrayTransformed[currentRepetitionsAux] = Math.abs(1 + ((compareAngle - upperAngleMin) / (upperAngleMax - upperAngleMin)) * (15 - 1));
+            setRectangleHeight(rectangleHeightArrayTransformed[currentRepetitionsAux]);
             setRectangleHeightArray(rectangleHeightArrayTransformed);
-            accuracy += rectangleHeightArrayTransformed[currentRepetitionsAux];
+            rectangleHeightAux = rectangleHeightArrayTransformed[currentRepetitionsAux];
         }
     }
 
@@ -558,10 +563,12 @@ export default function PoseRecognition() {
     }
 
     async function setRoutineFinishedData(seconds) {
-        console.log("timeCounter ", timeCounter, seconds);
+        let averageAccuracy = (accuracy * 100) / (globalRepetitions * 15);
+
         const basicStatistics = {
             timeCounter: seconds,
-            breakTimeCounter: breakTimeCounter
+            breakTimeCounter: breakTimeCounter,
+            averageAccuracy: averageAccuracy
         }
 
         try {
@@ -575,7 +582,7 @@ export default function PoseRecognition() {
             });
 
             if (response.ok) {
-                router.push('/PoseRecognition');
+                router.push('/Home');
             } else if (response.status === 500) {
                 setError('Internal server error. Please try again later.');
             } else {
@@ -592,10 +599,8 @@ export default function PoseRecognition() {
 
 
     const handleTick = (seconds) => {
-        console.log("Seconds passed:", seconds);
         setTimeCounter(seconds);
         
-        console.log(currentExerciseIndex, totalExercises)
         if(currentExerciseIndex == totalExercises && typeof totalExercises != 'undefined')
             setRoutineFinishedData(seconds)
     };
