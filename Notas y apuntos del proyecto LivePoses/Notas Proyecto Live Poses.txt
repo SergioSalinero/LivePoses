@@ -140,15 +140,15 @@ DATOS PARA EJERCICIOS:
 
 DATOS PARA ESTADÍSTICAS:
 	- En la tabla "users":
-		· Runitas realizadas totales. DEFINIDO EN LA BASE DE DATOS
+		· Runitas realizadas totales. DEFINIDO EN LA BASE DE DATOS -----------------------------------------> HECHO
 		· Rutinas por días en menses
-		· Tiempo entrenado total. DEFINIDO EN LA BASE DE DATOS
+		· Tiempo entrenado total. DEFINIDO EN LA BASE DE DATOS ---------------------------------------------> HECHO
 		· Tiempo por días en menses
-		· Calorías quemadas totales. DEFINIDO EN LA BASE DE DATOS
+		· Calorías quemadas totales. DEFINIDO EN LA BASE DE DATOS ------------------------------------------> HECHO
 		· Calorías quemadas por días en meses
-		· Precisión media. DEFINIDO EN LA BASE DE DATOS
+		· Precisión media. DEFINIDO EN LA BASE DE DATOS ----------------------------------------------------> HECHO
 		· Distribución de grupos musculares entrenados
-		· Tiempo descansado total. DEFINIDO EN LA BASE DE DATOS
+		· Tiempo descansado total. DEFINIDO EN LA BASE DE DATOS --------------------------------------------> HECHO
 		· Progreso: hay que tener en cuenta las rutinas realizadas junto con la cantidad de ejercicios, 
 		  repeticiones que contiene, el tiempo descansado y de actividad, además de que la distribución
 		  de grupos musculares entrenados debe ser uniforme. INVERTARSE UNA FÓRMULA MATEMÁTICA
