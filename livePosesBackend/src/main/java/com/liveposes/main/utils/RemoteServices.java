@@ -12,6 +12,9 @@ public class RemoteServices {
 	public static final String POST_PUBLISH_ROUTINE = "http://localhost:5001/database/api/routine/post/publish_routine";
 	public static final String GET_CATEGORY_COUNT = "http://localhost:5001/database/api/routine/get/category_count";
 	public static final String GET_CATEGORY_ROUTINES = "http://localhost:5001/database/api/routine/get/category_routines";
+	
 	public static final String POST_BASIC_STATISTICS = "http://localhost:5001/database/api/statistics/post/basic_statistics"; 
+	public static final String GET_BASIC_STATISTICS = "http://localhost:5001/database/api/statistics/get/basic_statistics";
+	public static final String GET_WEIGHT = "http://localhost:5001/database/api/statistics/get/weight";
 
 }
