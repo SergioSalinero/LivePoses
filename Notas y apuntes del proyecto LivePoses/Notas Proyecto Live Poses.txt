@@ -1,0 +1,154 @@
+
+<GESTIÓN AUTENTICACIÓN>
+UC-001: Iniciar sesión
+UC-002: Establecer contraseña
+UC-003: Restablecer contraseña
+UC-004: Cerrar sesión
+
+
+<Gestión de usuarios>
+UC-005: Ver perfil
+UC-006: Cambiar contraseña
+UC-007: Modificar datos
+UC-008: Eliminar cuenta
+UC-009: Listar usuarios
+UC-010: Cambiar rol
+UC-011: Eliminar usuario
+
+
+<Gestión de elaboración de rutinas>
+UC-012: Elaborar una rutina
+  - Pasos:
+    1. El actor usuario solicita elaborar una rutina de ejercicio.
+    2. El sistema solicita la configuración de ejercicios que compondrán la rutina.
+    3. El usuario añade y/o elimina los ejercicios y sus repeticiones.
+    4. El sistema construye la rutina.
+UC-013: Restablecer rutina
+UC-014: Especificar tiempo de descanso entre series
+¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿UC-015: Guardar rutina????????????????????????????????
+
+
+<Gestión de ejecución de rutinas>
+UC-016: Comenzar rutina
+  (Control de gestos)
+UC-017: Saltar ejercicio
+UC-018: Terminar rutina
+UC-019: Guardar rutina realizada
+
+
+<Gestión de categorías de ejerciccios de ejercicio>
+UC-020: Mostrar categorías de ejercicios
+	- Cardiovascular o aeróbico
+	- Entrenamiento de fuerza o musculación
+	- Flexibilidad y movilidad
+	- Equilibrio y estabilidad
+	- Entrenamiento de intervalos de alta intensidad (HIIT)
+	- Entrenamiento funcional
+	- Deportes y actividades recreativas
+	- Ejercicios de rehabilitaión y terapéuticos
+UC-021: Acceder a una categoría
+  (Esto puede dar lugar a la ejecución del caso de uso UC-016)
+/*****UC-022: Apuntarse a un grupo
+ **UC-023: Crear grupo
+ ** - Pasos:
+ **   1. El usuario solicita crear un grupo
+ **   2. El sistema solicita al usuario los datos del grupo (nombre, descripción, clase, ...)
+ **   3. El usuario proporciona los datos requeridos
+ **   4. El sistema recopila los datos y crea el grupo
+ **   5. El usuario puede añadir y/o eliminar rutinas (Postcondición)
+ ** (Esto puede dar lugar a la ejecución del caso de uso UC-012)
+ ** UC-024: Modificar grupo
+ ** UC-025: Eliminar grupo
+UC-022: Crear rutina pública
+UC-023: Eliminar rutina
+UC-024: Valorar rutina
+UC-025: Guardar rutina
+UC-026: Verificar rutina
+
+
+
+<Gestión de estadísticas y rutinas personales>
+UC-027: Mostrar histórico de rutinas
+UC-028: Mostrar rutinas guardadas
+UC-029: Mostrar estadísticas personales
+
+
+
+
+<NOTAS>
+En la pantalla principal aparecerán las salas de ejercicios a las que el usuario está apuntado.
+Backend en Java con Springboot.
+Base de datos con Firebase (Authentication, Firestore, Realtime Database).
+La elaboración de una rutina consistirá en una tabla con un componente select que permitirá elegir el ejercicio y un número de repeticiones. Estructura:
+	CUADRADO CON DIBUJO DEL EJERCICIO	SELECT		BOTÓN MENOS	BOTÓN MÁS	BOTÓN ELIMINAR EJERCICIO
+	
+
+Parámetro nuevo en la base de datos: Tipo de Reconocimiento:
+	Solo ángulos
+	Solo distancias
+	Ambos
+	
+Comando arrancar servidor Reac:
+	npm run dev
+	
+Se utiliza:
+	Eclipse 2024-03-R-linux
+	Spring Boot 4. Versión 3.2.4
+	JavaSE-17
+	
+Base de datos:
+	Mariadb
+	Nombre de usuario: mainUser	(Todos los permisos permitidos para este usuario)
+	Contraseña: 3Mpx5u#LJW4G!sqd
+	Nombre de la base de datos: LivePoses
+	Contraseña ROOT del servidor de bases de datos: **********
+	
+	
+DATOS PARA EJERCICIOS:
+	Ejercicio de pie 1: Levantar la pierna en el plano frontal (FrontalLegRaises):
+		name: "Pierna frontal"
+		rightKeyPoint1: 12
+		rightKeyPoint2: 24
+		rightKeyPoint3: 26
+		leftKeyPoint1: 11
+		leftKeyPoint2: 23
+		leftKeyPoint3: 25
+		upperAngleMax: 90
+		upperAngleMin: 40
+		lowerAngleMax: 40
+		lowerAngleMin: 0
+		recognitionType: only_angles
+		
+	Ejercicio lunge:
+		name: "Sentadillas lunge"
+		rightKeyPoint1: 24
+		rightKeyPoint2: 26
+		rightKeyPoint3: 28
+		rightKeyPointDistance1: 24
+		rightKeyPointDistance2: 26
+		leftKeyPoint1: 23
+		leftKeyPoint2: 25
+		leftKeyPoint3: 27
+		leftKeyPointDistance1: 23
+		leftKeyPointDistance2: 25
+		upperAngleMax: 90
+		upperAngleMin: 55
+		lowerAngleMax: 55
+		lowerAngleMin: 0
+		recognitionType: both
+
+
+DATOS PARA ESTADÍSTICAS:
+	- En la tabla "users":
+		· Runitas realizadas totales. DEFINIDO EN LA BASE DE DATOS -----------------------------------------> HECHO
+		· Rutinas por días en menses
+		· Tiempo entrenado total. DEFINIDO EN LA BASE DE DATOS ---------------------------------------------> HECHO
+		· Tiempo por días en menses
+		· Calorías quemadas totales. DEFINIDO EN LA BASE DE DATOS ------------------------------------------> HECHO
+		· Calorías quemadas por días en meses
+		· Precisión media. DEFINIDO EN LA BASE DE DATOS ----------------------------------------------------> HECHO
+		· Distribución de grupos musculares entrenados
+		· Tiempo descansado total. DEFINIDO EN LA BASE DE DATOS --------------------------------------------> HECHO
+		· Progreso: hay que tener en cuenta las rutinas realizadas junto con la cantidad de ejercicios, 
+		  repeticiones que contiene, el tiempo descansado y de actividad, además de que la distribución
+		  de grupos musculares entrenados debe ser uniforme. INVERTARSE UNA FÓRMULA MATEMÁTICA
