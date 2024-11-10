@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { FaArrowLeft } from 'react-icons/fa6'
+import { IoMdAdd } from "react-icons/io";
+import { MdPublish } from "react-icons/md";
 
 import { GET_EXERCISES_URL, POST_CURRENT_ROUTINE_URL } from '@/utils/Config';
 import AddExercise from '@/components/AddExercise';
@@ -34,7 +36,7 @@ export default function RoutineBuilding() {
 
     useEffect(() => {
         document.body.style.backgroundColor = BACKGROUND_COLOR;
-        
+
         const storedToken = localStorage.getItem('accessToken');
         if (storedToken !== null && storedToken !== undefined) {
             setToken(storedToken);
@@ -208,32 +210,39 @@ export default function RoutineBuilding() {
         },
         sidebarTitle: {
             color: SIDE_BAR_TEX_COLOR,
-            fontSize: '38px',
+            fontSize: '36px',
             fontWeight: 'bold',
             fontFamily: 'Montserrat, sans-serif',
-            marginLeft: '15px',
+            marginLeft: '5px',
             marginTop: '30px',
-            width: '250px'
+            width: '220px'
         },
         sidebarButton: {
             border: 'none',
             cursor: 'pointer',
-            marginBottom: '15px',
+            marginBottom: '10px',
             fontSize: '20px',
-            textAlign: 'left',
-            padding: '15px',
+            textAlign: 'center',
+            padding: '20px 10px 20px 10px',
             backgroundColor: SIDE_BAR_BUTTON_COLOR,
             color: SIDE_BAR_TEX_COLOR,
             borderRadius: '20px',
-
+        },
+        spanIcon: {
+            fontSize: '40px',
         },
         sidebarDivider: {
             margin: '10px 5px 10px 5px',
+            backgroundColor: "rgba(255, 255, 255, 0.2)"
         },
         addExerciseContainer: {
-            marginTop: '30px',
-            marginLeft: '320px',
-            marginRight: '20px',
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            height: '100vh',
+            marginTop: '20px',
+            marginBottom: '20px'
         },
         sectionTitle: {
             color: SECTION_TEXT_COLOR,
@@ -331,47 +340,19 @@ export default function RoutineBuilding() {
                             onMouseLeave={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButton.backgroundColor}
                             onClick={() => router.push('/Home')}
                         >
-                            <FaArrowLeft /> Back to Home
+                            <span style={StyleSheet.spanIcon}><FaArrowLeft /></span>
+                            <br></br>
+                            Back to Home
                         </button>
                         <button
                             style={StyleSheet.sidebarButton}
                             onMouseEnter={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButtonHover.backgroundColor}
                             onMouseLeave={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButton.backgroundColor}
-                            onClick={() => router.push('PublishRoutine')}
+                            onClick={() => router.push('/PublishRoutine')}
                         >
+                            <span style={StyleSheet.spanIcon}><MdPublish /></span>
+                            <br></br>
                             Publish a routine
-                        </button>
-                        <button
-                            style={StyleSheet.sidebarButton}
-                            onMouseEnter={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButtonHover.backgroundColor}
-                            onMouseLeave={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButton.backgroundColor}
-                            /*onClick={() => router.push('/PublishRoutine')}*/
-                        >
-                            Your published routines
-                        </button>
-                        <button
-                            style={StyleSheet.sidebarButton}
-                            onMouseEnter={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButtonHover.backgroundColor}
-                            onMouseLeave={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButton.backgroundColor}
-                        /*onClick={() => handleClick(2)}*/
-                        >
-                            Your statistics
-                        </button>
-                        <button
-                            style={StyleSheet.sidebarButton}
-                            onMouseEnter={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButtonHover.backgroundColor}
-                            onMouseLeave={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButton.backgroundColor}
-                        /*onClick={() => handleClick(2)}*/
-                        >
-                            Stored routines
-                        </button>
-                        <button
-                            style={StyleSheet.sidebarButton}
-                            onMouseEnter={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButtonHover.backgroundColor}
-                            onMouseLeave={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButton.backgroundColor}
-                        /*onClick={() => handleClick(2)}*/
-                        >
-                            Training history
                         </button>
                         <hr style={StyleSheet.sidebarDivider} />
                         <button
@@ -401,39 +382,39 @@ export default function RoutineBuilding() {
                         >
                             Add exercise
                         </button>
-                        </div>
-
-
-                        <div style={StyleSheet.floatingContainer}>
-                            <p style={StyleSheet.sectionTitle}>Set rest time (secs)</p>
-
-                            <input
-                                type="number"
-                                value={breakTime}
-                                style={{ ...StyleSheet.restTimeSliderNumber, marginLeft: `calc(${breakTime}% - 22px)` }}
-                            />
-
-                            <input
-                                type="range"
-                                min={0}
-                                max={100}
-                                value={breakTime}
-                                style={StyleSheet.restTimeSlider}
-                                onChange={(event) => setBreakTime(event.target.value)}
-                            />
-                        </div>
-
-                        <button
-                            style={StyleSheet.startRoutineButton}
-                            onMouseEnter={(e) => e.target.style.backgroundColor = StyleSheet.startRoutineButtonHover.backgroundColor}
-                            onMouseLeave={(e) => e.target.style.backgroundColor = StyleSheet.startRoutineButton.backgroundColor}
-                            onClick={handleStartRoutine}
-                        >
-                            Start routine
-                        </button>
-
                     </div>
+
+
+                    <div style={StyleSheet.floatingContainer}>
+                        <p style={StyleSheet.sectionTitle}>Set rest time (secs)</p>
+
+                        <input
+                            type="number"
+                            value={breakTime}
+                            style={{ ...StyleSheet.restTimeSliderNumber, marginLeft: `calc(${breakTime}% - 22px)` }}
+                        />
+
+                        <input
+                            type="range"
+                            min={0}
+                            max={100}
+                            value={breakTime}
+                            style={StyleSheet.restTimeSlider}
+                            onChange={(event) => setBreakTime(event.target.value)}
+                        />
+                    </div>
+
+                    <button
+                        style={StyleSheet.startRoutineButton}
+                        onMouseEnter={(e) => e.target.style.backgroundColor = StyleSheet.startRoutineButtonHover.backgroundColor}
+                        onMouseLeave={(e) => e.target.style.backgroundColor = StyleSheet.startRoutineButton.backgroundColor}
+                        onClick={handleStartRoutine}
+                    >
+                        Start routine
+                    </button>
+
                 </div>
             </div>
-            );
+        </div>
+    );
 }

@@ -19,6 +19,9 @@ import {
 
 import { POSE_ESTIMATION_BACKGROUND_COLOR } from '@/utils/Colors';
 
+import strenghtImage from '../../public/images/exerciseCategories/Strenght.jpeg';
+import image from '../../public/images/exercises/a.jpg';
+
 
 export default function PoseRecognition() {
 
@@ -69,6 +72,7 @@ export default function PoseRecognition() {
 
     useEffect(() => {
         document.body.style.backgroundColor = POSE_ESTIMATION_BACKGROUND_COLOR;
+        document.body.style.overflowX = 'hidden';
 
         const storedToken = localStorage.getItem('accessToken');
         if (storedToken !== null && storedToken !== undefined) {
@@ -172,38 +176,38 @@ export default function PoseRecognition() {
         currentExerciseIndex++;
 
         /* END OF ROUTINE */
-        if(currentExerciseIndex == totalExercises && typeof totalExercises != 'undefined')
+        if(currentExerciseIndex >= totalExercises && typeof totalExercises != 'undefined')
             return;
-              
-
-        let found = false;
-        exercises.forEach((exercise) => {
-            if (!found && exercise.id == currentRoutine.exercises[currentExerciseIndex].exerciseId) {
-                currentExercise = exercise;
-                setCurrentExerciseRepetition(currentRoutine.exercises[currentExerciseIndex].repetitions);
-                currentExerciseRepetitionsAux = currentRoutine.exercises[currentExerciseIndex].repetitions;
-                found = true;
+        else{
+            let found = false;
+            exercises.forEach((exercise) => {
+                if (!found && exercise.id == currentRoutine.exercises[currentExerciseIndex].exerciseId) {
+                    currentExercise = exercise;
+                    setCurrentExerciseRepetition(currentRoutine.exercises[currentExerciseIndex].repetitions);
+                    currentExerciseRepetitionsAux = currentRoutine.exercises[currentExerciseIndex].repetitions;
+                    found = true;
+                }
+            });
+    
+            currentRoutine.exercises.slice(1);
+    
+            setCurrentRepetitions(0);
+            currentRepetitionsAux = 0;
+            setCurrentExerciseName(currentExercise.name);
+    
+            if (currentExerciseIndex > 0) {
+                isBreakTimeActive = true;
+                setIsRoutineActive(false);
+                isRoutineActive = false;
+                /*setColor('red');
+                color = 'red';*/
             }
-        });
-
-        currentRoutine.exercises.slice(1);
-
-        setCurrentRepetitions(0);
-        currentRepetitionsAux = 0;
-        setCurrentExerciseName(currentExercise.name);
-
-        if (currentExerciseIndex > 0) {
-            isBreakTimeActive = true;
-            setIsRoutineActive(false);
-            isRoutineActive = false;
-            /*setColor('red');
-            color = 'red';*/
+    
+            rectangleHeightArrayAux = Array(sumTotalReps).fill(0);
+            rectangleHeightArrayTransformed = Array(sumTotalReps).fill(0);
+            setRectangleHeightArray(rectangleHeightArrayTransformed);
         }
-
-        rectangleHeightArrayAux = Array(sumTotalReps).fill(0);
-        rectangleHeightArrayTransformed = Array(sumTotalReps).fill(0);
-        setRectangleHeightArray(rectangleHeightArrayTransformed);
-
+              
         //console.log(currentExerciseIndex, currentExercise, currentExerciseRepetitions, currentRepetitions);
     }
 
@@ -288,7 +292,7 @@ export default function PoseRecognition() {
                     linesToDraw.forEach(line => {
                         drawLines(ctx, keypoints[line[0]], keypoints[line[1]], color);
                     });
-                    //console.log("1: " + isRoutineActive);
+
                     if (isRoutineActive) {
                         color = 'white';
                         exerciseRecognition(keypoints);
@@ -549,13 +553,20 @@ export default function PoseRecognition() {
                 exerciseStatus = previousExerciseStatus;
 
             if (exerciseStatus != previousExerciseStatus && exerciseStatus == 'END') {
-                isFirstTime = false;
-                setIsRoutineActive(true);
-                isRoutineActive = true;
-                setColor('white');
-                color = 'white';
-                previousExerciseStatus = 'START'
-                return;
+                setColor('orange');
+                    color = 'orange';
+
+                setTimeout(() => {
+                    isFirstTime = false;
+                previousExerciseStatus = 'START';
+
+                    setIsRoutineActive(true);
+                    isRoutineActive = true;
+
+                    
+
+                    return;
+                }, 2000);                
             }
 
             previousExerciseStatus = exerciseStatus;
@@ -634,13 +645,27 @@ export default function PoseRecognition() {
             transform: 'scaleX(-1)',
         },
         dataDivContainer: {
-            width: '50%',
+            width: '20%',
             height: 'auto',
             position: 'absolute',
             right: '0%',
-            top: '0px',
-            fontSize: '38px',
-            color: 'white'
+            top: '0px',            
+            backgroundColor: '#2B2A2B',
+            borderRadius: '10px',
+            boxShadow: '0px 5px 15px rgba(0, 0, 0, 0.4)',
+            opacity: 0.7 
+        },
+        dataDivText: {
+            margin: '15px',
+            color: 'white',
+            fontSize: '28px'
+        },
+        guideImage: {
+            width: '50%',
+            height: '80%',
+            position: 'absolute',
+            right: '0%',
+            top: '0px',            
         },
         repetitionsDivContainer: {
             width: '90%',
@@ -658,7 +683,7 @@ export default function PoseRecognition() {
             padding: '0',
             fontSize: '30px',
             position: 'absolute',
-            width: '90%',
+            width: '98.5%',
             height: '20vh',
             bottom: '0',
             left: '0',
@@ -675,7 +700,10 @@ export default function PoseRecognition() {
         <canvas className="output_canvas" ref={canvasRef} style={StyleSheet.videoCanvasStyle}></canvas>
         */
         <div style={StyleSheet.mainContainer}>
+            <img src={image.src} style={StyleSheet.guideImage}></img>
+            
             <div style={StyleSheet.dataDivContainer}>
+                <div style={StyleSheet.dataDivText}>
                 <div>Name: {currentExerciseName}</div>
                 <div>Reps: {currentRepetitions}/{currentExerciseRepetitions}</div>
                 <div>
@@ -688,7 +716,10 @@ export default function PoseRecognition() {
                     Descanso:
                     {seconds}
                 </div>
+                </div>
             </div>
+
+            
             <video ref={videoRef} width="640" height="480" style={StyleSheet.videoCanvasStyle} autoPlay></video>
             <canvas className="output_canvas" ref={canvasRef} style={StyleSheet.videoCanvasStyle}></canvas>
 

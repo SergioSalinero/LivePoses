@@ -2,8 +2,8 @@ export default function ExerciseCategory({ imageURL, title, cardio, strenght, mo
 
     const StyleSheet = {
         rectangleButton: {
-            width: '300px',
-            height: '400px',
+            width: '250px',
+            height: '300px',
             display: 'inline-flex', 
             flexDirection: 'column',
             alignItems: 'center',
@@ -21,8 +21,8 @@ export default function ExerciseCategory({ imageURL, title, cardio, strenght, mo
             fontFamily: 'Roboto, sans-serif',
         },
         image: {
-            width: '300px',
-            height: '300px',
+            width: '250px',
+            height: '250px',
             borderRadius: '20px 20px 0 0',
             maskImage: 'linear-gradient(to top, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 40%)',
             position: 'absolute',
@@ -32,7 +32,7 @@ export default function ExerciseCategory({ imageURL, title, cardio, strenght, mo
         textContainer: {
             zIndex: '1',
             position: 'absolute',
-            marginTop: '230px',
+            marginTop: '210px',
             left: '50%',
             transform: 'translateX(-50%)'
         },
@@ -49,11 +49,11 @@ export default function ExerciseCategory({ imageURL, title, cardio, strenght, mo
         numRoutines: {
             position: 'absolute',
             padding: '8px',
-            backgroundImage: 'linear-gradient(to bottom, rgba(183,183,183,0.7) 0%, rgba(183,183,183,0.7) 100%)',
+            backgroundImage: 'linear-gradient(to bottom, rgba(183,183,183,0.6) 0%, rgba(183,183,183,0.6) 100%)',
             borderRadius: '10px',
             left: 0,
             marginLeft: '10px',
-            marginTop: '50px'
+            marginTop: '120px'
         },
     }
 
@@ -63,9 +63,6 @@ export default function ExerciseCategory({ imageURL, title, cardio, strenght, mo
             
             <div style={StyleSheet.textContainer}>
                 <h1>{title}</h1>
-                <p>Cardio</p>
-                <p>Strength</p>
-                <p>Movility</p>
             </div>
 
             <div style={StyleSheet.gradientOverlay}></div>

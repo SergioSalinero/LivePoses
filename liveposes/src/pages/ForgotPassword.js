@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 
-import { POST_LOGING_URL } from '@/utils/Config';
+import { POST_SEND_EMAIL_URL } from '@/utils/Config';
 
 import {
   BACKGROUND_COLOR,
@@ -12,23 +12,22 @@ import {
 } from '@/utils/Colors';
 
 
-export default function Login() {
+export default function ForgotPassword() {
 
   const router = useRouter();
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await fetch(POST_LOGING_URL, {
+      const response = await fetch(POST_SEND_EMAIL_URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({email}),
       });
 
       if (response.ok) {
@@ -92,16 +91,6 @@ export default function Login() {
       cursor: 'pointer',
       transition: 'background-color 0.3s ease',
     },
-    linksContainer: {
-      marginTop: '15px',
-    },
-    link: {
-      display: 'block',
-      color: SECTION_TEXT_COLOR,
-      textDecoration: 'none',
-      fontSize: '14px',
-      marginTop: '10px',
-    },
   };
 
   styles.loginButton[':hover'] = {
@@ -111,7 +100,7 @@ export default function Login() {
   return (
     <div style={styles.container}>
       <div style={styles.loginBox}>
-        <h2 style={styles.header}>Login</h2>
+        <h2 style={styles.header}>Reset Password</h2>
         <form onSubmit={handleSubmit} style={styles.form}>
           <input
             type="email"
@@ -122,23 +111,10 @@ export default function Login() {
             onChange={(e) => setEmail(e.target.value)}
             required
           />
-          <input
-            type="password"
-            placeholder="Password"
-            style={styles.input}
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
           <button type="submit" style={styles.loginButton}>
-            Sign In
+            Send email
           </button>
         </form>
-        <div style={styles.linksContainer}>
-          <a href="/Signup" style={styles.link}>Don't have an account? Sign up</a>
-          <a href="/ForgotPassword" style={styles.link}>Forgot password?</a>
-        </div>
       </div>
     </div>
   );
