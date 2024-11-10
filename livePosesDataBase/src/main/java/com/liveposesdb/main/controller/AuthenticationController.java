@@ -24,7 +24,6 @@ public class AuthenticationController {
 	
 	@PostMapping("/signup")
 	public ResponseEntity<String> signup(@RequestBody User user) {
-		System.out.println("User: " + user.getEmail());
 		boolean result = authenticationServices.signup(user);
 		
 		if(result)

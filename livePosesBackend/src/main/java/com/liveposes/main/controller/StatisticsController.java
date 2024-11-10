@@ -86,5 +86,23 @@ public class StatisticsController {
 		else
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 	}
+	
+	@GetMapping("/get/statistics")
+	public ResponseEntity<List<String[]>> getStatistics(@RequestHeader("Authorization") String token) {
+		if (token == null || token.isBlank())
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+
+		String userID = jwtUtil.getKey(token);
+		
+		if (userID == null)
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+
+		List<String[]> statisticsList = this.statisticsServices.getStatistics(userID);
+
+		if (statisticsList != null)
+			return ResponseEntity.status(HttpStatus.OK).body(statisticsList);
+		else
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+	}
 
 }

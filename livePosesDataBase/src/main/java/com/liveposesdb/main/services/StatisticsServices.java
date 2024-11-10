@@ -91,6 +91,8 @@ public class StatisticsServices {
 		String query = "SELECT routineCounter, timeCounter, caloriesCounter, breakTimeCounter, averageAccuracy FROM users where id = " + userID + ";";
 		List<String[]> results = dbConnection.DBOperation(query, "SELECT");
 		
+		System.out.println(userID);
+		
 		int routineCounter = Integer.parseInt(results.get(0)[0]);
 		int timeCounter = Integer.parseInt(results.get(0)[1]);
 		float caloriesCounter = Float.parseFloat(results.get(0)[2]);
@@ -103,10 +105,17 @@ public class StatisticsServices {
 	}
 
 	public float getWeight(long userID) {
-		String query = "SELECT weight FROM liveposes.users where id = " + userID + ";";
+		String query = "SELECT weight FROM users where id = " + userID + ";";
 		List<String[]> results = dbConnection.DBOperation(query, "SELECT");
 		
 		return Float.parseFloat(results.get(0)[0]);
+	}
+
+	public List<String[]> getListStatistics(long userID) {
+		String query = "SELECT * FROM statistics where userId = " + userID + ";";
+		List<String[]> results = dbConnection.DBOperation(query, "SELECT");
+		
+		return results;
 	}
 
 }

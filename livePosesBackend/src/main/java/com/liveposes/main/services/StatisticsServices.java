@@ -3,6 +3,8 @@ package com.liveposes.main.services;
 import java.util.Arrays;
 import java.util.List;
 
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -122,6 +124,32 @@ public class StatisticsServices {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			return 0;
+		}
+	}
+
+	public List<String[]> getStatistics(String userID) {
+		try {
+			String url = RemoteServices.GET_STATISTICS + "?userID={userID}";
+			ResponseEntity<List<String[]>> response = restTemplate.exchange(
+				    url,
+				    HttpMethod.GET,
+				    null,
+				    new ParameterizedTypeReference<List<String[]>>() {},
+				    userID
+				);
+			
+			if (response.getStatusCode() == HttpStatus.OK) {
+				return response.getBody();
+			} else {
+				return null;
+			}
+			
+		} catch (HttpClientErrorException ex) {
+			//HttpStatus statusCode = (HttpStatus) ex.getStatusCode();
+			return null;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			return null;
 		}
 	}
 

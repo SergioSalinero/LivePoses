@@ -16,5 +16,9 @@ public class RemoteServices {
 	public static final String POST_BASIC_STATISTICS = "http://localhost:5001/database/api/statistics/post/basic_statistics"; 
 	public static final String GET_BASIC_STATISTICS = "http://localhost:5001/database/api/statistics/get/basic_statistics";
 	public static final String GET_WEIGHT = "http://localhost:5001/database/api/statistics/get/weight";
+	public static final String GET_STATISTICS = "http://localhost:5001/database/api/statistics/get/statistics";
 
+	public static final String GET_USER_DATA = "http://localhost:5001/database/api/user/get/user_data";
+	public static final String POST_UPDATE_WEIGHT = "http://localhost:5001/database/api/user/post/update_weight";
+	public static final String POST_DELETE_ACCOUNT = "http://localhost:5001/database/api/user/post/delete_account";
 }

@@ -58,5 +58,15 @@ public class StatisticsController {
 		else
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 	}
+	
+	@GetMapping("/get/statistics")
+	public ResponseEntity<List<String[]>> getStatistics(@RequestParam long userID) {
+		List<String[]> statisticsList = statisticsServices.getListStatistics(userID);
+		
+		if(statisticsList != null)
+			return ResponseEntity.status(HttpStatus.OK).body(statisticsList);
+		else
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+	}
 
 }

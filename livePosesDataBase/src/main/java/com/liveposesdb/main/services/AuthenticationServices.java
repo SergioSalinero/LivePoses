@@ -17,7 +17,7 @@ public class AuthenticationServices {
 	}
 
 	public boolean signup(User user) {
-		String query = "INSERT INTO users (email, password) VALUES ('" + user.getEmail() + "', '" + user.getPassword() + "');";
+		String query = "INSERT INTO users (email, password, routineCounter, timeCounter, caloriesCounter, breakTimeCounter, averageAccuracy, weight) VALUES ('" + user.getEmail() + "', '" + user.getPassword() + "', 0, 0, 0, 0, 0, '" + user.getWeight() + "');";
 
 		List<String[]> results = dbConnection.DBOperation(query, "INSERT");
 		
