@@ -238,11 +238,12 @@ export default function RoutineBuilding() {
         addExerciseContainer: {
             position: 'absolute',
             top: '50%',
-            left: '50%',
+            left: '55%',
             transform: 'translate(-50%, -50%)',
             height: '100vh',
             marginTop: '20px',
-            marginBottom: '20px'
+            marginBottom: '20px',
+            minWidth: '700px'
         },
         sectionTitle: {
             color: SECTION_TEXT_COLOR,
@@ -265,7 +266,7 @@ export default function RoutineBuilding() {
             marginRight: 'auto',
             display: 'block',
             marginBottom: '10px',
-            fontSize: '32px',
+            fontSize: '25px',
             fontWeight: 600,
             backgroundColor: SECTION_BUTTON_COLOR,
             color: 'white',
@@ -305,7 +306,7 @@ export default function RoutineBuilding() {
             marginTop: '30px',
             display: 'block',
             marginBottom: '10px',
-            fontSize: '32px',
+            fontSize: '28px',
             fontWeight: 600,
             backgroundColor: START_ROUTINE_BUTTON_COLOR,
             color: 'white',

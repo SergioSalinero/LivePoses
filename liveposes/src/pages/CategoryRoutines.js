@@ -209,6 +209,16 @@ export default function CategoryRoutines() {
                             style={StyleSheet.sidebarButton}
                             onMouseEnter={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButtonHover.backgroundColor}
                             onMouseLeave={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButton.backgroundColor}
+                            onClick={() => router.push('/Home')}
+                        >
+                            <span style={StyleSheet.spanIcon}><FaArrowLeft /></span>
+                            <br></br>
+                            Back to Home
+                        </button>
+                        <button
+                            style={StyleSheet.sidebarButton}
+                            onMouseEnter={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButtonHover.backgroundColor}
+                            onMouseLeave={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButton.backgroundColor}
                             onClick={() => router.push('/RoutineBuilding')}
                         >
                             <span style={StyleSheet.spanIcon}><IoMdAdd /></span>
