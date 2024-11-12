@@ -79,4 +79,7 @@ VALUES ('Biceps curl', 12, 14, 16, 14, 16, 11, 13, 15, 13, 15, 90, 40, 20, 0, 'b
 INSERT INTO exercises (name, rightKeyPoint1, rightKeyPoint2, rightKeyPoint3, rightKeyPointDistance1, rightKeyPointDistance2, leftKeyPoint1, leftKeyPoint2, leftKeyPoint3, leftKeyPointDistance1, leftKeyPointDistance2, upperAngleMax, upperAngleMin, lowerAngleMax, lowerAngleMin, recognitionType)
 VALUES ('Pull ups', 12, 14, 16, 16, 10, 11, 13, 15, 15, 9, 90, 40, 20, 0, 'both');
 
+INSERT INTO exercises (name, rightKeyPoint1, rightKeyPoint2, rightKeyPoint3, rightKeyPointDistance1, rightKeyPointDistance2, leftKeyPoint1, leftKeyPoint2, leftKeyPoint3, leftKeyPointDistance1, leftKeyPointDistance2, upperAngleMax, upperAngleMin, lowerAngleMax, lowerAngleMin, recognitionType)
+VALUES ('Standing crunch with clap', 24, 26, 28, 26, 29, 23, 25, 27, 25, 30, 30, 40, 20, 0, 'both');
+
 
