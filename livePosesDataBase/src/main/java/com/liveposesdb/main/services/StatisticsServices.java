@@ -91,7 +91,6 @@ public class StatisticsServices {
 		String query = "SELECT routineCounter, timeCounter, caloriesCounter, breakTimeCounter, averageAccuracy FROM users where id = " + userID + ";";
 		List<String[]> results = dbConnection.DBOperation(query, "SELECT");
 		
-		System.out.println(userID);
 		
 		int routineCounter = Integer.parseInt(results.get(0)[0]);
 		int timeCounter = Integer.parseInt(results.get(0)[1]);

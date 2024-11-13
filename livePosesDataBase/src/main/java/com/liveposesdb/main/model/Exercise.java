@@ -1,7 +1,7 @@
 package com.liveposesdb.main.model;
 
 public class Exercise {
-	
+
 	private int id;
 	private String name;
 	private int rightKeyPoint1;
@@ -14,19 +14,21 @@ public class Exercise {
 	private int leftKeyPoint3;
 	private int leftKeyPointDistance1;
 	private int leftKeyPointDistance2;
-	
+
 	private int upperAngleMax;
 	private int upperAngleMin;
 	private int lowerAngleMax;
 	private int lowerAngleMin;
-	
+
 	private String recognitionType;
 
-	
-	/* CONSTRUCTORS */	
-	public Exercise(int id, String name, int rightKeyPoint1, int rightKeyPoint2, int rightKeyPoint3, int rightKeyPointDistance1, int rightKeyPointDistance2, int leftKeyPoint1, int leftKeyPoint2,
-			int leftKeyPoint3, int leftKeyPointDistance1, int leftKeyPointDistance2, int upperAngleMax, int upperAngleMin, int lowerAngleMax, int lowerAngleMin,
-			String recognitionType) {
+	private String src;
+
+	/* CONSTRUCTORS */
+	public Exercise(int id, String name, int rightKeyPoint1, int rightKeyPoint2, int rightKeyPoint3,
+			int rightKeyPointDistance1, int rightKeyPointDistance2, int leftKeyPoint1, int leftKeyPoint2,
+			int leftKeyPoint3, int leftKeyPointDistance1, int leftKeyPointDistance2, int upperAngleMax,
+			int upperAngleMin, int lowerAngleMax, int lowerAngleMin, String recognitionType, String src) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -45,8 +47,9 @@ public class Exercise {
 		this.lowerAngleMax = lowerAngleMax;
 		this.lowerAngleMin = lowerAngleMin;
 		this.recognitionType = recognitionType;
+		this.src = src;
 	}
-	
+
 	public Exercise() {
 		this.id = -1;
 		this.name = "UNKNOWN";
@@ -61,8 +64,8 @@ public class Exercise {
 		this.lowerAngleMax = -1;
 		this.lowerAngleMin = -1;
 		this.recognitionType = "UNKNOWN";
+		this.src = "UNKNOWN";
 	}
-	
 
 	/* GETTERS AND SETTERS */
 	public int getId() {
@@ -72,7 +75,7 @@ public class Exercise {
 	public void setId(int id) {
 		this.id = id;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
@@ -80,7 +83,7 @@ public class Exercise {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
 	public int getRightKeyPoint1() {
 		return rightKeyPoint1;
 	}
@@ -104,7 +107,7 @@ public class Exercise {
 	public void setRightKeyPoint3(int rightKeyPoint3) {
 		this.rightKeyPoint3 = rightKeyPoint3;
 	}
-	
+
 	public int getRightKeyPointDistance1() {
 		return rightKeyPointDistance1;
 	}
@@ -140,7 +143,7 @@ public class Exercise {
 	public int getLeftKeyPoint3() {
 		return leftKeyPoint3;
 	}
-	
+
 	public int getLeftKeyPointDistance1() {
 		return leftKeyPointDistance1;
 	}
@@ -200,5 +203,13 @@ public class Exercise {
 	public void setRecognitionType(String recognitionType) {
 		this.recognitionType = recognitionType;
 	}
-	
+
+	public String getSrc() {
+		return src;
+	}
+
+	public void setSrc(String src) {
+		this.src = src;
+	}
+
 }

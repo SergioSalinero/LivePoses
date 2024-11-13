@@ -82,6 +82,7 @@ public class ExercisesServices {
 				exercise.setLowerAngleMin(Integer.parseInt(result[15]));
 
 			exercise.setRecognitionType(result[16]);
+			exercise.setSrc(result[17]);
 
 			exercisesList.add(exercise);
 		}
