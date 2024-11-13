@@ -43,7 +43,7 @@ public class ExercisesController {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
 
 		List<Exercise> exerciseList = this.exercisesServices.getExercises();
-
+		
 		if (exerciseList != null)
 			return ResponseEntity.status(HttpStatus.OK).body(exerciseList);
 		else
@@ -153,7 +153,7 @@ public class ExercisesController {
 
 		if (userID == null)
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
-		System.out.println(category);
+		
 		List<PublicRoutine> categoryRoutine = exercisesServices.getCategoryRoutine(category);
 		
 		if (categoryRoutine != null)
