@@ -29,7 +29,7 @@ export default function Chronometer({ isRunning, onTick }) {
 
   return (
     <div>
-      <p>{seconds} segundos</p>
+      <p><span style={{fontWeight:'bold'}}>{seconds}</span> segs</p>
     </div>
   );
 }

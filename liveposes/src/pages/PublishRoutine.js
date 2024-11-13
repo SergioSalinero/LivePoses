@@ -35,7 +35,7 @@ export default function PublishRoutine() {
     const maxWords = 100;
     const [wordsRemaining, setWordsRemaining] = useState(maxWords);
 
-    var [selectedCategory, setSelectedCategory] = useState('Cardio Burner');
+    var [selectedCategory, setSelectedCategory] = useState('Rehabilitation');
 
     const [error, setError] = useState(null);
     var [token, setToken] = useState('');

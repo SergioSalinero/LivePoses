@@ -10,6 +10,8 @@ export default function Routine({ exercises, routine }) {
     const router = useRouter();
     var [token, setToken] = useState('');
 
+    //console.log(routine)
+
     useEffect(() => {
         const storedToken = localStorage.getItem('accessToken');
         if (storedToken !== null && storedToken !== undefined) {
@@ -30,7 +32,7 @@ export default function Routine({ exercises, routine }) {
         for(let i=0; i<routine.exercises.length; i++) {
             const exerciseData = {
                 exerciseId: routine.exercises[i].exerciseId,
-                repetitions: routine.exercises[i].repetitions
+                repetitions: routine.exercises[i].repetitions,
             }
             currentRoutine.exercises.push(exerciseData);
         }

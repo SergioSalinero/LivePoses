@@ -17,6 +17,14 @@ import strenghtImage from '../../public/images/exerciseCategories/Strenght.jpeg'
 import flexibilityImage from '../../public/images/exerciseCategories/Flexibility.jpg';
 import rehabilitationImage from '../../public/images/exerciseCategories/Rehabilitation.jpeg';
 
+import frontLegRaiseImage from "../../public/images/exercises/FrontLegRaise.gif";
+import lungesImage from "../../public/images/exercises/Lunges.gif";
+import hamstringsImage from "../../public/images/exercises/Hamstrings.gif";
+import tiryakTasadanImage from "../../public/images/exercises/TiryakTasadan.gif";
+import pullUpsImage from "../../public/images/exercises/PullUps.gif";
+import bicepsCurlImage from "../../public/images/exercises/BicepsCurl.gif";
+import stantingCrunchImage from "../../public/images/exercises/StandingCrunch.gif";
+
 import { 
     BACKGROUND_COLOR,
     SIDE_BAR_COLOR,
@@ -161,6 +169,13 @@ export default function Home() {
                     value: parseFloat(element[1])
                 })));
 
+                console.log(frontLegRaiseImage.src);
+                console.log(lungesImage.src)
+                console.log(hamstringsImage.src)
+                console.log(tiryakTasadanImage.src)
+                console.log(pullUpsImage.src)
+                console.log(bicepsCurlImage.src)
+                console.log(stantingCrunchImage.src)
             } catch (error) {
                 console.error('Error fetching data: ', error);
             }
@@ -389,22 +404,22 @@ export default function Home() {
 
                         <div style={StyleSheet.horizontalScroll}>
                             <ExerciseCategory
-                                imageURL={rehabilitationImageURL}
+                                imageURL="/_next/static/media/FrontLegRaise.5ac6d4f9.gif"
                                 title="Rehabilitation"
                                 numRoutines={rehabilitationCounter}
                                 onClick={() => handleClick(4)} />
                             <ExerciseCategory
-                                imageURL={flexibilityImageURL}
+                                imageURL="/_next/static/media/TiryakTasadan.4908e6c3.gif"
                                 title="Flexibility & Mobility"
                                 numRoutines={flesibilityCounter}
                                 onClick={() => handleClick(3)} />
                             <ExerciseCategory
-                                imageURL={strenghtImageURL}
+                                imageURL="/_next/static/media/BicepsCurl.449b5c5f.gif"
                                 title="Muscle & Strenght"
                                 numRoutines={strenghtCounter}
                                 onClick={() => handleClick(2)} />
                             <ExerciseCategory
-                                imageURL={strenghtImageURL}
+                                imageURL="/_next/static/media/StandingCrunch.07dc2eb3.gif"
                                 title="Equilibrium"
                                 numRoutines={equilibriumCounter}
                                 onClick={() => handleClick(7)} />

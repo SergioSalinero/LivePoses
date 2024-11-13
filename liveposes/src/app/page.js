@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import {
     BACKGROUND_COLOR,
@@ -8,28 +8,37 @@ import {
     START_ROUTINE_BUTTON_HOVER_COLOR,
     SECTION_BUTTON_COLOR,
     SECTION_BUTTON_HOVER_COLOR,
-    SECTION_TEXT_COLOR
+    SECTION_TEXT_COLOR,
+    SIDE_BAR_TEX_COLOR,
 } from '@/utils/Colors';
 
 export default function LandingPage() {
+
+    useEffect(() => {
+        document.body.style.backgroundColor = BACKGROUND_COLOR;
+    }, []);
+
     const styles = {
         container: {
             backgroundColor: BACKGROUND_COLOR,
-            height: '100vh',
+            //height: '100vh',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'space-between',
             color: SECTION_TEXT_COLOR,
             fontFamily: 'Roboto, sans-serif',
-            backgroundImage: 'url(/images/posture-background.jpg)',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
-            padding: '20px',
+            padding: '0px 20px 20px 20px',
         },
         header: {
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
+            position: 'fixed',
+            width: '95%',
+            backgroundColor: BACKGROUND_COLOR,
+            padding: '20px'
         },
         logo: {
             width: '120px',
@@ -75,6 +84,7 @@ export default function LandingPage() {
             fontWeight: 'bold',
             cursor: 'pointer',
             transition: 'background-color 0.3s ease',
+            marginBottom: '20px'
         },
         getStartedHover: {
             backgroundColor: START_ROUTINE_BUTTON_HOVER_COLOR,
@@ -84,14 +94,20 @@ export default function LandingPage() {
             margin: '20px auto',
             display: 'block',
             borderRadius: '10px',
+            boxShadow: "0px 5px 15px rgba(0, 0, 0, 0.3)"
+        },
+        sidebarTitle: {
+            color: SIDE_BAR_TEX_COLOR,
+            fontSize: '36px',
+            fontWeight: 'bold',
+            fontFamily: 'Montserrat, sans-serif',
         },
     };
 
     return (
         <div style={styles.container}>
-            {/* Header con Logo y Botones */}
             <div style={styles.header}>
-                <img src="/images/logo.png" alt="Platform Logo" style={styles.logo} />
+                <p style={styles.sidebarTitle}>LIVE POSES</p>
                 <div style={styles.navButtons}>
                     <button
                         style={styles.button}
@@ -112,13 +128,12 @@ export default function LandingPage() {
                 </div>
             </div>
 
-            {/* Contenido Principal */}
             <div style={styles.mainContent}>
                 <h1 style={styles.mainHeader}>Transform Your Workouts</h1>
                 <p style={styles.subHeader}>
                     Experience the next level of fitness tracking. Improve your posture, monitor your progress, and achieve your goals with ease.
                 </p>
-                <img src="/images/posture-demo.jpg" alt="Posture Demo" style={styles.image} />
+                <img src="/_next/static/media/FrontLegRaise.5ac6d4f9.gif" alt="Posture Demo" style={styles.image} />
                 <button
                     style={styles.getStartedButton}
                     onMouseEnter={(e) => e.target.style.backgroundColor = styles.getStartedHover.backgroundColor}

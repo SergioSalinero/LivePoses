@@ -3,14 +3,14 @@ import { FaRegTrashCan, FaArrowUp, FaArrowDown } from 'react-icons/fa6'
 
 export default function RoutineExercise({ exercise, exercises }) {
     const [exerciseName, setExerciseName] = useState('');
-    
-    //console.log(exercise);
+    const [exerciseSrc, setExerciseSrc] = useState('');
 
     
     useEffect(() => {
         const matchingExercise = exercises.find(item => item.id === exercise.exerciseId);
         if (matchingExercise) {
             setExerciseName(matchingExercise.name);
+            setExerciseSrc(matchingExercise.src);
         }
     }, [exercise.exerciseId, exercises]);
 
@@ -24,17 +24,27 @@ export default function RoutineExercise({ exercise, exercises }) {
             fontSize: '20px',
             fontWeight: '600',
             color: '#f7f7f7',
-            padding: '1px'
+            padding: '1px',
+            display: 'flex',
+            alignItems: 'center'
         },
         text: {
             //padding: '1px',
             margin: '15px'
+        },
+        image: {
+            width: '50px',
+            marginLeft: '10px',
+            borderRadius: '10px',
+            padding: '5px'
         }
     }
 
     return (
         <div style={StyleSheet.containerStyle}>
-            <p style={StyleSheet.text}>{exercise.repetitions}x {exerciseName}</p>
+            <p style={StyleSheet.text}>{exercise.repetitions}x </p>
+            <img src={exerciseSrc} style={StyleSheet.image}></img>
+            <p style={StyleSheet.text}>{exerciseName}</p>
         </div>
     );
 }

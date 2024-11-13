@@ -26,7 +26,6 @@ export default function CategoryRoutines() {
 
     const router = useRouter();
     var { category } = router.query;
-    console.log(router.query)
 
     const [routines, setRoutines] = useState([]);
     var intRoutines;
@@ -50,11 +49,9 @@ export default function CategoryRoutines() {
 
     useEffect(() => {
         if (category) {
-            console.log(category);
             category = category.replace(/\s+/g, '')
             const encodedCategory = encodeURIComponent(category);
             const url = `${GET_CATEGORY_ROUTINE_URL}?${"category=" + encodedCategory}`;
-            console.log(url);
 
             async function fetchCategoryCount() {
                 try {
@@ -70,7 +67,6 @@ export default function CategoryRoutines() {
                     }
                     intRoutines = await response.json();
                     setRoutines(intRoutines);
-                    //console.log(routines);
                 } catch (error) {
                     console.error('Error fetching data: ', error);
                 }
@@ -90,6 +86,7 @@ export default function CategoryRoutines() {
                     }
                     const jsonData = await response.json();
                     setExercises(jsonData);
+                    console.log(jsonData);
                 } catch (error) {
                     console.error('Error fetching data: ', error);
                 }
@@ -101,7 +98,6 @@ export default function CategoryRoutines() {
     }, [category]);
 
     function handleRoutineClick(index) {
-        console.log(index);
     }
 
     const StyleSheet = {
@@ -172,7 +168,7 @@ export default function CategoryRoutines() {
         routines: {
             backgroundColor: 'transparent',
             marginTop: '25px',
-            marginLeft: '320px',
+            marginLeft: '280px',
             marginRight: '20px',
             height: '400px',
         },
