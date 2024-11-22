@@ -122,7 +122,7 @@ export default function Home() {
                 data['averageAccuracy'] = data['averageAccuracy'].toFixed(2);
                 data['caloriesCounter'] = data['caloriesCounter'].toFixed(2);
                 data['timeCounter'] = (data['timeCounter'] / 60).toFixed(2);
-                data['breakCounter'] = (data['breakCounter'] / 60).toFixed(2)
+                data['breakCounter'] = (data['breakCounter'] / 60).toFixed(2);
                 setBasicStatistics(data);
             } catch (error) {
                 console.error('Error fetching data: ', error);
@@ -432,9 +432,9 @@ export default function Home() {
                     <p style={StyleSheet.sectionTitle}>Your statistics</p>
                         <div style={StyleSheet.basicStatisticsDiv}>
                             <p style={StyleSheet.basicSpecificStatistic}><span style={StyleSheet.boldSpan}>Routine counter:</span> {basicStatistics['routineCounter']}</p>
-                            <p style={StyleSheet.basicSpecificStatistic}><span style={StyleSheet.boldSpan}>Time counter:</span> {basicStatistics['timeCounter']}</p>
-                            <p style={StyleSheet.basicSpecificStatistic}><span style={StyleSheet.boldSpan}>Calories counter:</span> {basicStatistics['caloriesCounter']}</p>
-                            <p style={StyleSheet.basicSpecificStatistic}><span style={StyleSheet.boldSpan}>Breaktime counter:</span> {basicStatistics['breakTimeCounter']}</p>
+                            <p style={StyleSheet.basicSpecificStatistic}><span style={StyleSheet.boldSpan}>Time counter:</span> {basicStatistics['timeCounter']} mins</p>
+                            <p style={StyleSheet.basicSpecificStatistic}><span style={StyleSheet.boldSpan}>Calories counter:</span> {basicStatistics['caloriesCounter']} cal</p>
+                            <p style={StyleSheet.basicSpecificStatistic}><span style={StyleSheet.boldSpan}>Breaktime counter:</span> {basicStatistics['breakTimeCounter']} mins</p>
                             <p style={StyleSheet.basicSpecificStatistic}><span style={StyleSheet.boldSpan}>Average Accuracy:</span> {basicStatistics['averageAccuracy']}%</p>
                         </div>
                         <div style={StyleSheet.chartsDiv}>

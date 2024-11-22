@@ -363,7 +363,7 @@ export default function RoutineBuilding() {
                             }}
                             onMouseEnter={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButtonHover.backgroundColor}
                             onMouseLeave={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButton.backgroundColor}
-                        /*onClick={() => handleClick(3)}*/
+                            onClick={() => router.push('/Profile')}
                         >
                             Profile
                         </button>

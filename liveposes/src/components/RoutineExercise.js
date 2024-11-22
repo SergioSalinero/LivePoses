@@ -42,7 +42,7 @@ export default function RoutineExercise({ exercise, exercises }) {
 
     return (
         <div style={StyleSheet.containerStyle}>
-            <p style={StyleSheet.text}>{exercise.repetitions}x </p>
+            <p style={StyleSheet.text}>{exercise.repetitions} x </p>
             <img src={exerciseSrc} style={StyleSheet.image}></img>
             <p style={StyleSheet.text}>{exerciseName}</p>
         </div>
