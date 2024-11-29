@@ -17,11 +17,11 @@ export default function RoutineExercise({ exercise, exercises }) {
     const StyleSheet = {
         containerStyle: {
             backgroundColor: '#171717',
-            borderRadius: '20px',
+            borderRadius: '5px',
             marginBottom: '15px',
             boxShadow: '0px 5px 15px rgba(0, 0, 0, 0.3)',
-            width: '380px',
-            fontSize: '20px',
+            width: 'auto',
+            fontSize: '15px',
             fontWeight: '600',
             color: '#f7f7f7',
             padding: '1px',
@@ -33,7 +33,7 @@ export default function RoutineExercise({ exercise, exercises }) {
             margin: '15px'
         },
         image: {
-            width: '50px',
+            width: '45px',
             marginLeft: '10px',
             borderRadius: '10px',
             padding: '5px'

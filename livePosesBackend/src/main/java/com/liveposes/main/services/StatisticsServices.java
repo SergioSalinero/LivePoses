@@ -13,6 +13,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.liveposes.main.model.BasicStatistics;
 import com.liveposes.main.model.CategoryCount;
+import com.liveposes.main.model.User;
 import com.liveposes.main.utils.RemoteServices;
 
 @Service
@@ -151,6 +152,24 @@ public class StatisticsServices {
 			ex.printStackTrace();
 			return null;
 		}
+	}
+	
+	public Boolean setResetStatistics(long userID) {
+		try {
+            ResponseEntity<String> response = restTemplate.postForEntity(RemoteServices.POST_RESET_STATISTICS, userID, String.class);
+            
+            if (response.getStatusCode() == HttpStatus.OK) {
+            	return true;
+            } else {
+                return false;
+            }
+        } catch (HttpClientErrorException ex) {
+			//HttpStatus statusCode = (HttpStatus) ex.getStatusCode();
+            return false;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return false;
+        }
 	}
 
 }

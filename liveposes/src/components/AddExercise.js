@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { FaRegTrashCan, FaArrowUp, FaArrowDown } from 'react-icons/fa6'
 
+import Box from '@mui/material/Box';
+
 export default function handleAddExercise(props) {
     const [repetitions, setRepetitions] = useState(0);
     const [selectedExercise, setSelectedExercise] = useState('1');
@@ -38,7 +40,7 @@ export default function handleAddExercise(props) {
     const StyleSheet = {
         containerStyle: {
             backgroundColor: '#4A4A4A',
-            borderRadius: '20px',
+            borderRadius: '5px',
             marginBottom: '15px',
             boxShadow: '0px 5px 15px rgba(0, 0, 0, 0.3)',
         },
@@ -58,7 +60,7 @@ export default function handleAddExercise(props) {
             color: 'white',
             height: '50px',
             border: 'none',
-            borderRadius: '20px',
+            borderRadius: '5px',
             fontSize: '18px',
             fontFamily: 'Roboto, sans-serif',
             marginRight: '20px',
@@ -67,7 +69,7 @@ export default function handleAddExercise(props) {
         button: {
             backgroundColor: '#2F2F2F',
             color: 'white',
-            borderRadius: '20px',
+            borderRadius: '5px',
             border: 'none',
             fontSize: '24px',
             fontFamily: 'Roboto, sans-serif',

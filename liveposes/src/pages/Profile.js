@@ -1,6 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 
+import { styled } from '@mui/material/styles';
+import Box from '@mui/material/Box';
+import Paper from '@mui/material/Paper';
+import Grid from '@mui/material/Grid2';
+import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
+import AddIcon from '@mui/icons-material/Add';
+import PublishIcon from '@mui/icons-material/Publish';
+import PersonIcon from '@mui/icons-material/Person';
+import BarChartIcon from '@mui/icons-material/BarChart';
+import HistoryIcon from '@mui/icons-material/History';
+import ClassIcon from '@mui/icons-material/Class';
+import TextField from '@mui/material/TextField';
+
 import {
     GET_USER_DATA,
     POST_UPDATE_WEIGHT,
@@ -13,8 +27,11 @@ import {
     SECTION_TEXT_COLOR,
     SECTION_BUTTON_COLOR,
     SECTION_BUTTON_HOVER_COLOR,
-    DANGER_BUTTON_COLOR
+    DANGER_BUTTON_COLOR,
+    SIDE_BAR_BUTTON_COLOR,
+    SIDE_BAR_BUTTON_HOVER_COLOR,
 } from '@/utils/Colors';
+
 
 
 export default function UserProfilePage() {
@@ -27,6 +44,8 @@ export default function UserProfilePage() {
     var [token, setToken] = useState('');
 
     useEffect(() => {
+        document.body.style.backgroundColor = BACKGROUND_COLOR;
+
         const storedToken = localStorage.getItem('accessToken');
         if (storedToken !== null && storedToken !== undefined) {
             setToken(storedToken);
@@ -116,21 +135,36 @@ export default function UserProfilePage() {
         router.push('/Login');
     }
 
-    const styles = {
+    const Item = styled(Paper)(({ theme }) => ({
+        backgroundColor: '#fff',
+        ...theme.typography.body2,
+        padding: theme.spacing(1),
+        textAlign: 'center',
+        color: theme.palette.text.secondary,
+        ...theme.applyStyles('dark', {
+            backgroundColor: '#1A2027',
+        }),
+    }));
+
+    const StyleSheet = {
         container: {
             backgroundColor: BACKGROUND_COLOR,
-            height: '100vh',
+            //height: '100vh',
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
             color: SECTION_TEXT_COLOR,
             fontFamily: 'Roboto, sans-serif',
+            backgroundColor: FLOATING_CONTAINER_COLOR,
+            borderRadius: '5px',
+            padding: '20px 20px 20px 20px',
+            boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.5)',
+            marginBottom: '20px',
         },
         profileBox: {
             backgroundColor: FLOATING_CONTAINER_COLOR,
             padding: '30px',
             borderRadius: '8px',
-            boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.5)',
             textAlign: 'center',
             width: '320px',
         },
@@ -141,10 +175,11 @@ export default function UserProfilePage() {
         },
         infoContainer: {
             marginBottom: '20px',
+            fontSize: '22px'
         },
         label: {
             color: SECTION_TEXT_COLOR,
-            fontSize: '16px',
+            fontSize: '22px',
             marginBottom: '10px',
         },
         buttonsContainer: {
@@ -184,62 +219,265 @@ export default function UserProfilePage() {
         },
         deleteButtonHover: {
             backgroundColor: '#FF1744', // Color de hover para el botón de eliminación
+        },
+        inputStyle: {
+            width: '100%',
+            padding: '12px 16px',
+            fontSize: '16px',
+            borderRadius: '8px',
+            border: '2px solid #ccc',
+            outline: 'none',
+            transition: 'all 0.3s ease',
+            backgroundColor: '#f9f9f9',
+        },
+        inputFocusStyle: {
+            border: '2px solid #4caf50',
+            boxShadow: '0 0 8px rgba(76, 175, 80, 0.5)',
         }
     };
 
 
     return (
-        <div style={styles.container}>
-            <div style={styles.profileBox}>
-                <h2 style={styles.header}>User Profile</h2>
-                <div style={styles.infoContainer}>
-                    <p style={styles.label}><strong>Email:</strong> {userData[0]}</p>
-                    <div style={styles.weightDiv}>
-                        <p><strong>Weight:</strong></p>
-                        <input
-                            type="number"
-                            placeholder={userData[1]}
-                            onChange={(e) => setWeight(e.target.value)}
-                            value={weight}
+        <Box sx={{ flexGrow: 1 }}>
+            <Grid container spacing={2}>
+                <Grid size={8}>
+                    <Item>size=8</Item>
+                </Grid>
+                <Grid size={4} alignItems={'left'}>
+                    <Button
+                        variant="contained"
+                        sx={{
+                            backgroundColor: SIDE_BAR_BUTTON_COLOR,
+                            color: 'white',
+                            '&:hover': {
+                                backgroundColor: SIDE_BAR_BUTTON_HOVER_COLOR,
+                            },
+                            fontSize: '18px',
+                            width: '100%'
+                        }}
+                        onClick={() => router.push('/Profile')}
+                    >
+                        <PersonIcon fontSize="medium" /> Profile
+                    </Button>
+                </Grid>
+                <Grid size={2}>
+                    <Stack spacing={2} direction="column">
+                        <Button
+                            variant="contained"
+                            sx={{
+                                backgroundColor: SIDE_BAR_BUTTON_COLOR,
+                                color: 'white',
+                                '&:hover': {
+                                    backgroundColor: SIDE_BAR_BUTTON_HOVER_COLOR,
+                                },
+                                fontSize: '18px',
+                                textAlign: 'right'
+                            }}
+                            onClick={() => router.push('/Home')}
                         >
-                        </input>
+                            <ClassIcon fontSize="large" /> Exercise categories
+                        </Button>
+                        <Button
+                            variant="contained"
+                            sx={{
+                                backgroundColor: SIDE_BAR_BUTTON_COLOR,
+                                color: 'white',
+                                '&:hover': {
+                                    backgroundColor: SIDE_BAR_BUTTON_HOVER_COLOR,
+                                },
+                                fontSize: '18px',
+                                textAlign: 'right'
+                            }}
+                            onClick={() => router.push('/RoutineBuilding')}
+                        >
+                            <AddIcon fontSize="large" /> Create your own rutine
+                        </Button>
+                        <Button
+                            variant="contained"
+                            sx={{
+                                backgroundColor: SIDE_BAR_BUTTON_COLOR,
+                                color: 'white',
+                                '&:hover': {
+                                    backgroundColor: SIDE_BAR_BUTTON_HOVER_COLOR,
+                                },
+                                fontSize: '18px',
+                                textAlign: 'right'
+                            }}
+                            onClick={() => router.push('/PublishRoutine')}
+                        >
+                            <PublishIcon fontSize="large" /> Publish a routine
+                        </Button>
+                        <Button
+                            variant="contained"
+                            sx={{
+                                backgroundColor: SIDE_BAR_BUTTON_COLOR,
+                                color: 'white',
+                                '&:hover': {
+                                    backgroundColor: SIDE_BAR_BUTTON_HOVER_COLOR,
+                                },
+                                fontSize: '18px',
+                                textAlign: 'right'
+                            }}
+                            onClick={() => router.push('/Statistics')}
+                        >
+                            <BarChartIcon fontSize="large" /> Show statistics
+                        </Button>
+                        <Button
+                            variant="contained"
+                            sx={{
+                                backgroundColor: SIDE_BAR_BUTTON_COLOR,
+                                color: 'white',
+                                '&:hover': {
+                                    backgroundColor: SIDE_BAR_BUTTON_HOVER_COLOR,
+                                },
+                                fontSize: '18px',
+                                textAlign: 'right'
+                            }}
+                            onClick={() => router.push('/RoutineHistory')}
+                        >
+                            <HistoryIcon fontSize="large" /> Show your history
+                        </Button>
+                    </Stack>
+                </Grid>
+                <Grid size={10}>
+                    <div style={StyleSheet.container}>
+                        <div style={StyleSheet.profileBox}>
+                            <div style={StyleSheet.infoContainer}>
+                                <p style={StyleSheet.label}><strong>Email:</strong> {userData[0]}</p>
+                                <div style={StyleSheet.weightDiv}>
+                                    <p><strong>Weight:</strong></p>
+                                    <input
+                                        type="number"
+                                        placeholder={userData[1]}
+                                        onChange={(e) => setWeight(e.target.value)}
+                                        value={weight}
+                                        style={StyleSheet.inputStyle}
+                                    >
+                                    </input>
+                                </div>
+                            </div>
+                            <div style={StyleSheet.buttonsContainer}>
+                                <Button
+                                    variant="contained"
+                                    sx={{
+                                        backgroundColor: SIDE_BAR_BUTTON_COLOR,
+                                        color: 'white',
+                                        '&:hover': {
+                                            backgroundColor: SIDE_BAR_BUTTON_HOVER_COLOR,
+                                        },
+                                        fontSize: '18px',
+                                        textAlign: 'right'
+                                    }}
+                                    onClick={() => handleUpdateWeight()}
+                                >
+                                    Update Weight
+                                </Button>
+                                <Button
+                                    variant="contained"
+                                    sx={{
+                                        backgroundColor: SIDE_BAR_BUTTON_COLOR,
+                                        color: 'white',
+                                        '&:hover': {
+                                            backgroundColor: SIDE_BAR_BUTTON_HOVER_COLOR,
+                                        },
+                                        fontSize: '18px',
+                                        textAlign: 'right'
+                                    }}
+                                    onClick={() => handleUpdateWeight()}
+                                >
+                                    Change Password
+                                </Button>
+
+                                <br></br>
+
+                                <Button
+                                    variant="contained"
+                                    sx={{
+                                        backgroundColor: SIDE_BAR_BUTTON_COLOR,
+                                        color: 'white',
+                                        '&:hover': {
+                                            backgroundColor: SIDE_BAR_BUTTON_HOVER_COLOR,
+                                        },
+                                        fontSize: '18px',
+                                        textAlign: 'right'
+                                    }}
+                                    onClick={() => handleLogOut()}
+                                >
+                                    Log out
+                                </Button>
+                                <Button
+                                    variant="contained"
+                                    sx={{
+                                        backgroundColor: DANGER_BUTTON_COLOR,
+                                        color: 'white',
+                                        '&:hover': {
+                                            backgroundColor: SIDE_BAR_BUTTON_HOVER_COLOR,
+                                        },
+                                        fontSize: '18px',
+                                        textAlign: 'right'
+                                    }}
+                                    onClick={() => handleDeleteAccount()}
+                                >
+                                    Delete Account
+                                </Button>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div style={styles.buttonsContainer}>
-                    <button
-                        onMouseEnter={(e) => e.target.style.backgroundColor = styles.buttonHover.backgroundColor}
-                        onMouseLeave={(e) => e.target.style.backgroundColor = styles.button.backgroundColor}
-                        style={styles.button}
-                        onClick={() => handleUpdateWeight()}
+
+                </Grid>
+            </Grid>
+        </Box>
+    );
+    /*<div style={styles.container}>
+        <div style={styles.profileBox}>
+            <h2 style={styles.header}>User Profile</h2>
+            <div style={styles.infoContainer}>
+                <p style={styles.label}><strong>Email:</strong> {userData[0]}</p>
+                <div style={styles.weightDiv}>
+                    <p><strong>Weight:</strong></p>
+                    <input
+                        type="number"
+                        placeholder={userData[1]}
+                        onChange={(e) => setWeight(e.target.value)}
+                        value={weight}
                     >
-                        Update Weight
-                    </button>
-                    <button
-                        onMouseEnter={(e) => e.target.style.backgroundColor = styles.buttonHover.backgroundColor}
-                        onMouseLeave={(e) => e.target.style.backgroundColor = styles.button.backgroundColor}
-                        style={styles.button}
-                    >
-                        Change Password
-                    </button>
-                    <br></br>
-                    <button
-                        onMouseEnter={(e) => e.target.style.backgroundColor = styles.buttonHover.backgroundColor}
-                        onMouseLeave={(e) => e.target.style.backgroundColor = styles.button.backgroundColor}
-                        style={styles.button}
-                        onClick={() => handleLogOut()}
-                    >
-                        Log out
-                    </button>
-                    <button
-                        onMouseEnter={(e) => e.target.style.backgroundColor = styles.deleteButtonHover.backgroundColor}
-                        onMouseLeave={(e) => e.target.style.backgroundColor = styles.deleteButton.backgroundColor}
-                        style={styles.deleteButton}
-                        onClick={() => handleDeleteAccount()}
-                    >
-                        Delete Account
-                    </button>
+                    </input>
                 </div>
             </div>
+            <div style={styles.buttonsContainer}>
+                <button
+                    onMouseEnter={(e) => e.target.style.backgroundColor = styles.buttonHover.backgroundColor}
+                    onMouseLeave={(e) => e.target.style.backgroundColor = styles.button.backgroundColor}
+                    style={styles.button}
+                    onClick={() => handleUpdateWeight()}
+                >
+                    Update Weight
+                </button>
+                <button
+                    onMouseEnter={(e) => e.target.style.backgroundColor = styles.buttonHover.backgroundColor}
+                    onMouseLeave={(e) => e.target.style.backgroundColor = styles.button.backgroundColor}
+                    style={styles.button}
+                >
+                    Change Password
+                </button>
+                <br></br>
+                <button
+                    onMouseEnter={(e) => e.target.style.backgroundColor = styles.buttonHover.backgroundColor}
+                    onMouseLeave={(e) => e.target.style.backgroundColor = styles.button.backgroundColor}
+                    style={styles.button}
+                    onClick={() => handleLogOut()}
+                >
+                    Log out
+                </button>
+                <button
+                    onMouseEnter={(e) => e.target.style.backgroundColor = styles.deleteButtonHover.backgroundColor}
+                    onMouseLeave={(e) => e.target.style.backgroundColor = styles.deleteButton.backgroundColor}
+                    style={styles.deleteButton}
+                    onClick={() => handleDeleteAccount()}
+                >
+                    Delete Account
+                </button>
+            </div>
         </div>
-    );
+    </div>*/
 };

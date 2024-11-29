@@ -104,5 +104,22 @@ public class StatisticsController {
 		else
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 	}
+	
+	@PostMapping("/post/reset_statistics")
+	public ResponseEntity<String> setTheLastRoutine(@RequestHeader("Authorization") String token) {
+		
+		if (token == null || token.isBlank())
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+
+		String userID = jwtUtil.getKey(token);
+
+		if (userID == null)
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+		
+		if(statisticsServices.setResetStatistics(Long.parseLong(userID)))
+			return ResponseEntity.status(HttpStatus.OK).body("The statistics has been removed successfully");
+		else
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add statistics");
+	}
 
 }

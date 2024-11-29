@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { FaRegTrashCan, FaArrowUp, FaArrowDown } from 'react-icons/fa6'
 
-import { POST_CURRENT_ROUTINE_URL, POST_DELETE_CATEGORY_ROUTINE_URL } from '@/utils/Config';
+import { POST_CURRENT_ROUTINE_URL } from '@/utils/Config';
 
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -33,17 +33,15 @@ import {
     FLOATING_CONTAINER_COLOR,
     SECTION_TEXT_COLOR,
     START_ROUTINE_BUTTON_COLOR,
-    START_ROUTINE_BUTTON_HOVER_COLOR,
-    DANGER_BUTTON_COLOR
+    START_ROUTINE_BUTTON_HOVER_COLOR
 } from '@/utils/Colors';
 
 import RoutineExercise from '@/components/RoutineExercise';
 
-export default function Routine({ exercises, routine, category }) {
+export default function Routine({ exercises, routine }) {
     const router = useRouter();
     var [token, setToken] = useState('');
 
-    //console.log(routine)
 
     useEffect(() => {
         const storedToken = localStorage.getItem('accessToken');
@@ -92,30 +90,6 @@ export default function Routine({ exercises, routine, category }) {
                 console.error('Error processing request:', error);
                 console.log('Error processing request. Please try again later.');
             }
-        }
-    }
-
-    async function handleDeleteRoutine() {
-        try {
-            const response = await fetch(POST_DELETE_CATEGORY_ROUTINE_URL, {
-                method: 'POST',
-                headers: {
-                    'Authorization': token,
-                    'Content-Type': 'application/json',
-                },
-                body: routine.id,
-            });
-
-            if (response.ok) {
-                router.push('/CategoryRoutines?category=' + category);
-            } else if (response.status === 500) {
-                console.log('Internal server error. Please try again later.');
-            } else {
-                console.log('Invalid credentials');
-            }
-        } catch (error) {
-            console.error('Error processing request:', error);
-            console.log('Error processing request. Please try again later.');
         }
     }
 
@@ -175,17 +149,8 @@ export default function Routine({ exercises, routine, category }) {
             <CardActionArea>
                 <CardContent>
                     <Typography gutterBottom variant="h6" component="div">
-                        {routine.description ? (
-                            <>
-                                <span style={{ fontWeight: 'bold', fontSize: '20px' }}>Description:</span> <span style={{ opacity: 0.7 }}>{routine.description}</span>
-                            </>
-                        ) : (
-                            <>
-                                <span style={{ fontWeight: 'bold', fontSize: '20px' }}>Description:</span> Ø
-                            </>
-                        )}
+                        <span style={{ fontWeight: 'bold', fontSize: '20px' }}>Accuracy:</span> {routine.accuracy}%
                     </Typography>
-
                     <Typography gutterBottom variant="h6" component="div">
                         <span style={{ fontWeight: 'bold', fontSize: '20px' }}>Break Time:</span> {routine.breakTime} secs
                     </Typography>
@@ -204,25 +169,12 @@ export default function Routine({ exercises, routine, category }) {
 
                 <CardActions
                     sx={{
-                        justifyContent: 'space-between',
-                        width: '95%',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        width: '100%',
                     }}
                 >
-                    <Button
-                        variant="contained"
-                        sx={{
-                            backgroundColor: DANGER_BUTTON_COLOR,
-                            color: 'white',
-                            '&:hover': {
-                                backgroundColor: SIDE_BAR_BUTTON_HOVER_COLOR,
-                            },
-                            fontSize: '16px',
-                        }}
-                        onClick={handleDeleteRoutine}
-                    >
-                        Delete
-                    </Button>
-
                     <Button
                         size="medium"
                         color="primary"
@@ -230,9 +182,10 @@ export default function Routine({ exercises, routine, category }) {
                             backgroundColor: START_ROUTINE_BUTTON_COLOR,
                             color: 'white',
                             '&:hover': {
-                                backgroundColor: SIDE_BAR_BUTTON_HOVER_COLOR,
+                                backgroundColor: START_ROUTINE_BUTTON_HOVER_COLOR,
                             },
-                            fontSize: '16px',
+                            fontSize: '18px',
+                            textAlign: 'right'
                         }}
                         onClick={handleRoutineClicked}
                     >
@@ -241,7 +194,7 @@ export default function Routine({ exercises, routine, category }) {
                 </CardActions>
             </CardActionArea>
 
-        </Card>
+        </Card >
 
     );
     /*<button

@@ -17,6 +17,7 @@ import com.liveposes.main.model.CurrentRoutine;
 import com.liveposes.main.model.CurrentRoutineExercises;
 import com.liveposes.main.model.Exercise;
 import com.liveposes.main.model.PublicRoutine;
+import com.liveposes.main.model.RoutineHistory;
 import com.liveposes.main.services.ExercisesServices;
 import com.liveposes.main.utils.JWTUtil;
 
@@ -160,6 +161,97 @@ public class ExercisesController {
 			return ResponseEntity.status(HttpStatus.OK).body(categoryRoutine);
 		else
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+	}
+	
+	@PostMapping("/post/reset_category_routines")
+	public ResponseEntity<String> setResetCategoryRoutine(@RequestBody String category,
+			@RequestHeader("Authorization") String token) {
+		
+		if (token == null || token.isBlank())
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+
+		String userID = jwtUtil.getKey(token);
+
+		if (userID == null)
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+		
+		if(exercisesServices.setResetCategoryRoutines(category))
+			return ResponseEntity.status(HttpStatus.OK).body("The category has been reset successfully");
+		else
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add the routine");
+	}
+	
+	@PostMapping("/post/delete_category_routine")
+	public ResponseEntity<String> setDeleteCategoryRoutine(@RequestBody long id,
+			@RequestHeader("Authorization") String token) {
+		
+		if (token == null || token.isBlank())
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+
+		String userID = jwtUtil.getKey(token);
+
+		if (userID == null)
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+		
+		if(exercisesServices.setDeleteCategoryRoutine(id))
+			return ResponseEntity.status(HttpStatus.OK).body("The routine has been removed successfully");
+		else
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add the routine");
+	}
+	
+	@PostMapping("/post/routine_history")
+	public ResponseEntity<String> setRoutineHistory(@RequestBody RoutineHistory routineHistory,
+			@RequestHeader("Authorization") String token) {
+		
+		if (token == null || token.isBlank())
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+
+		String userID = jwtUtil.getKey(token);
+
+		if (userID == null)
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+		
+		routineHistory.setUserId(Long.parseLong(userID));		
+		
+		if(exercisesServices.setRoutineHistory(routineHistory))
+			return ResponseEntity.status(HttpStatus.OK).body("The routine has been added successfully");
+		else
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add the routine");
+	}
+	
+	@GetMapping("/get/routine_history")
+	public ResponseEntity<List<RoutineHistory>> getCategoryRoutine(@RequestHeader("Authorization") String token) {
+		if (token == null || token.isBlank())
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+
+		String userID = jwtUtil.getKey(token);
+		
+		if (userID == null)
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+		
+		List<RoutineHistory> routineHistory = exercisesServices.getRoutineHistory(Long.parseLong(userID));
+		
+		if (routineHistory != null)
+			return ResponseEntity.status(HttpStatus.OK).body(routineHistory);
+		else
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+	}
+	
+	@PostMapping("/post/reset_routine_history")
+	public ResponseEntity<String> setRoutineHistory(@RequestHeader("Authorization") String token) {
+		
+		if (token == null || token.isBlank())
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+
+		String userID = jwtUtil.getKey(token);
+
+		if (userID == null)
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+		
+		if(exercisesServices.setResetHistory(Long.parseLong(userID)))
+			return ResponseEntity.status(HttpStatus.OK).body("The routine has been added successfully");
+		else
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add the routine");
 	}
 
 }

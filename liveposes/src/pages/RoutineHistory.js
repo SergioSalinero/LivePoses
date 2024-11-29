@@ -4,9 +4,9 @@ import { FaArrowLeft } from 'react-icons/fa6'
 import { IoMdAdd } from "react-icons/io";
 import { MdPublish } from "react-icons/md";
 
-import Routine from '@/components/Routine';
+import RoutineInHistory from '@/components/RoutineInHistory';
 
-import { GET_EXERCISES_URL, GET_CATEGORY_ROUTINE_URL, POST_RESET_CATEGORY_ROUTINE_URL } from '@/utils/Config';
+import { GET_EXERCISES_URL, GET_ROUTINE_HISTORY_URL, POST_RESET_HISTORY_URL } from '@/utils/Config';
 
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -21,7 +21,7 @@ import BarChartIcon from '@mui/icons-material/BarChart';
 import HistoryIcon from '@mui/icons-material/History';
 import ClassIcon from '@mui/icons-material/Class';
 
-import { 
+import {
     BACKGROUND_COLOR,
     SIDE_BAR_COLOR,
     SIDE_BAR_BUTTON_COLOR,
@@ -34,17 +34,12 @@ import {
     SECTION_BUTTON_HOVER_COLOR,
     START_ROUTINE_BUTTON_COLOR,
     START_ROUTINE_BUTTON_HOVER_COLOR
- } from '@/utils/Colors';
+} from '@/utils/Colors';
 
 
-
-export default function CategoryRoutines() {
+export default function RoutineHistory() {
 
     const router = useRouter();
-    var { category } = router.query;
-    var prevCategory = category;
-    var [categoryForComponent, setCategoryForComponent] = useState("");
-    
 
     const [routines, setRoutines] = useState([]);
     var intRoutines;
@@ -52,11 +47,9 @@ export default function CategoryRoutines() {
     const [exercises, setExercises] = useState([]);
 
     var [token, setToken] = useState('');
-    const [error, setError] = useState(null);
 
     useEffect(() => {
         document.body.style.backgroundColor = BACKGROUND_COLOR;
-        setCategoryForComponent(encodeURIComponent(prevCategory));
 
         const storedToken = localStorage.getItem('accessToken');
         if (storedToken !== null && storedToken !== undefined) {
@@ -69,70 +62,60 @@ export default function CategoryRoutines() {
     })
 
     useEffect(() => {
-        if (category) {
-            category = category.replace(/\s+/g, '')
-            const encodedCategory = encodeURIComponent(category);
-            const url = `${GET_CATEGORY_ROUTINE_URL}?${"category=" + encodedCategory}`;
-
-            async function fetchCategoryCount() {
-                try {
-                    const response = await fetch(url, {
-                        method: 'GET',
-                        headers: {
-                            'Authorization': token,
-                            'Content-Type': 'application/json'
-                        }
-                    });
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
+        async function fetchRoutineHistory() {
+            try {
+                const response = await fetch(GET_ROUTINE_HISTORY_URL, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': token,
+                        'Content-Type': 'application/json'
                     }
-                    intRoutines = await response.json();
-                    setRoutines(intRoutines);
-                } catch (error) {
-                    console.error('Error fetching data: ', error);
+                });
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
                 }
+                intRoutines = await response.json();
+                setRoutines(intRoutines);
+            } catch (error) {
+                console.error('Error fetching data: ', error);
             }
-
-            async function fetchExerciseData() {
-                try {
-                    const response = await fetch(GET_EXERCISES_URL, {
-                        method: 'GET',
-                        headers: {
-                            'Authorization': token,
-                            'Content-Type': 'application/json'
-                        }
-                    });
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    const jsonData = await response.json();
-                    setExercises(jsonData);
-                } catch (error) {
-                    console.error('Error fetching data: ', error);
-                }
-            }
-
-            fetchExerciseData();
-            fetchCategoryCount();
         }
-    }, [category]);
 
-    async function handleResetCategory() {
+        async function fetchExerciseData() {
+            try {
+                const response = await fetch(GET_EXERCISES_URL, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': token,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const jsonData = await response.json();
+                setExercises(jsonData);
+            } catch (error) {
+                console.error('Error fetching data: ', error);
+            }
+        }
+
+        fetchExerciseData();
+        fetchRoutineHistory();
+    }, []);
+
+    async function handleResetHistory() {
         try {
-            const encodedCategory = encodeURIComponent(prevCategory);
-            const body = prevCategory.replace(/\s+/g, "");
-
-            const response = await fetch(POST_RESET_CATEGORY_ROUTINE_URL, {
+            const response = await fetch(POST_RESET_HISTORY_URL, {
                 method: 'POST',
                 headers: {
                     'Authorization': token,
                     'Content-Type': 'application/json'
                 },
-                body: body
             });
 
             if (response.ok) {
-                router.push('/CategoryRoutines?category=' + encodedCategory);
+                router.push('/RoutineHistory');
             } else if (response.status === 500) {
                 setError('Internal server error. Please try again later.');
             } else {
@@ -217,7 +200,7 @@ export default function CategoryRoutines() {
         },
         sectionTitle: {
             color: SECTION_TEXT_COLOR,
-            fontSize: '35px',
+            fontSize: '30px',
             fontFamily: 'Montserrat, sans-serif',
             fontWeight: '600',
             marginTop: '0px',
@@ -353,7 +336,7 @@ export default function CategoryRoutines() {
                 <Grid size={10}>
                     <div style={StyleSheet.routines}>
                         <div style={StyleSheet.floatingContainer}>
-                            
+
                             <div
                                 style={{
                                     display: 'flex',
@@ -362,7 +345,7 @@ export default function CategoryRoutines() {
                                     width: '100%',
                                 }}
                             >
-                                <p style={StyleSheet.sectionTitle}>{category}</p>
+                                <p style={StyleSheet.sectionTitle}>Your history</p>
                                 <Button
                                     variant="contained"
                                     sx={{
@@ -374,20 +357,19 @@ export default function CategoryRoutines() {
                                         fontSize: '18px',
                                         marginTop: '-15px'
                                     }}
-                                    onClick={() => handleResetCategory()}
+                                    onClick={() => handleResetHistory()}
                                 >
-                                    RESET CATEGORY
+                                    RESET HISTORY
                                 </Button>
                             </div>
 
                             <div style={StyleSheet.showRoutines}>
                                 {routines.map((item, index) => (
-                                    <Routine
+                                    <RoutineInHistory
                                         key={index}
                                         onclick={() => handleRoutineClick(index)}
                                         routine={item}
                                         exercises={exercises}
-                                        category={categoryForComponent}
                                     />
                                 ))}
                             </div>

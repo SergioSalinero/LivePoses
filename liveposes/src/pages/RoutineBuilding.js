@@ -5,6 +5,20 @@ import { FaArrowLeft } from 'react-icons/fa6'
 import { IoMdAdd } from "react-icons/io";
 import { MdPublish } from "react-icons/md";
 
+import { styled } from '@mui/material/styles';
+import Box from '@mui/material/Box';
+import Paper from '@mui/material/Paper';
+import Grid from '@mui/material/Grid2';
+import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
+import AddIcon from '@mui/icons-material/Add';
+import PublishIcon from '@mui/icons-material/Publish';
+import PersonIcon from '@mui/icons-material/Person';
+import BarChartIcon from '@mui/icons-material/BarChart';
+import HistoryIcon from '@mui/icons-material/History';
+import ClassIcon from '@mui/icons-material/Class';
+import Slider from '@mui/material/Slider';
+
 import { GET_EXERCISES_URL, POST_CURRENT_ROUTINE_URL } from '@/utils/Config';
 import AddExercise from '@/components/AddExercise';
 
@@ -236,22 +250,18 @@ export default function RoutineBuilding() {
             backgroundColor: "rgba(255, 255, 255, 0.2)"
         },
         addExerciseContainer: {
-            position: 'absolute',
-            top: '50%',
-            left: '55%',
-            transform: 'translate(-50%, -50%)',
-            height: '100vh',
-            marginTop: '20px',
+            backgroundColor: FLOATING_CONTAINER_COLOR,
+            borderRadius: '5px',
+            padding: '20px 20px 20px 20px',
+            boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.5)',
             marginBottom: '20px',
-            minWidth: '700px'
         },
         sectionTitle: {
             color: SECTION_TEXT_COLOR,
-            color: SECTION_TEXT_COLOR,
-            fontSize: '35px',
+            fontSize: '30px',
             fontFamily: 'Montserrat, sans-serif',
             fontWeight: '600',
-            marginTop: '0px'
+            marginTop: '0px',
         },
         sectionDivider: {
             width: '99%',
@@ -322,100 +332,307 @@ export default function RoutineBuilding() {
         },
         floatingContainer: {
             backgroundColor: FLOATING_CONTAINER_COLOR,
-            borderRadius: '20px',
+            borderRadius: '5px',
             padding: '20px 20px 20px 20px',
             boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.5)',
             marginBottom: '20px',
         },
     };
 
+    const Item = styled(Paper)(({ theme }) => ({
+        backgroundColor: '#fff',
+        ...theme.typography.body2,
+        padding: theme.spacing(1),
+        textAlign: 'center',
+        color: theme.palette.text.secondary,
+        ...theme.applyStyles('dark', {
+            backgroundColor: '#1A2027',
+        }),
+    }));
+
     return (
-        <div style={StyleSheet.backgroundContainer}>
-            <div style={StyleSheet.mainContainer}>
-                <div style={StyleSheet.content}>
-                    <div style={StyleSheet.sidebar}>
-                        <p style={StyleSheet.sidebarTitle}>Live Poses</p>
-                        <button
-                            style={StyleSheet.sidebarButton}
-                            onMouseEnter={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButtonHover.backgroundColor}
-                            onMouseLeave={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButton.backgroundColor}
+        <Box sx={{ flexGrow: 1 }}>
+            <Grid container spacing={2}>
+                <Grid size={8}>
+                    <Item>size=8</Item>
+                </Grid>
+                <Grid size={4} alignItems={'left'}>
+                    <Button
+                        variant="contained"
+                        sx={{
+                            backgroundColor: SIDE_BAR_BUTTON_COLOR,
+                            color: 'white',
+                            '&:hover': {
+                                backgroundColor: SIDE_BAR_BUTTON_HOVER_COLOR,
+                            },
+                            fontSize: '18px',
+                            width: '100%'
+                        }}
+                        onClick={() => router.push('/Profile')}
+                    >
+                        <PersonIcon fontSize="medium" /> Profile
+                    </Button>
+                </Grid>
+                <Grid size={2}>
+                    <Stack spacing={2} direction="column">
+                        <Button
+                            variant="contained"
+                            sx={{
+                                backgroundColor: SIDE_BAR_BUTTON_COLOR,
+                                color: 'white',
+                                '&:hover': {
+                                    backgroundColor: SIDE_BAR_BUTTON_HOVER_COLOR,
+                                },
+                                fontSize: '18px',
+                                textAlign: 'right'
+                            }}
                             onClick={() => router.push('/Home')}
                         >
-                            <span style={StyleSheet.spanIcon}><FaArrowLeft /></span>
-                            <br></br>
-                            Back to Home
-                        </button>
-                        <button
-                            style={StyleSheet.sidebarButton}
-                            onMouseEnter={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButtonHover.backgroundColor}
-                            onMouseLeave={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButton.backgroundColor}
+                            <ClassIcon fontSize="large" /> Exercise categories
+                        </Button>
+                        <Button
+                            variant="contained"
+                            sx={{
+                                backgroundColor: SIDE_BAR_BUTTON_COLOR,
+                                color: 'white',
+                                '&:hover': {
+                                    backgroundColor: SIDE_BAR_BUTTON_HOVER_COLOR,
+                                },
+                                fontSize: '18px',
+                                textAlign: 'right'
+                            }}
+                            onClick={() => router.push('/RoutineBuilding')}
+                        >
+                            <AddIcon fontSize="large" /> Create your own rutine
+                        </Button>
+                        <Button
+                            variant="contained"
+                            sx={{
+                                backgroundColor: SIDE_BAR_BUTTON_COLOR,
+                                color: 'white',
+                                '&:hover': {
+                                    backgroundColor: SIDE_BAR_BUTTON_HOVER_COLOR,
+                                },
+                                fontSize: '18px',
+                                textAlign: 'right'
+                            }}
                             onClick={() => router.push('/PublishRoutine')}
                         >
-                            <span style={StyleSheet.spanIcon}><MdPublish /></span>
-                            <br></br>
-                            Publish a routine
-                        </button>
-                        <hr style={StyleSheet.sidebarDivider} />
-                        <button
-                            style={{
-                                ...StyleSheet.sidebarButton,
-                                marginTop: '10px',
+                            <PublishIcon fontSize="large" /> Publish a routine
+                        </Button>
+                        <Button
+                            variant="contained"
+                            sx={{
+                                backgroundColor: SIDE_BAR_BUTTON_COLOR,
+                                color: 'white',
+                                '&:hover': {
+                                    backgroundColor: SIDE_BAR_BUTTON_HOVER_COLOR,
+                                },
+                                fontSize: '18px',
+                                textAlign: 'right'
                             }}
-                            onMouseEnter={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButtonHover.backgroundColor}
-                            onMouseLeave={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButton.backgroundColor}
-                            onClick={() => router.push('/Profile')}
+                            onClick={() => router.push('/Statistics')}
                         >
-                            Profile
-                        </button>
-                    </div>
-                </div>
-
-                <div style={StyleSheet.addExerciseContainer}>
-                    <div style={StyleSheet.floatingContainer}>
-                        <p style={StyleSheet.sectionTitle}>Routine building</p>
-
-                        {exerciseComponents}
-                        <button
-                            style={StyleSheet.addButton}
-                            onMouseEnter={(e) => e.target.style.backgroundColor = SECTION_BUTTON_HOVER_COLOR}
-                            onMouseLeave={(e) => e.target.style.backgroundColor = StyleSheet.addButton.backgroundColor}
-                            onClick={handleAddExercise}
+                            <BarChartIcon fontSize="large" /> Show statistics
+                        </Button>
+                        <Button
+                            variant="contained"
+                            sx={{
+                                backgroundColor: SIDE_BAR_BUTTON_COLOR,
+                                color: 'white',
+                                '&:hover': {
+                                    backgroundColor: SIDE_BAR_BUTTON_HOVER_COLOR,
+                                },
+                                fontSize: '18px',
+                                textAlign: 'right'
+                            }}
+                            onClick={() => router.push('/RoutineHistory')}
                         >
-                            Add exercise
-                        </button>
+                            <HistoryIcon fontSize="large" /> Show your history
+                        </Button>
+                    </Stack>
+                </Grid>
+                <Grid size={10}>
+                    <div style={StyleSheet.addExerciseContainer}>
+                        <div style={StyleSheet.floatingContainer}>
+                            <p style={StyleSheet.sectionTitle}>Routine building</p>
+
+                            {exerciseComponents}
+
+                            <Button
+                                variant="contained"
+                                sx={{
+                                    backgroundColor: SIDE_BAR_BUTTON_COLOR,
+                                    color: 'white',
+                                    '&:hover': {
+                                        backgroundColor: SIDE_BAR_BUTTON_HOVER_COLOR,
+                                    },
+                                    fontSize: '18px',
+                                    textAlign: 'right',
+                                    marginLeft: 'auto',
+                                    marginRight: 'auto',
+                                    display: 'block'
+                                }}
+                                onClick={handleAddExercise}
+                            >
+                                Add exercise
+                            </Button>
+
+                        </div>
+
+
+                        <div style={StyleSheet.floatingContainer}>
+                            <p style={StyleSheet.sectionTitle}>Set rest time (secs)</p>
+
+                            <Box sx={{ width: '100%' }}>
+                                <Slider
+                                    aria-label="Temperature"
+                                    defaultValue={0}
+                                    getAriaValueText={(value) => `${value} secs`}
+                                    valueLabelDisplay="auto"
+                                    shiftStep={30}
+                                    step={1}
+                                    min={0}
+                                    max={120}
+                                    sx={{
+                                        color: '#4caf50', // Cambia el color principal (track y thumb)
+                                        '& .MuiSlider-thumb': {
+                                            backgroundColor: '#388e3c', // Color del thumb
+                                        },
+                                        '& .MuiSlider-rail': {
+                                            backgroundColor: '#bdbdbd', // Color de la pista no activa
+                                        },
+                                        '& .MuiSlider-track': {
+                                            backgroundColor: '#4caf50', // Color de la pista activa
+                                        },
+                                    }}
+                                    onChange={(event) => setBreakTime(event.target.value)}
+                                    value={breakTime}
+                                />
+                            </Box>
+                        </div>
+
+                        <Button
+                            variant="contained"
+                            sx={{
+                                backgroundColor: SIDE_BAR_BUTTON_COLOR,
+                                color: 'white',
+                                '&:hover': {
+                                    backgroundColor: SIDE_BAR_BUTTON_HOVER_COLOR,
+                                },
+                                fontSize: '18px',
+                                textAlign: 'center',
+                                marginLeft: 'auto',
+                                marginRight: 'auto',
+                                display: 'block',
+                                marginTop: '30px',
+                                marginBottom: '10px',
+                                fontSize: '28px',
+                                fontWeight: 600,
+                                backgroundColor: START_ROUTINE_BUTTON_COLOR,
+                                color: 'white',
+                                border: 'none',
+                                borderRadius: '5px',
+                                padding: '15px',
+                                boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.5)',
+                                width: '50%'
+                            }}
+                            onClick={handleStartRoutine}
+                        >
+                            Start routine
+                        </Button>
+
                     </div>
 
-
-                    <div style={StyleSheet.floatingContainer}>
-                        <p style={StyleSheet.sectionTitle}>Set rest time (secs)</p>
-
-                        <input
-                            type="number"
-                            value={breakTime}
-                            style={{ ...StyleSheet.restTimeSliderNumber, marginLeft: `calc(${breakTime}% - 22px)` }}
-                        />
-
-                        <input
-                            type="range"
-                            min={0}
-                            max={100}
-                            value={breakTime}
-                            style={StyleSheet.restTimeSlider}
-                            onChange={(event) => setBreakTime(event.target.value)}
-                        />
-                    </div>
-
+                </Grid>
+            </Grid>
+        </Box>
+    );
+    /*<div style={StyleSheet.backgroundContainer}>
+        <div style={StyleSheet.mainContainer}>
+            <div style={StyleSheet.content}>
+                <div style={StyleSheet.sidebar}>
+                    <p style={StyleSheet.sidebarTitle}>Live Poses</p>
                     <button
-                        style={StyleSheet.startRoutineButton}
-                        onMouseEnter={(e) => e.target.style.backgroundColor = StyleSheet.startRoutineButtonHover.backgroundColor}
-                        onMouseLeave={(e) => e.target.style.backgroundColor = StyleSheet.startRoutineButton.backgroundColor}
-                        onClick={handleStartRoutine}
+                        style={StyleSheet.sidebarButton}
+                        onMouseEnter={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButtonHover.backgroundColor}
+                        onMouseLeave={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButton.backgroundColor}
+                        onClick={() => router.push('/Home')}
                     >
-                        Start routine
+                        <span style={StyleSheet.spanIcon}><FaArrowLeft /></span>
+                        <br></br>
+                        Back to Home
                     </button>
-
+                    <button
+                        style={StyleSheet.sidebarButton}
+                        onMouseEnter={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButtonHover.backgroundColor}
+                        onMouseLeave={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButton.backgroundColor}
+                        onClick={() => router.push('/PublishRoutine')}
+                    >
+                        <span style={StyleSheet.spanIcon}><MdPublish /></span>
+                        <br></br>
+                        Publish a routine
+                    </button>
+                    <hr style={StyleSheet.sidebarDivider} />
+                    <button
+                        style={{
+                            ...StyleSheet.sidebarButton,
+                            marginTop: '10px',
+                        }}
+                        onMouseEnter={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButtonHover.backgroundColor}
+                        onMouseLeave={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButton.backgroundColor}
+                        onClick={() => router.push('/Profile')}
+                    >
+                        Profile
+                    </button>
                 </div>
             </div>
+
+            <div style={StyleSheet.addExerciseContainer}>
+                <div style={StyleSheet.floatingContainer}>
+                    <p style={StyleSheet.sectionTitle}>Routine building</p>
+
+                    {exerciseComponents}
+                    <button
+                        style={StyleSheet.addButton}
+                        onMouseEnter={(e) => e.target.style.backgroundColor = SECTION_BUTTON_HOVER_COLOR}
+                        onMouseLeave={(e) => e.target.style.backgroundColor = StyleSheet.addButton.backgroundColor}
+                        onClick={handleAddExercise}
+                    >
+                        Add exercise
+                    </button>
+                </div>
+
+
+                <div style={StyleSheet.floatingContainer}>
+                    <p style={StyleSheet.sectionTitle}>Set rest time (secs)</p>
+
+                    <input
+                        type="number"
+                        value={breakTime}
+                        style={{ ...StyleSheet.restTimeSliderNumber, marginLeft: `calc(${breakTime}% - 22px)` }}
+                    />
+
+                    <input
+                        type="range"
+                        min={0}
+                        max={100}
+                        value={breakTime}
+                        style={StyleSheet.restTimeSlider}
+                        onChange={(event) => setBreakTime(event.target.value)}
+                    />
+                </div>
+
+                <button
+                    style={StyleSheet.startRoutineButton}
+                    onMouseEnter={(e) => e.target.style.backgroundColor = StyleSheet.startRoutineButtonHover.backgroundColor}
+                    onMouseLeave={(e) => e.target.style.backgroundColor = StyleSheet.startRoutineButton.backgroundColor}
+                    onClick={handleStartRoutine}
+                >
+                    Start routine
+                </button>
+
+            </div>
         </div>
-    );
+    </div>*/
 }

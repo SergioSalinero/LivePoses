@@ -14,7 +14,8 @@ import {
     GET_EXERCISES_URL,
     GET_CURRENT_ROUTINE_URL,
     GET_START_SIGNAL,
-    POST_BASIC_STATISTICS_URL
+    POST_BASIC_STATISTICS_URL,
+    POST_ROUTINE_HISTORY_URL
 } from '@/utils/Config';
 
 import { POSE_ESTIMATION_BACKGROUND_COLOR } from '@/utils/Colors';
@@ -25,12 +26,13 @@ export default function PoseRecognition() {
 
     var startSignal;
     var exercises;
-    var currentRoutine;
+    var [currentRoutine, setCurrentRoutine] = useState([]);
     var [token, setToken] = useState('');
 
     var createdDetector = false;
 
     const router = useRouter();
+    const [error, setError] = useState(null);
 
     var [color, setColor] = useState('red');
     var [isRoutineActive, setIsRoutineActive] = useState(false);
@@ -137,6 +139,7 @@ export default function PoseRecognition() {
                     throw new Error('Network response was not ok');
                 }
                 const jsonData = await response.json();
+                setCurrentRoutine(jsonData);
                 currentRoutine = jsonData;
 
                 setBreakTime(currentRoutine.breakTime);
@@ -593,6 +596,35 @@ export default function PoseRecognition() {
             });
 
             if (response.ok) {
+                
+            } else if (response.status === 500) {
+                setError('Internal server error. Please try again later.');
+            } else {
+                setError('Invalid credentials');
+            }
+        } catch (error) {
+            console.error('Error processing request:', error);
+            setError('Error processing request. Please try again later.');
+        }
+
+
+        const routineHistory = {
+            exercises: currentRoutine.exercises,
+            breakTime: breakTime,
+            accuracy: averageAccuracy
+        }
+
+        try {
+            const response = await fetch(POST_ROUTINE_HISTORY_URL, {
+                method: 'POST',
+                headers: {
+                    'Authorization': token,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(routineHistory),
+            });
+
+            if (response.ok) {
                 router.push('/Home');
             } else if (response.status === 500) {
                 setError('Internal server error. Please try again later.');
@@ -603,6 +635,7 @@ export default function PoseRecognition() {
             console.error('Error processing request:', error);
             setError('Error processing request. Please try again later.');
         }
+
     }
 
 

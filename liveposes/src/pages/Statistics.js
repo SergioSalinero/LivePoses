@@ -17,14 +17,13 @@ import PersonIcon from '@mui/icons-material/Person';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import HistoryIcon from '@mui/icons-material/History';
 import ClassIcon from '@mui/icons-material/Class';
-import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
 
 import ExerciseCategory from "@/components/ExerciseCategory";
 
 import {
-    GET_CATEGORY_COUNT_URL,
     GET_BASIC_STATISTICS_URL,
-    GET_STATISTICS_URL
+    GET_STATISTICS_URL,
+    POST_RESET_STATISTICS_URL
 } from '@/utils/Config';
 
 import strenghtImage from '../../public/images/exerciseCategories/Strenght.jpeg';
@@ -46,23 +45,14 @@ import {
     SIDE_BAR_BUTTON_HOVER_COLOR,
     SIDE_BAR_TEX_COLOR,
     FLOATING_CONTAINER_COLOR,
-    SECTION_TEXT_COLOR
+    SECTION_TEXT_COLOR,
+    DANGER_BUTTON_COLOR,
 } from '@/utils/Colors';
 
 
-export default function Home() {
+export default function Statistics() {
 
     const router = useRouter();
-    const [strenghtImageURL, setStrenghtImageURL] = useState('');
-    const [flexibilityImageURL, setflexibilityImageURL] = useState('');
-    const [rehabilitationImageURL, setRehabilitationImageURL] = useState('');
-
-    const [strenghtCounter, setStrenghtCounter] = useState(0);
-    const [flesibilityCounter, setFlexibilityCounter] = useState(0);
-    const [rehabilitationCounter, setRehabilitationCounter] = useState(0);
-    const [equilibriumCounter, setEquilibriumCounter] = useState(0);
-
-    var categoryCounter;
 
     var [basicStatistics, setBasicStatistics] = useState([]);
     var [statistics, setStatistics] = useState([]);
@@ -71,15 +61,10 @@ export default function Home() {
     var [caloriesStatistics, setCaloriesStatistics] = useState([]);
 
     var [token, setToken] = useState('');
+    const [error, setError] = useState(null);
 
     useEffect(() => {
         document.body.style.backgroundColor = BACKGROUND_COLOR;
-
-
-        setStrenghtImageURL(strenghtImage.src);
-        setflexibilityImageURL(flexibilityImage.src);
-        setRehabilitationImageURL(rehabilitationImage.src);
-
 
         const storedToken = localStorage.getItem('accessToken');
         if (storedToken !== null && storedToken !== undefined) {
@@ -88,35 +73,6 @@ export default function Home() {
         }
         else {
             router.push('/Login');
-        }
-
-        async function fetchCategoryCount() {
-            try {
-                const response = await fetch(GET_CATEGORY_COUNT_URL, {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': token,
-                        'Content-Type': 'application/json'
-                    }
-                });
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                categoryCounter = await response.json();
-
-                categoryCounter.forEach((element) => {
-                    if (element.category == 'Muscle&Strenght')
-                        setStrenghtCounter(element.count);
-                    else if (element.category == 'Flexibility&Mobility')
-                        setFlexibilityCounter(element.count);
-                    else if (element.category == 'Rehabilitation')
-                        setRehabilitationCounter(element.count);
-                    else
-                        setEquilibriumCounter(element.count);
-                })
-            } catch (error) {
-                console.error('Error fetching data: ', error);
-            }
         }
 
         async function fetchBasicStatistics() {
@@ -186,43 +142,33 @@ export default function Home() {
             }
         }
 
-        fetchCategoryCount();
         fetchBasicStatistics();
         fetchStatistics();
     }, []);
 
-    const handleClick = (id) => {
-        var category;
-        var encodedCategory;
-        var url;
+    async function handleResetStatistics() {
+        try {
+            const response = await fetch(POST_RESET_STATISTICS_URL, {
+                method: 'POST',
+                headers: {
+                    'Authorization': token,
+                    'Content-Type': 'application/json'
+                },
+            });
 
-        switch (id) {
-            case 1:
-                category = "Rehabilitation";
-                encodedCategory = encodeURIComponent(category);
-                url = `/CategoryRoutines?category=${encodedCategory}`;
-                router.push(url);
-                break;
-            case 2:
-                category = "Flexibility & Mobility";
-                encodedCategory = encodeURIComponent(category);
-                url = `/CategoryRoutines?category=${encodedCategory}`;
-                router.push(url);
-                break;
-            case 3:
-                category = "Muscle & Strenght";
-                encodedCategory = encodeURIComponent(category);
-                url = `/CategoryRoutines?category=${encodedCategory}`;
-                router.push(url);
-                break;
-            case 4:
-                category = "Equilibrium";
-                encodedCategory = encodeURIComponent(category);
-                url = `/CategoryRoutines?category=${encodedCategory}`;
-                router.push(url);
-                break;
+            if (response.ok) {
+                router.push('/Statistics');
+            } else if (response.status === 500) {
+                setError('Internal server error. Please try again later.');
+            } else {
+                setError('Invalid credentials');
+            }
+        } catch (error) {
+            console.error('Error processing request:', error);
+            setError('Error processing request. Please try again later.');
         }
-    };
+    }
+
 
     const StyleSheet = {
         backgroundContainer: {
@@ -293,11 +239,6 @@ export default function Home() {
         },
         exerciseCategory: {
             backgroundColor: 'transparent',
-            marginTop: '25px',
-            marginLeft: '275px',
-            marginRight: '20px',
-            marginBottom: '55px',
-            height: '400px'
         },
         sectionTitle: {
             color: SECTION_TEXT_COLOR,
@@ -312,6 +253,7 @@ export default function Home() {
             scrollbarColor: 'rgba(248, 248, 248, 0.8) transparent'
         },
         floatingContainer: {
+            fontFamily: 'Roboto, sans-serif',
             backgroundColor: FLOATING_CONTAINER_COLOR,
             borderRadius: '5px',
             padding: '20px 20px 20px 20px',
@@ -320,7 +262,7 @@ export default function Home() {
         },
         chartsDiv: {
             backgroundColor: '#E0E0E0',
-            borderRadius: '20px',
+            borderRadius: '5px',
             boxShadow: '0px 5px 15px rgba(0, 0, 0, 0.4)',
             marginBottom: '20px'
         },
@@ -334,7 +276,7 @@ export default function Home() {
         basicSpecificStatistic: {
             backgroundColor: "rgba(224, 224, 224, 0.9)",
             padding: '15px 7px 15px 7px',
-            borderRadius: '10px',
+            borderRadius: '5px',
             boxShadow: '0px 5px 15px rgba(0, 0, 0, 0.4)',
         },
         boldSpan: {
@@ -456,52 +398,119 @@ export default function Home() {
                         >
                             <HistoryIcon fontSize="large" /> Show your history
                         </Button>
-                        <Button
-                            variant="contained"
-                            sx={{
-                                backgroundColor: SIDE_BAR_BUTTON_COLOR,
-                                color: 'white',
-                                '&:hover': {
-                                    backgroundColor: SIDE_BAR_BUTTON_HOVER_COLOR,
-                                },
-                                fontSize: '18px',
-                                textAlign: 'right'
-                            }}
-                            /*onClick={() => router.push('/RoutineHistory')}*/
-                        >
-                            <FormatListNumberedIcon fontSize="large" /> Exercise management
-                        </Button>
                     </Stack>
                 </Grid>
                 <Grid size={10}>
-                    <div style={StyleSheet.floatingContainer}>
-                        <p style={StyleSheet.sectionTitle}>Select a fitness plan</p>
 
-                        <div style={StyleSheet.horizontalScroll}>
-                            <ExerciseCategory
-                                imageURL="/_next/static/media/FrontLegRaise.5ac6d4f9.gif"
-                                title="Rehabilitation"
-                                numRoutines={rehabilitationCounter}
-                                onClick={() => handleClick(1)}
-                            />
-                            <ExerciseCategory
-                                imageURL="/_next/static/media/TiryakTasadan.4908e6c3.gif"
-                                title="Flexibility & Mobility"
-                                numRoutines={flesibilityCounter}
-                                onClick={() => handleClick(2)}
-                            />
-                            <ExerciseCategory
-                                imageURL="/_next/static/media/BicepsCurl.449b5c5f.gif"
-                                title="Muscle & Strenght"
-                                numRoutines={strenghtCounter}
-                                onClick={() => handleClick(3)}
-                            />
-                            <ExerciseCategory
-                                imageURL="/_next/static/media/StandingCrunch.07dc2eb3.gif"
-                                title="Equilibrium"
-                                numRoutines={equilibriumCounter}
-                                onClick={() => handleClick(4)}
-                            />
+                    <div style={StyleSheet.exerciseCategory}>
+                        <div style={StyleSheet.floatingContainer}>
+                            
+
+                            <div
+                                style={{
+                                    display: 'flex',
+                                    justifyContent: 'space-between',
+                                    alignItems: 'center',
+                                    width: '100%',
+                                }}
+                            >
+                                <p style={StyleSheet.sectionTitle}>Your statistics</p>
+                                <Button
+                                    variant="contained"
+                                    sx={{
+                                        backgroundColor: DANGER_BUTTON_COLOR,
+                                        color: 'white',
+                                        '&:hover': {
+                                            backgroundColor: SIDE_BAR_BUTTON_HOVER_COLOR,
+                                        },
+                                        fontSize: '18px',
+                                        marginTop: '-15px'
+                                    }}
+                                    onClick={() => handleResetStatistics()}
+                                >
+                                    RESET STATISTICS
+                                </Button>
+                                </div>
+
+                            <div style={StyleSheet.basicStatisticsDiv}>
+                                <p style={StyleSheet.basicSpecificStatistic}><span style={StyleSheet.boldSpan}>Routine counter:</span> {basicStatistics['routineCounter']}</p>
+                                <p style={StyleSheet.basicSpecificStatistic}><span style={StyleSheet.boldSpan}>Time counter:</span> {basicStatistics['timeCounter']} mins</p>
+                                <p style={StyleSheet.basicSpecificStatistic}><span style={StyleSheet.boldSpan}>Calories counter:</span> {basicStatistics['caloriesCounter']} cal</p>
+                                <p style={StyleSheet.basicSpecificStatistic}><span style={StyleSheet.boldSpan}>Breaktime counter:</span> {basicStatistics['breakTimeCounter']} mins</p>
+                                <p style={StyleSheet.basicSpecificStatistic}><span style={StyleSheet.boldSpan}>Average Accuracy:</span> {basicStatistics['averageAccuracy']}%</p>
+                            </div>
+                            <div style={StyleSheet.chartsDiv}>
+                                <ResponsiveContainer width="100%" height={400}>
+                                    <BarChart data={routineStatistics} margin={{ top: 20, right: 20, left: 20, bottom: 20 }}>
+                                        <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
+                                        <XAxis dataKey="date" tick={{ fill: '#555', fontSize: 12 }} />
+                                        <YAxis tick={{ fill: '#555', fontSize: 12 }} />
+                                        <Tooltip
+                                            contentStyle={{ backgroundColor: '#333', borderRadius: 8, color: '#fff' }}
+                                            labelStyle={{ fontWeight: 'bold' }}
+                                            itemStyle={{ color: '#ddd' }}
+                                        />
+                                        <Legend verticalAlign="top" height={36} iconType="square" />
+                                        <Bar
+                                            dataKey="value"
+                                            name="Routines per day"
+                                            fill="#212121"
+                                            barSize={40}
+                                            radius={[10, 10, 0, 0]}
+                                        />
+                                    </BarChart>
+                                </ResponsiveContainer>
+                            </div>
+
+                            <div style={StyleSheet.chartsDiv}>
+                                <ResponsiveContainer width="100%" height={400}>
+                                    <BarChart data={timeStatistics} margin={{ top: 20, right: 20, left: 20, bottom: 20 }}>
+                                        <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
+                                        <XAxis dataKey="date" tick={{ fill: '#555', fontSize: 12 }} />
+                                        <YAxis tick={{ fill: '#555', fontSize: 12 }} />
+                                        <Tooltip
+                                            contentStyle={{ backgroundColor: '#333', borderRadius: 8, color: '#fff' }}
+                                            labelStyle={{ fontWeight: 'bold' }}
+                                            itemStyle={{ color: '#ddd' }}
+                                        />
+                                        <Legend verticalAlign="top" height={36} iconType="square" />
+                                        <Bar
+                                            dataKey="value"
+                                            name="Trained time per day (minutes)"
+                                            fill="#212121"
+                                            barSize={40}
+                                            radius={[10, 10, 0, 0]}
+                                        />
+                                    </BarChart>
+                                </ResponsiveContainer>
+                            </div>
+
+                            <div style={StyleSheet.chartsDiv}>
+                                <ResponsiveContainer width="100%" height={400}>
+                                    <LineChart data={caloriesStatistics} margin={{ top: 20, right: 20, left: 20, bottom: 20 }}>
+                                        <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
+                                        <XAxis dataKey="date" tick={{ fill: '#555', fontSize: 12 }} />
+                                        <YAxis tick={{ fill: '#555', fontSize: 12 }} />
+                                        <Tooltip
+                                            contentStyle={{ backgroundColor: '#333', borderRadius: 8, color: '#fff' }}
+                                            labelStyle={{ fontWeight: 'bold' }}
+                                            itemStyle={{ color: '#ddd' }}
+                                        />
+                                        <Legend verticalAlign="top" height={36} iconType="square" />
+                                        <Line
+                                            type="monotone"
+                                            dataKey="value"
+                                            name="Calories burned per day"
+                                            stroke="#212121"
+                                            strokeWidth={2.5}
+                                            dot={{ r: 6, fill: '#212121' }}
+                                            activeDot={{ r: 8, fill: '#4a47a3' }}
+                                        />
+                                    </LineChart>
+                                </ResponsiveContainer>
+
+                            
+                            </div>
                         </div>
                     </div>
 
