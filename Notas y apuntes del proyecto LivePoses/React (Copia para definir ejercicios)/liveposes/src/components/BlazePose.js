@@ -122,7 +122,7 @@ export default function BlazePose() {
 
     const StyleSheet = {
         videoCanvasStyle: {
-            width: '50%',
+            width: '70%',
             height: 'auto',
             position: 'absolute', left: '0px', top: '0px',
             transform: 'scaleX(-1)',

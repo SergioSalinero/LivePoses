@@ -14,23 +14,33 @@ UC-008: Eliminar cuenta
 
 
 <Gestión de rutinas>
-UC-009: Elaborar una rutina
+UC-009: Publicar rutina en categoría
+UC-010: Acceder a categoría
+UC-011: Eliminar rutina de categoría
+UC-012: Limpiar categoría
+UC-013: Mostrar historial de rutinas
+UC-014: Limpiar historial de rutinas
+UC-015: Elaborar una rutina
   - Pasos:
     1. El actor usuario solicita elaborar una rutina de ejercicio.
     2. El sistema solicita la configuración de ejercicios que compondrán la rutina.
     3. El usuario añade y/o elimina los ejercicios y sus repeticiones.
     4. El sistema construye la rutina.
-UC-010: Publicar una rutina
-UC-011: Acceder a la tecnología de estimación de posturas
-UC-012: Comenzar una rutina
+UC-016: Acceder a la tecnología de estimación de posturas
+UC-017: Comenzar una rutina
+UC-018: Reconocer ejercicio
+UC-019: Terminar rutina
 
 
-<Gestión de categorías de ejerciccios de ejercicio>
-UC-013: Acceder a una categoría
-UC-014: Seleccionar una rutina
+<Gestión de ejercicios>
+UC-020: Mostrar ejercicios
+UC-021: Añadir ejercicio
+UC-022: Modificar ejercicio
+UC-023: Eliminar ejercicio
 
 <Gestión de estadísticas>
-UC-015: Mostrar estadísticas personales
+UC-024: Mostrar estadísticas
+UC-025: Limpiar estadísticas
 
 
 <NOTAS>

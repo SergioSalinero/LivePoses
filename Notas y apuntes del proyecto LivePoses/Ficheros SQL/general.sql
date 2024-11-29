@@ -37,6 +37,16 @@ CREATE TABLE `liveposes`.`current_routine` (
 );
 
 
+CREATE TABLE `liveposes`.`routine_history` (
+	id INT AUTO_INCREMENT PRIMARY KEY,
+    userId INT NOT NULL,
+    exercises JSON    NOT NULL,
+    breakTime   INT NOT NULL,
+    accuracy    INT NOT NULL,
+    FOREIGN KEY (userId) REFERENCES users(id)
+);
+
+
 CREATE TABLE `liveposes`.`public_routines` (
 	id INT AUTO_INCREMENT PRIMARY KEY,
     exercises JSON    NOT NULL,
