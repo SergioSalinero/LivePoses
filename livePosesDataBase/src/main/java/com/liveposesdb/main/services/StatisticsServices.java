@@ -116,5 +116,15 @@ public class StatisticsServices {
 		
 		return results;
 	}
+	
+	public Boolean setResetStatistics(long userID) {
+		String query = "DELETE FROM statistics WHERE userId = " + userID + ";";
+		List<String[]> results = dbConnection.DBOperation(query, "DELETE");
+		
+		if(results == null)
+			return false;
+		
+		return true;
+	}
 
 }

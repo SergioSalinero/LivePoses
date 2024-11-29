@@ -68,5 +68,14 @@ public class StatisticsController {
 		else
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 	}
+	
+	@PostMapping("/post/reset_statistics")
+	public ResponseEntity<String> setResetStatistics(@RequestBody long userID) {
+		
+		if(statisticsServices.setResetStatistics(userID))
+			return ResponseEntity.status(HttpStatus.OK).body("The statistics has been removed successfully");
+		else
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add statistics");
+	}
 
 }

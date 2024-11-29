@@ -17,6 +17,7 @@ import com.liveposesdb.main.model.CategoryCount;
 import com.liveposesdb.main.model.CurrentRoutine;
 import com.liveposesdb.main.model.Exercise;
 import com.liveposesdb.main.model.PublicRoutine;
+import com.liveposesdb.main.model.RoutineHistory;
 import com.liveposesdb.main.services.ExercisesServices;
 
 
@@ -97,4 +98,51 @@ public class ExercisesController {
 		else
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 	}
+	
+	@PostMapping("/post/reset_category_routines")
+	public ResponseEntity<String> setResetCategory(@RequestBody String category){
+		
+		if(exercisesServices.setResetCategory(category))
+			return ResponseEntity.status(HttpStatus.OK).body("The category has been reset successfully");
+		else
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("The routine could not be added");
+	}
+	
+	@PostMapping("/post/delete_category_routine")
+	public ResponseEntity<String> setDeleteCategoryRoutine(@RequestBody long id){
+		
+		if(exercisesServices.setDeleteCategoryRoutine(id))
+			return ResponseEntity.status(HttpStatus.OK).body("The routine has been removed successfully");
+		else
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("The routine could not be added");
+	}
+	
+	@PostMapping("/post/routine_history")
+	public ResponseEntity<String> setRoutineHistory(@RequestBody RoutineHistory routineHistory){
+		
+		if(exercisesServices.setRoutineHistory(routineHistory))
+			return ResponseEntity.status(HttpStatus.OK).body("The routine has been added successfully");
+		else
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("The routine could not be added");
+	}
+	
+	@GetMapping("/get/routine_history")
+	public ResponseEntity<List<RoutineHistory>> getRoutineHistory(@RequestParam long userID) {
+		List<RoutineHistory> routineHistory = exercisesServices.getRoutineHistory(userID);
+		
+		if(routineHistory != null)
+			return ResponseEntity.status(HttpStatus.OK).body(routineHistory);
+		else
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+	}
+	
+	@PostMapping("/post/reset_routine_history")
+	public ResponseEntity<String> setResetHistory(@RequestBody long userID){
+		
+		if(exercisesServices.setResetHistory(userID))
+			return ResponseEntity.status(HttpStatus.OK).body("The routine history has been reset successfully");
+		else
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("The routine could not be added");
+	}
+	
 }
