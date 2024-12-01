@@ -50,6 +50,80 @@ public class ExercisesController {
 		else
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 	}
+	
+	@GetMapping("/get/exercise")
+	public ResponseEntity<Exercise> getExercise(@RequestParam int id,
+			@RequestHeader("Authorization") String token) {
+		if (token == null || token.isBlank())
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+
+		String userID = jwtUtil.getKey(token);
+
+		if (userID == null)
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+
+		Exercise exercise = this.exercisesServices.getExercise(id);
+		
+		if (exercise != null)
+			return ResponseEntity.status(HttpStatus.OK).body(exercise);
+		else
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+	}
+	
+	@PostMapping("/post/exercise")
+	public ResponseEntity<String> setExercise(@RequestBody Exercise exercise,
+			@RequestHeader("Authorization") String token) {
+		
+		if (token == null || token.isBlank())
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+
+		String userID = jwtUtil.getKey(token);
+
+		if (userID == null)
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+
+		
+		if(exercisesServices.setExercise(exercise))
+			return ResponseEntity.status(HttpStatus.OK).body("The exercise has been added successfully");
+		else
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add the routine");
+	}
+	
+	@PostMapping("/post/edit_exercise")
+	public ResponseEntity<String> setEditExercise(@RequestBody Exercise exercise,
+			@RequestHeader("Authorization") String token) {
+		
+		if (token == null || token.isBlank())
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+
+		String userID = jwtUtil.getKey(token);
+
+		if (userID == null)
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+
+		if(exercisesServices.setEditExercise(exercise))
+			return ResponseEntity.status(HttpStatus.OK).body("The exercise has been updated successfully");
+		else
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update the exercise");
+	}
+	
+	@PostMapping("/post/delete_exercise")
+	public ResponseEntity<String> setDeleteExercise(@RequestBody int id,
+			@RequestHeader("Authorization") String token) {
+		
+		if (token == null || token.isBlank())
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+
+		String userID = jwtUtil.getKey(token);
+
+		if (userID == null)
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+		
+		if(exercisesServices.setDeleteExercise(id))
+			return ResponseEntity.status(HttpStatus.OK).body("The exercise has been removed successfully");
+		else
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to remove the routine");
+	}
 
 	@PostMapping("/post/current_routine")
 	public ResponseEntity<String> setCurrentRoutine(@RequestBody CurrentRoutine currentRoutine,

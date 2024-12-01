@@ -27,7 +27,7 @@ public class ExercisesServices {
 
 	public List<Exercise> getExercises() {
 		try {
-			ResponseEntity<Exercise[]> response = restTemplate.getForEntity(RemoteServices.GET_SERVICES,
+			ResponseEntity<Exercise[]> response = restTemplate.getForEntity(RemoteServices.GET_EXERCISES,
 					Exercise[].class);
 
 			if (response.getStatusCode() == HttpStatus.OK) {
@@ -43,6 +43,83 @@ public class ExercisesServices {
 			return null;
 		}
 
+	}
+
+	public Exercise getExercise(int id) {
+		try {
+			String url = RemoteServices.GET_EXERCISE + "?id={id}";
+
+			ResponseEntity<Exercise> response = restTemplate.getForEntity(url, Exercise.class, id);
+
+			if (response.getStatusCode() == HttpStatus.OK) {
+				return response.getBody();
+			} else {
+				return null;
+			}
+		} catch (HttpClientErrorException ex) {
+			// HttpStatus statusCode = (HttpStatus) ex.getStatusCode();
+			return null;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			return null;
+		}
+	}
+
+	public boolean setExercise(Exercise exercise) {
+		try {
+			ResponseEntity<String> response = restTemplate.postForEntity(RemoteServices.POST_EXERCISE, exercise,
+					String.class);
+
+			if (response.getStatusCode() == HttpStatus.OK) {
+				return true;
+			} else {
+				return false;
+			}
+		} catch (HttpClientErrorException ex) {
+			// HttpStatus statusCode = (HttpStatus) ex.getStatusCode();
+			return false;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			return false;
+		}
+	}
+	
+	public boolean setEditExercise(Exercise exercise) {
+		try {
+			ResponseEntity<String> response = restTemplate.postForEntity(RemoteServices.POST_EDIT_EXERCISE, exercise,
+					String.class);
+
+			if (response.getStatusCode() == HttpStatus.OK) {
+				return true;
+			} else {
+				return false;
+			}
+		} catch (HttpClientErrorException ex) {
+			// HttpStatus statusCode = (HttpStatus) ex.getStatusCode();
+			return false;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			return false;
+		}
+	}
+
+	public boolean setDeleteExercise(int id) {
+		try {
+			ResponseEntity<String> response = restTemplate.postForEntity(RemoteServices.POST_DELETE_EXERCISE, id,
+					String.class);
+
+			if (response.getStatusCode() == HttpStatus.OK) {
+				return true;
+			} else {
+				return false;
+			}
+		} catch (HttpClientErrorException ex) {
+			// HttpStatus statusCode = (HttpStatus) ex.getStatusCode();
+			return false;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			return false;
+		}
 	}
 
 	public boolean setCurrentRoutine(CurrentRoutine currentRoutine) {
@@ -162,7 +239,7 @@ public class ExercisesServices {
 			return null;
 		}
 	}
-	
+
 	public boolean setResetCategoryRoutines(String category) {
 		try {
 			ResponseEntity<String> response = restTemplate.postForEntity(RemoteServices.POST_RESET_CATEGORY_ROUTINES,
@@ -181,7 +258,7 @@ public class ExercisesServices {
 			return false;
 		}
 	}
-	
+
 	public boolean setDeleteCategoryRoutine(long id) {
 		try {
 			ResponseEntity<String> response = restTemplate.postForEntity(RemoteServices.POST_DELETE_CATEGORY_ROUTINE,
@@ -219,7 +296,7 @@ public class ExercisesServices {
 			return false;
 		}
 	}
-	
+
 	public List<RoutineHistory> getRoutineHistory(long userID) {
 		try {
 			String url = RemoteServices.GET_ROUTINE_HISTORY + "?userID={userID}";
