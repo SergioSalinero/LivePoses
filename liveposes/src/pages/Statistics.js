@@ -17,8 +17,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import HistoryIcon from '@mui/icons-material/History';
 import ClassIcon from '@mui/icons-material/Class';
-
-import ExerciseCategory from "@/components/ExerciseCategory";
+import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
 
 import {
     GET_BASIC_STATISTICS_URL,
@@ -398,6 +397,21 @@ export default function Statistics() {
                         >
                             <HistoryIcon fontSize="large" /> Show your history
                         </Button>
+                        <Button
+                            variant="contained"
+                            sx={{
+                                backgroundColor: SIDE_BAR_BUTTON_COLOR,
+                                color: 'white',
+                                '&:hover': {
+                                    backgroundColor: SIDE_BAR_BUTTON_HOVER_COLOR,
+                                },
+                                fontSize: '18px',
+                                textAlign: 'right'
+                            }}
+                            onClick={() => router.push('/ExerciseManagement')}
+                        >
+                            <FormatListNumberedIcon fontSize="large" /> Exercise management
+                        </Button>
                     </Stack>
                 </Grid>
                 <Grid size={10}>
@@ -430,7 +444,7 @@ export default function Statistics() {
                                 >
                                     RESET STATISTICS
                                 </Button>
-                                </div>
+                            </div>
 
                             <div style={StyleSheet.basicStatisticsDiv}>
                                 <p style={StyleSheet.basicSpecificStatistic}><span style={StyleSheet.boldSpan}>Routine counter:</span> {basicStatistics['routineCounter']}</p>

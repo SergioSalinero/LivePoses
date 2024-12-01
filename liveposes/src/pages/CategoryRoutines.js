@@ -20,6 +20,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import HistoryIcon from '@mui/icons-material/History';
 import ClassIcon from '@mui/icons-material/Class';
+import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
 
 import { 
     BACKGROUND_COLOR,
@@ -348,6 +349,21 @@ export default function CategoryRoutines() {
                         >
                             <HistoryIcon fontSize="large" /> Show your history
                         </Button>
+                        <Button
+                            variant="contained"
+                            sx={{
+                                backgroundColor: SIDE_BAR_BUTTON_COLOR,
+                                color: 'white',
+                                '&:hover': {
+                                    backgroundColor: SIDE_BAR_BUTTON_HOVER_COLOR,
+                                },
+                                fontSize: '18px',
+                                textAlign: 'right'
+                            }}
+                            onClick={() => router.push('/ExerciseManagement')}
+                        >
+                            <FormatListNumberedIcon fontSize="large" /> Exercise management
+                        </Button>
                     </Stack>
                 </Grid>
                 <Grid size={10}>
@@ -397,72 +413,4 @@ export default function CategoryRoutines() {
             </Grid>
         </Box>
     );
-    /* <div style={StyleSheet.backgroundContainer}>
-         <div style={StyleSheet.mainContainer}>
-         <div style={StyleSheet.content}>
-                 <div style={StyleSheet.sidebar}>
-                     <p style={StyleSheet.sidebarTitle}>Live Poses</p>
-                     <button
-                         style={StyleSheet.sidebarButton}
-                         onMouseEnter={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButtonHover.backgroundColor}
-                         onMouseLeave={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButton.backgroundColor}
-                         onClick={() => router.push('/Home')}
-                     >
-                         <span style={StyleSheet.spanIcon}><FaArrowLeft /></span>
-                         <br></br>
-                         Back to Home
-                     </button>
-                     <button
-                         style={StyleSheet.sidebarButton}
-                         onMouseEnter={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButtonHover.backgroundColor}
-                         onMouseLeave={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButton.backgroundColor}
-                         onClick={() => router.push('/RoutineBuilding')}
-                     >
-                         <span style={StyleSheet.spanIcon}><IoMdAdd /></span>
-                         <br></br>
-                         Create your own rutine
-                     </button>
-                     <button
-                         style={StyleSheet.sidebarButton}
-                         onMouseEnter={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButtonHover.backgroundColor}
-                         onMouseLeave={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButton.backgroundColor}
-                         onClick={() => router.push('/PublishRoutine')}
-                     >
-                         <span style={StyleSheet.spanIcon}><MdPublish /></span>
-                         <br></br>
-                         Publish a routine
-                     </button>
-                     <hr style={StyleSheet.sidebarDivider} />
-                     <button
-                         style={{
-                             ...StyleSheet.sidebarButton,
-                             marginTop: '10px',
-                         }}
-                         onMouseEnter={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButtonHover.backgroundColor}
-                         onMouseLeave={(e) => e.target.style.backgroundColor = StyleSheet.sidebarButton.backgroundColor}
-                         onClick={() => router.push('/Profile')}
-                     >
-                         Profile
-                     </button>
-                 </div>
-             </div>
-
-
-             <div style={StyleSheet.routines}>
-                 <div style={StyleSheet.floatingContainer}>
-                     <p style={StyleSheet.sectionTitle}>{category}</p>
-                     <div style={StyleSheet.showRoutines}>
-                         {routines.map((item, index) => (
-                             <Routine
-                                 key={index}
-                                 onclick={() => handleRoutineClick(index)}
-                                 routine={item}
-                                 exercises={exercises}
-                             />
-                         ))}
-                     </div>
-                 </div>
-             </div>
-         </div>
-     </div>*/
 }

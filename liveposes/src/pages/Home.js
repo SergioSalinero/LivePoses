@@ -467,7 +467,7 @@ export default function Home() {
                                 fontSize: '18px',
                                 textAlign: 'right'
                             }}
-                            /*onClick={() => router.push('/RoutineHistory')}*/
+                            onClick={() => router.push('/ExerciseManagement')}
                         >
                             <FormatListNumberedIcon fontSize="large" /> Exercise management
                         </Button>

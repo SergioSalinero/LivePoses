@@ -15,11 +15,20 @@ import HistoryIcon from '@mui/icons-material/History';
 import ClassIcon from '@mui/icons-material/Class';
 import TextField from '@mui/material/TextField';
 import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
+import EditIcon from '@mui/icons-material/Edit';
+
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+
+import ExerciseRow from '../components/ExerciseRow';
 
 import {
-    GET_USER_DATA,
-    POST_UPDATE_WEIGHT,
-    POST_DELETE_ACCOUNT
+    GET_EXERCISES_URL,
+    POST_DELETE_EXERCISE_URL
 } from '@/utils/Config';
 
 import {
@@ -31,18 +40,20 @@ import {
     DANGER_BUTTON_COLOR,
     SIDE_BAR_BUTTON_COLOR,
     SIDE_BAR_BUTTON_HOVER_COLOR,
+    START_ROUTINE_BUTTON_COLOR,
+    START_ROUTINE_BUTTON_HOVER_COLOR
 } from '@/utils/Colors';
 
 
 
-export default function UserProfilePage() {
+export default function ExerciseManagement() {
 
-    var [userData, setUserData] = useState('');
-    var [weight, setWeight] = useState('');
     const [error, setError] = useState(null);
     const router = useRouter();
 
     var [token, setToken] = useState('');
+
+    const [exercises, setExercises] = useState([]);
 
     useEffect(() => {
         document.body.style.backgroundColor = BACKGROUND_COLOR;
@@ -56,9 +67,9 @@ export default function UserProfilePage() {
             router.push('/Login');
         }
 
-        async function fetchUserData() {
+        async function fetchExercises() {
             try {
-                const response = await fetch(GET_USER_DATA, {
+                const response = await fetch(GET_EXERCISES_URL, {
                     method: 'GET',
                     headers: {
                         'Authorization': token,
@@ -66,57 +77,36 @@ export default function UserProfilePage() {
                     }
                 });
                 if (!response.ok) {
+                    //router.push('/Login');
                     throw new Error('Network response was not ok');
                 }
-                var data = await response.json();
-                data[1] = parseFloat(data[1]);
-                setUserData(data);
+                const jsonData = await response.json();
+                setExercises(jsonData);
             } catch (error) {
                 console.error('Error fetching data: ', error);
             }
         }
 
-        fetchUserData();
+        fetchExercises();
     }, []);
 
-    async function handleUpdateWeight() {
-        if (weight > 0) {
-            try {
-                const response = await fetch(POST_UPDATE_WEIGHT, {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': token,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ "weight": weight }),
-                });
-
-                if (response.ok) {
-                    router.push('/Profile');
-                } else if (response.status === 500) {
-                    setError('Internal server error. Please try again later.');
-                } else {
-                    setError('Invalid credentials');
-                }
-            } catch (error) {
-                console.error('Error processing request:', error);
-                setError('Error processing request. Please try again later.');
-            }
-        }
+    function handleAddExercise() {
+        router.push('/AddExerciseManagement');
     }
 
-    async function handleDeleteAccount() {
+    async function handleRemoveExercise(id) {
         try {
-            const response = await fetch(POST_DELETE_ACCOUNT, {
+            const response = await fetch(POST_DELETE_EXERCISE_URL, {
                 method: 'POST',
                 headers: {
                     'Authorization': token,
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
                 },
+                body: id,
             });
 
             if (response.ok) {
-                router.push('/Login');
+                router.push('/ExerciseManagement');
             } else if (response.status === 500) {
                 setError('Internal server error. Please try again later.');
             } else {
@@ -128,12 +118,8 @@ export default function UserProfilePage() {
         }
     }
 
-    async function handleLogOut() {
-        localStorage.removeItem('accessToken');
-
-        document.cookie = 'accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-
-        router.push('/Login');
+    function handleEditExercise(id) {
+        router.push('/EditExercise?id=' + id);
     }
 
     const Item = styled(Paper)(({ theme }) => ({
@@ -234,7 +220,25 @@ export default function UserProfilePage() {
         inputFocusStyle: {
             border: '2px solid #4caf50',
             boxShadow: '0 0 8px rgba(76, 175, 80, 0.5)',
-        }
+        },
+        exercises: {
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '10px'
+        },
+        image: {
+            width: '50px',
+            marginLeft: '10px',
+            borderRadius: '10px',
+            padding: '5px'
+        },
+        sectionTitle: {
+            color: SECTION_TEXT_COLOR,
+            fontSize: '30px',
+            fontFamily: 'Montserrat, sans-serif',
+            fontWeight: '600',
+            marginTop: '0px',
+        },
     };
 
 
@@ -356,87 +360,144 @@ export default function UserProfilePage() {
                     </Stack>
                 </Grid>
                 <Grid size={10}>
+
                     <div style={StyleSheet.container}>
-                        <div style={StyleSheet.profileBox}>
-                            <div style={StyleSheet.infoContainer}>
-                                <p style={StyleSheet.label}><strong>Email:</strong> {userData[0]}</p>
-                                <div style={StyleSheet.weightDiv}>
-                                    <p><strong>Weight:</strong></p>
-                                    <input
-                                        type="number"
-                                        placeholder={userData[1]}
-                                        onChange={(e) => setWeight(e.target.value)}
-                                        value={weight}
-                                        style={StyleSheet.inputStyle}
-                                    >
-                                    </input>
-                                </div>
-                            </div>
-                            <div style={StyleSheet.buttonsContainer}>
-                                <Button
-                                    variant="contained"
-                                    sx={{
-                                        backgroundColor: SIDE_BAR_BUTTON_COLOR,
-                                        color: 'white',
-                                        '&:hover': {
-                                            backgroundColor: SIDE_BAR_BUTTON_HOVER_COLOR,
-                                        },
-                                        fontSize: '18px',
-                                        textAlign: 'right'
-                                    }}
-                                    onClick={() => handleUpdateWeight()}
-                                >
-                                    Update Weight
-                                </Button>
-                                <Button
-                                    variant="contained"
-                                    sx={{
-                                        backgroundColor: SIDE_BAR_BUTTON_COLOR,
-                                        color: 'white',
-                                        '&:hover': {
-                                            backgroundColor: SIDE_BAR_BUTTON_HOVER_COLOR,
-                                        },
-                                        fontSize: '18px',
-                                        textAlign: 'right'
-                                    }}
-                                    onClick={() => handleUpdateWeight()}
-                                >
-                                    Change Password
-                                </Button>
 
-                                <br></br>
+                        <div
+                            style={{
+                                display: 'grid',
+                                gridTemplateColumns: '1fr',
+                                gap: '10px'
+                            }}
+                        >
 
+                            <div
+                                style={{
+                                    display: 'flex',
+                                    justifyContent: 'space-between',
+                                    alignItems: 'center',
+                                    width: '100%',
+                                }}
+                            >
+                                <p style={StyleSheet.sectionTitle}>Current exercises</p>
                                 <Button
                                     variant="contained"
                                     sx={{
-                                        backgroundColor: SIDE_BAR_BUTTON_COLOR,
+                                        backgroundColor: START_ROUTINE_BUTTON_COLOR,
                                         color: 'white',
                                         '&:hover': {
-                                            backgroundColor: SIDE_BAR_BUTTON_HOVER_COLOR,
+                                            backgroundColor: START_ROUTINE_BUTTON_HOVER_COLOR,
                                         },
                                         fontSize: '18px',
-                                        textAlign: 'right'
+                                        marginTop: '-15px'
                                     }}
-                                    onClick={() => handleLogOut()}
+                                    onClick={() => handleAddExercise()}
                                 >
-                                    Log out
-                                </Button>
-                                <Button
-                                    variant="contained"
-                                    sx={{
-                                        backgroundColor: DANGER_BUTTON_COLOR,
-                                        color: 'white',
-                                        '&:hover': {
-                                            backgroundColor: SIDE_BAR_BUTTON_HOVER_COLOR,
-                                        },
-                                        fontSize: '18px',
-                                        textAlign: 'right'
-                                    }}
-                                    onClick={() => handleDeleteAccount()}
-                                >
-                                    Delete Account
+                                    ADD EXERCISE
                                 </Button>
                             </div>
+
+
+                            <TableContainer component={Paper}>
+                                <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell></TableCell>
+                                            <TableCell></TableCell>
+                                            <TableCell>ID</TableCell>
+                                            <TableCell align="right">Name</TableCell>
+                                            <TableCell align="right">Image</TableCell>
+                                            <TableCell align="right">Right Keypoint 1</TableCell>
+                                            <TableCell align="right">Right Keypoint 2</TableCell>
+                                            <TableCell align="right">Right Keypoint 3</TableCell>
+                                            <TableCell align="right">Right Keypoint Distance 1</TableCell>
+                                            <TableCell align="right">Right Keypoint Distance 2</TableCell>
+                                            <TableCell align="right">Left Keypoint 1</TableCell>
+                                            <TableCell align="right">Left Keypoint 2</TableCell>
+                                            <TableCell align="right">Left Keypoint 3</TableCell>
+                                            <TableCell align="right">Left Keypoint Distance 1</TableCell>
+                                            <TableCell align="right">Left Keypoint Distance 2</TableCell>
+                                            <TableCell align="right">Upper Angle Max</TableCell>
+                                            <TableCell align="right">Upper Angle Min</TableCell>
+                                            <TableCell align="right">Lower Angle Max</TableCell>
+                                            <TableCell align="right">Lower Angle Min</TableCell>
+                                            <TableCell align="right">Recognition Type</TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        {exercises.map((item) => (
+                                            <TableRow
+                                                key={item.name}
+                                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                            >
+                                                <TableCell component="th" scope="row">
+                                                    <Button
+                                                        variant="contained"
+                                                        sx={{
+                                                            backgroundColor: '#E0E0E0',
+                                                            color: 'black',
+                                                            '&:hover': {
+                                                                backgroundColor: '#B3B2B2',
+                                                            },
+                                                            fontSize: '15px',
+                                                        }}
+                                                        onClick={() => handleEditExercise(item.id)}
+                                                    >
+                                                        <EditIcon />
+                                                    </Button>
+                                                </TableCell>
+                                                <TableCell component="th" scope="row">
+                                                    <Button
+                                                        variant="contained"
+                                                        sx={{
+                                                            backgroundColor: DANGER_BUTTON_COLOR,
+                                                            color: 'white',
+                                                            '&:hover': {
+                                                                backgroundColor: SIDE_BAR_BUTTON_HOVER_COLOR,
+                                                            },
+                                                            fontSize: '15px',
+                                                        }}
+                                                        onClick={() => handleRemoveExercise(item.id)}
+                                                    >
+                                                        X
+                                                    </Button>
+                                                </TableCell>
+                                                <TableCell component="th" scope="row">{item.id}</TableCell>
+                                                <TableCell align="right">{item.name}</TableCell>
+                                                <TableCell align="right"><img src={item.src} style={StyleSheet.image}></img></TableCell>
+                                                <TableCell align="right">{item.rightKeyPoint1}</TableCell>
+                                                <TableCell align="right">{item.rightKeyPoint2}</TableCell>
+                                                <TableCell align="right">{item.rightKeyPoint3}</TableCell>
+                                                <TableCell align="right">{item.rightKeyPointDistance1}</TableCell>
+                                                <TableCell align="right">{item.rightKeyPointDistance2}</TableCell>
+                                                <TableCell align="right">{item.leftKeyPoint1}</TableCell>
+                                                <TableCell align="right">{item.leftKeyPoint2}</TableCell>
+                                                <TableCell align="right">{item.leftKeyPoint3}</TableCell>
+                                                <TableCell align="right">{item.leftKeyPointDistance1}</TableCell>
+                                                <TableCell align="right">{item.leftKeyPointDistance2}</TableCell>
+                                                <TableCell align="right">{item.upperAngleMax}</TableCell>
+                                                <TableCell align="right">{item.upperAngleMin}</TableCell>
+                                                <TableCell align="right">{item.lowerAngleMax}</TableCell>
+                                                <TableCell align="right">{item.lowerAngleMin}</TableCell>
+                                                <TableCell align="right">{item.recognitionType}</TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+
+                        </div>
+
+
+                        <div style={StyleSheet.exercises}>
+
+                            {/*exercises.map((item, index) => (
+                                <ExerciseRow
+                                    key={index}
+                                    /*onclick={() => handleRoutineClick(index)}*
+                                    exercise={item}
+                                />
+                            ))*/}
                         </div>
                     </div>
 
@@ -444,56 +505,4 @@ export default function UserProfilePage() {
             </Grid>
         </Box>
     );
-    /*<div style={styles.container}>
-        <div style={styles.profileBox}>
-            <h2 style={styles.header}>User Profile</h2>
-            <div style={styles.infoContainer}>
-                <p style={styles.label}><strong>Email:</strong> {userData[0]}</p>
-                <div style={styles.weightDiv}>
-                    <p><strong>Weight:</strong></p>
-                    <input
-                        type="number"
-                        placeholder={userData[1]}
-                        onChange={(e) => setWeight(e.target.value)}
-                        value={weight}
-                    >
-                    </input>
-                </div>
-            </div>
-            <div style={styles.buttonsContainer}>
-                <button
-                    onMouseEnter={(e) => e.target.style.backgroundColor = styles.buttonHover.backgroundColor}
-                    onMouseLeave={(e) => e.target.style.backgroundColor = styles.button.backgroundColor}
-                    style={styles.button}
-                    onClick={() => handleUpdateWeight()}
-                >
-                    Update Weight
-                </button>
-                <button
-                    onMouseEnter={(e) => e.target.style.backgroundColor = styles.buttonHover.backgroundColor}
-                    onMouseLeave={(e) => e.target.style.backgroundColor = styles.button.backgroundColor}
-                    style={styles.button}
-                >
-                    Change Password
-                </button>
-                <br></br>
-                <button
-                    onMouseEnter={(e) => e.target.style.backgroundColor = styles.buttonHover.backgroundColor}
-                    onMouseLeave={(e) => e.target.style.backgroundColor = styles.button.backgroundColor}
-                    style={styles.button}
-                    onClick={() => handleLogOut()}
-                >
-                    Log out
-                </button>
-                <button
-                    onMouseEnter={(e) => e.target.style.backgroundColor = styles.deleteButtonHover.backgroundColor}
-                    onMouseLeave={(e) => e.target.style.backgroundColor = styles.deleteButton.backgroundColor}
-                    style={styles.deleteButton}
-                    onClick={() => handleDeleteAccount()}
-                >
-                    Delete Account
-                </button>
-            </div>
-        </div>
-    </div>*/
 };

@@ -3,6 +3,10 @@ export const POST_SIGNUP_URL = 'http://localhost:5000/api/auth/signup';
 export const POST_SEND_EMAIL_URL = 'http://localhost:5000/api/auth/send_email';
 
 export const GET_EXERCISES_URL = 'http://localhost:5000/api/routine/get/exercises';
+export const GET_EXERCISE_URL = 'http://localhost:5000/api/routine/get/exercise';
+export const POST_EXERCISE_URL = 'http://localhost:5000/api/routine/post/exercise';
+export const POST_EDIT_EXERCISE_URL = 'http://localhost:5000/api/routine/post/edit_exercise';
+export const POST_DELETE_EXERCISE_URL = 'http://localhost:5000/api/routine/post/delete_exercise';
 export const POST_CURRENT_ROUTINE_URL = 'http://localhost:5000/api/routine/post/current_routine';
 export const GET_CURRENT_ROUTINE_URL = 'http://localhost:5000/api/routine/get/current_routine';
 export const GET_START_SIGNAL = 'http://localhost:5000/api/routine/get/start_signal';
