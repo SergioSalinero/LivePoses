@@ -91,6 +91,118 @@ public class ExercisesServices {
 		return exercisesList;
 	}
 
+	public Exercise getExercise(int id) {
+		String query = "SELECT * FROM exercises WHERE id = " + id + ";";
+
+		List<String[]> results = dbConnection.DBOperation(query, "SELECT");
+
+		if (results == null)
+			return null;
+
+		for (String[] result : results) {
+			Exercise exercise = new Exercise();
+
+			exercise.setId(Integer.parseInt(result[0]));
+			exercise.setName(result[1]);
+
+			if (result.length > 2 && result[2] != null)
+				exercise.setRightKeyPoint1(Integer.parseInt(result[2]));
+			if (result.length > 3 && result[3] != null)
+				exercise.setRightKeyPoint2(Integer.parseInt(result[3]));
+			if (result.length > 4 && result[4] != null)
+				exercise.setRightKeyPoint3(Integer.parseInt(result[4]));
+			if (result.length > 4 && result[5] != null)
+				exercise.setRightKeyPointDistance1(Integer.parseInt(result[5]));
+			else
+				exercise.setRightKeyPointDistance1(-1);
+			if (result.length > 4 && result[6] != null)
+				exercise.setRightKeyPointDistance2(Integer.parseInt(result[6]));
+			else
+				exercise.setRightKeyPointDistance2(-1);
+
+			if (result.length > 5 && result[7] != null)
+				exercise.setLeftKeyPoint1(Integer.parseInt(result[7]));
+			if (result.length > 6 && result[8] != null)
+				exercise.setLeftKeyPoint2(Integer.parseInt(result[8]));
+			if (result.length > 7 && result[9] != null)
+				exercise.setLeftKeyPoint3(Integer.parseInt(result[9]));
+			if (result.length > 4 && result[10] != null)
+				exercise.setLeftKeyPointDistance1(Integer.parseInt(result[10]));
+			else
+				exercise.setLeftKeyPointDistance1(-1);
+			if (result.length > 4 && result[11] != null)
+				exercise.setLeftKeyPointDistance2(Integer.parseInt(result[11]));
+			else
+				exercise.setLeftKeyPointDistance2(-1);
+
+			if (result.length > 8 && result[12] != null)
+				exercise.setUpperAngleMax(Integer.parseInt(result[12]));
+			if (result.length > 9 && result[13] != null)
+				exercise.setUpperAngleMin(Integer.parseInt(result[13]));
+			if (result.length > 10 && result[14] != null)
+				exercise.setLowerAngleMax(Integer.parseInt(result[14]));
+			if (result.length > 11 && result[15] != null)
+				exercise.setLowerAngleMin(Integer.parseInt(result[15]));
+
+			exercise.setRecognitionType(result[16]);
+			exercise.setSrc(result[17]);
+
+			return exercise;
+		}
+
+		return null;
+	}
+
+	public boolean setExercise(Exercise exercise) {
+		String query = "INSERT INTO exercises (name, rightKeyPoint1, rightKeyPoint2, rightKeyPoint3, rightKeyPointDistance1, rightKeyPointDistance2, leftKeyPoint1, leftKeyPoint2, leftKeyPoint3, leftKeyPointDistance1, leftKeyPointDistance2, upperAngleMax, upperAngleMin, lowerAngleMax, lowerAngleMin, recognitionType, src) VALUES ('"
+				+ exercise.getName() + "', " + exercise.getRightKeyPoint1() + ", " + exercise.getRightKeyPoint2() + ", "
+				+ exercise.getRightKeyPoint3() + ", " + exercise.getRightKeyPointDistance1() + ", "
+				+ exercise.getRightKeyPointDistance2() + ", " + exercise.getLeftKeyPoint1() + ", "
+				+ exercise.getLeftKeyPoint2() + ", " + exercise.getLeftKeyPoint3() + ", "
+				+ exercise.getLeftKeyPointDistance1() + ", " + exercise.getLeftKeyPointDistance2() + ", "
+				+ exercise.getUpperAngleMax() + ", " + exercise.getUpperAngleMin() + ", " + exercise.getLowerAngleMax()
+				+ ", " + exercise.getLowerAngleMin() + ", '" + exercise.getRecognitionType() + "', '"
+				+ exercise.getSrc() + "');";
+
+		List<String[]> results = dbConnection.DBOperation(query, "INSERT");
+
+		if (results != null)
+			return true;
+
+		return false;
+	}
+
+	public boolean setEditExercise(Exercise exercise) {
+		String query = "UPDATE exercises SET name = '" + exercise.getName() + "', rightKeyPoint1 = "
+				+ exercise.getRightKeyPoint1() + ", rightKeyPoint2 = " + exercise.getRightKeyPoint2()
+				+ ", rightKeyPoint3 = " + exercise.getRightKeyPoint3() + ", rightKeyPointDistance1 = "
+				+ exercise.getRightKeyPointDistance1() + ", rightKeyPointDistance2 = "
+				+ exercise.getRightKeyPointDistance2() + ", leftKeyPoint1 = " + exercise.getLeftKeyPoint1()
+				+ ", leftKeyPoint2 = " + exercise.getLeftKeyPoint2() + ", leftKeyPoint3 = "
+				+ exercise.getLeftKeyPoint3() + ", leftKeyPointDistance1 = " + exercise.getLeftKeyPointDistance1()
+				+ ", leftKeyPointDistance2 = " + exercise.getLeftKeyPointDistance2() + ", upperAngleMax = "
+				+ exercise.getUpperAngleMax() + ", upperAngleMin = " + exercise.getUpperAngleMin()
+				+ ", lowerAngleMax = " + exercise.getLowerAngleMax() + ", lowerAngleMin = "
+				+ exercise.getLowerAngleMin() + ", recognitionType = '" + exercise.getRecognitionType() + "', src = '"
+				+ exercise.getSrc() + "' WHERE id = " + exercise.getId() + ";";
+		List<String[]> results = dbConnection.DBOperation(query, "UPDATE");
+
+		if (results == null)
+			return false;
+
+		return true;
+	}
+
+	public boolean setDeleteExercise(int id) {
+		String query = "DELETE FROM exercises WHERE id = " + id + ";";
+		List<String[]> results = dbConnection.DBOperation(query, "DELETE");
+
+		if (results == null)
+			return false;
+
+		return true;
+	}
+
 	public boolean setCurrentRoutine(CurrentRoutine currentRoutine) {
 		String query = "DELETE FROM current_routine WHERE userId = " + currentRoutine.getUserId() + ";";
 		List<String[]> results = dbConnection.DBOperation(query, "DELETE");
@@ -236,7 +348,7 @@ public class ExercisesServices {
 
 		return categoryCount;
 	}
-	
+
 	public List<PublicRoutine> getCategoryRoutines(String category) {
 		String query = "SELECT * FROM public_routines WHERE category = '" + category + "';";
 
@@ -255,7 +367,8 @@ public class ExercisesServices {
 						new TypeReference<List<CurrentRoutineExercises>>() {
 						});
 
-				PublicRoutine pr = new PublicRoutine(Long.parseLong(result[0]), exercises, Integer.parseInt(result[2]), result[3], result[4]);
+				PublicRoutine pr = new PublicRoutine(Long.parseLong(result[0]), exercises, Integer.parseInt(result[2]),
+						result[3], result[4]);
 
 				categoryRoutines.add(pr);
 			} catch (JsonMappingException e) {
@@ -267,24 +380,24 @@ public class ExercisesServices {
 
 		return categoryRoutines;
 	}
-	
+
 	public boolean setResetCategory(String category) {
 		String query = "DELETE FROM public_routines WHERE category = '" + category + "';";
 		List<String[]> results = dbConnection.DBOperation(query, "DELETE");
-		
-		if(results == null)
+
+		if (results == null)
 			return false;
-		
+
 		return true;
 	}
-	
+
 	public boolean setDeleteCategoryRoutine(long id) {
 		String query = "DELETE FROM public_routines WHERE id = '" + id + "';";
 		List<String[]> results = dbConnection.DBOperation(query, "DELETE");
-		
-		if(results == null)
+
+		if (results == null)
 			return false;
-		
+
 		return true;
 	}
 
@@ -326,7 +439,7 @@ public class ExercisesServices {
 				List<CurrentRoutineExercises> exercises = mapper.readValue(result[2],
 						new TypeReference<List<CurrentRoutineExercises>>() {
 						});
-				
+
 				long userId = Integer.parseInt(result[1]);
 				int breaktime = Integer.parseInt(result[3]);
 				float accuracy = Float.parseFloat(result[4]);
@@ -347,10 +460,10 @@ public class ExercisesServices {
 	public boolean setResetHistory(long userID) {
 		String query = "DELETE FROM routine_history WHERE userId = " + userID + ";";
 		List<String[]> results = dbConnection.DBOperation(query, "DELETE");
-		
-		if(results == null)
+
+		if (results == null)
 			return false;
-		
+
 		return true;
 	}
 

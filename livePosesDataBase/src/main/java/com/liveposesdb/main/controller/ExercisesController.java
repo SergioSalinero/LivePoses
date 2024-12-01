@@ -32,13 +32,50 @@ public class ExercisesController {
 	}
 	
 	@GetMapping("/get/exercises")
-	public ResponseEntity<List<Exercise>> getExercise() {
+	public ResponseEntity<List<Exercise>> getExercises() {
 		List<Exercise> exerciseList = exercisesServices.getExercises();
 		
 		if(exerciseList != null)
 			return ResponseEntity.status(HttpStatus.OK).body(exerciseList);
 		else
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+	}
+	
+	@GetMapping("/get/exercise")
+	public ResponseEntity<Exercise> getExercise(@RequestParam int id) {
+		Exercise exercise = exercisesServices.getExercise(id);
+		
+		if(exercise != null)
+			return ResponseEntity.status(HttpStatus.OK).body(exercise);
+		else
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+	}
+	
+	@PostMapping("/post/exercise")
+	public ResponseEntity<String> setExercise(@RequestBody Exercise exercise){
+		
+		if(exercisesServices.setExercise(exercise))
+			return ResponseEntity.status(HttpStatus.OK).body("The exercise has been added successfully");
+		else
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("The routine could not be added");
+	}
+	
+	@PostMapping("/post/edit_exercise")
+	public ResponseEntity<String> setEditExercise(@RequestBody Exercise exercise){
+		
+		if(exercisesServices.setEditExercise(exercise))
+			return ResponseEntity.status(HttpStatus.OK).body("The exercise has been updated successfully");
+		else
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("The exercise could not be updated");
+	}
+	
+	@PostMapping("/post/delete_exercise")
+	public ResponseEntity<String> setDeleteExercise(@RequestBody int id){
+		
+		if(exercisesServices.setDeleteExercise(id))
+			return ResponseEntity.status(HttpStatus.OK).body("The exercise has been added successfully");
+		else
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("The routine could not be added");
 	}
 	
 	@PostMapping("/post/current_routine")
