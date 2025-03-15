@@ -89,10 +89,7 @@ npm run dev
 mvn spring-boot:run
 ```
 
-## 📜 License
-This project is licensed under the **MIT License** – see the [LICENSE](LICENSE) file for details.
-
 ## 📧 Contact
-For any inquiries, feel free to reach out via email or create an issue in this repository.
+For any inquiries, feel free to reach out via email or create an issue in this repository. sergiosalisan@gmail.com
 
 
